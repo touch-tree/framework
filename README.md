@@ -7,7 +7,7 @@ An easy-to-use framework for developing solid applications.
 - opcache for PHP 7.4
 
 ## Installation
-First, navigate to your project and include this repository as a submodule to your project:
+First, navigate to your project and include this repository as a submodule:
 
     git submodule add https://github.com/echtyushi/framework Framework
 
