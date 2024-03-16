@@ -1,6 +1,6 @@
 # @framework
 
-An easy-to-use framework for developing solid applications.
+An easy-to-use framework for developing web applications.
 
 ## Requirements
 - PHP version 7.4
