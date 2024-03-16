@@ -118,7 +118,7 @@ function session(string $key = null, $value = null)
  */
 function error(string $key): ?string
 {
-    $errors = Session::get('errors.form.' . $key, []);
+    $errors = Application::get_instance()->get(Session::class)->get('errors.form.' . $key, []);
 
     return reset($errors) ?? null;
 }
@@ -344,7 +344,7 @@ function find_object_by_properties(array $array, array $search): ?array
  */
 function add_error(string $key, string $value): void
 {
-    Session::put('errors.errors', array_merge(Session::get('errors.errors', []), [$key => $value]));
+    Application::get_instance()->get(Session::class)->push('errors.errors.' . $key, $value);
 }
 
 /**
@@ -357,5 +357,5 @@ function add_error(string $key, string $value): void
  */
 function retrieve_error_bag(): ParameterBag
 {
-    return new ParameterBag(Session::get('errors.errors', []));
+    return new ParameterBag(Application::get_instance()->get(Session::class)->get('errors.errors', []));
 }
