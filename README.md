@@ -3,7 +3,7 @@
 An easy-to-use framework for developing web applications.
 
 > [!NOTE]
-> While it's possible, this repository is not intended for direct use in a development project. It's recommended that you use this framework alongside our [boilerplate](echtyushi/framework-boilerplate) instead.
+> While it's possible, this repository is not intended for direct use in a development project. It's recommended that you use this framework alongside our [boilerplate](https://github.com/echtyushi/framework-boilerplate) instead.
 
 ## Requirements
 - PHP version 7.4
