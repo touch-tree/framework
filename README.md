@@ -2,6 +2,9 @@
 
 An easy-to-use framework for developing web applications.
 
+> [!TIP]
+> It is recommended to develop your application using this [boilerplate](https://github.com/echtyushi/framework-boilerplate) instead of directly using this repository for development.
+
 ## Requirements
 - PHP version 7.4
 - opcache for PHP 7.4
