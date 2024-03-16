@@ -2,10 +2,7 @@
 
 namespace Framework\Support;
 
-use App\Http\Controllers\DashboardController;
 use Framework\Foundation\Application;
-use Framework\Foundation\Config;
-use Framework\Http\Request;
 use Framework\Routing\Router;
 
 /**
@@ -55,7 +52,10 @@ class Url
      */
     public static function base_url(): ?string
     {
-        return config('app.url') ?: request()->root() . str_replace(server('DOCUMENT_ROOT'), null, backslashes_to_slashes(base_path()));
+        $root = server('DOCUMENT_ROOT');
+        $base = backslashes_to_slashes(base_path());
+
+        return config('app.url') ?: request()->root() . str_replace($root, '', $base);
     }
 
     /**
