@@ -35,4 +35,4 @@ For the `php.ini` we need to enable the extension opcache.
 
 ## Additional Notes
 
-- This application relies on opcache. See [opcache installation](https://www.php.net/manual/en/opcache.installation.php).
+- This application relies on opcache. See [opcache](https://www.php.net/manual/en/opcache.installation.php).
