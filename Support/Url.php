@@ -53,9 +53,9 @@ class Url
     public static function base_url(): ?string
     {
         $root = server('DOCUMENT_ROOT');
-        $base = backslashes_to_slashes(base_path());
+        $base = base_path();
 
-        return config('app.url') ?: request()->root() . str_replace($root, '', $base);
+        return config('app.url') ?: request()->root() . str_replace($root, '', url_slash($base));
     }
 
     /**

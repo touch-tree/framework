@@ -268,7 +268,7 @@ function base_path(string $path = null): string
  *
  * @return string The input string with backslashes converted to slashes.
  */
-function backslashes_to_slashes(string $input): string
+function url_slash(string $input): string
 {
     return str_replace(DIRECTORY_SEPARATOR, '/', $input);
 }
