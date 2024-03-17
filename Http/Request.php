@@ -171,26 +171,13 @@ class Request
     }
 
     /**
-     * Get the port number from the request's URL.
-     *
-     * @return int|null The port number, or null if not present.
-     */
-    public function port(): ?int
-    {
-        return parse_url($this->request_uri(), PHP_URL_PORT);
-    }
-
-    /**
      * Get the root URL of the application.
      *
-     * @param bool $include_port [optional] Whether to include the port in the URL.
      * @return string The root URL.
      */
-    public function root(bool $include_port = false): string
+    public function root(): string
     {
-        $port = $include_port ? ':' . $this->port() : '';
-
-        return $this->scheme() . '://' . $this->host() . $port . '/';
+        return ($this->is_secure() ? 'https' : 'http') . ':' . '/' . '/' . $this->host() . '/';
     }
 
     /**
