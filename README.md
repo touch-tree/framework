@@ -16,7 +16,10 @@ First, navigate to your project and include this repository as a submodule:
 
 ## Credentials
 
-Create a folder named `config` in your project directory. Inside this folder, add a file named `app.php`. In `app.php`, define an array that contains properties named `url` and `development_mode`, where `development_mode` is a boolean variable.
+Create a folder named config in your project directory. Inside this folder, add a file named `app.php`. In `app.php`, define an array that contains properties named url and development_mode, where development_mode is a boolean variable.
+
+> [!IMPORTANT]
+> It's important to ensure that the url variable in your config is set if the .htaccess file in the document root of the web server redirects directly to your project.
 
 ### php.ini
 
