@@ -21,17 +21,6 @@ First, navigate to your project and include this repository as a submodule:
 2.    Inside this folder, add a file named `app.php`. 
 
 3.    In `app.php`, define an array that contains properties named `url` and `development_mode`, where `development_mode` is a boolean variable.
-```php
-// config/app.php
-
-return [
-    // entrypoint for this application
-    'url' => '',
-
-    // keep on true for debugging, and false for production
-    'development_mode' => true
-];
-```
 
 ### php.ini
 
