@@ -36,7 +36,7 @@ class Session
      */
     public function pull(string $key, $default = null)
     {
-        $value = $this->get($key, $default);
+        $value = Collector::get($_SESSION, $key, $default);
 
         Collector::forget($_SESSION, $key);
 
@@ -66,11 +66,14 @@ class Session
      */
     public function push(string $key, $value): Session
     {
-        if (Collector::exists($_SESSION, $key) && !is_array($this->get($key))) {
-            throw new Error('Session value at ' . $key . ' is not an array');
+        $exists = Collector::exists($_SESSION, $key);
+        $item = Collector::get($_SESSION, $key);
+
+        if ($exists && !is_array($item)) {
+            throw new Error('Session value is not an array: ' . $key);
         }
 
-        if (!Collector::exists($_SESSION, $key)) {
+        if (!$exists) {
             Collector::set($_SESSION, $key, []);
         }
 
