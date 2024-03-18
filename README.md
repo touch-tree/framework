@@ -16,11 +16,7 @@ First, navigate to your project and include this repository as a submodule:
 
 ## Credentials
 
-1.    Create a folder named `config` in your project directory. 
-
-2.    Inside this folder, add a file named `app.php`. 
-
-3.    In `app.php`, define an array that contains properties named `url` and `development_mode`, where `development_mode` is a boolean variable.
+Create a folder named `config` in your project directory. Inside this folder, add a file named `app.php`. In `app.php`, define an array that contains properties named `url` and `development_mode`, where `development_mode` is a boolean variable.
 
 ### php.ini
 
