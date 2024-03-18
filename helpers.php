@@ -120,7 +120,7 @@ function error(string $key): ?string
 {
     $errors = Application::get_instance()->get(Session::class)->get('errors.form.' . $key, []);
 
-    return reset($errors) ?? null;
+    return !empty($errors) ? $errors[0] : null;
 }
 
 /**

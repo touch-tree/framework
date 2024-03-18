@@ -52,7 +52,7 @@ class Collector
      * @param string $key The key to check for.
      * @return bool true if the key exists in the array, false otherwise.
      */
-    protected static function exists(array $array, string $key): bool
+    public static function exists(array $array, string $key): bool
     {
         return array_key_exists($key, $array);
     }
@@ -130,13 +130,11 @@ class Collector
      */
     public static function push(array &$array, string $key, $value): array
     {
-        $segments = self::explode_key($key);
-
-        foreach ($segments as $segment) {
+        foreach (self::explode_key($key) as $segment) {
             $array = &$array[$segment];
         }
 
-        $array[array_pop($segments)][] = $value;
+        $array[] = $value;
 
         return $array;
     }
