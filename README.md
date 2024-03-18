@@ -16,23 +16,38 @@ First, navigate to your project and include this repository as a submodule:
 
 ## Credentials
 
-Create a folder named `config` in your project directory. Inside this folder, add a file named `app.php`. In `app.php`, define an array that contains properties named `url` and `development_mode`, where `development_mode` is a boolean variable.
+1.    Create a folder named `config` in your project directory. 
+
+2.    Inside this folder, add a file named `app.php`. 
+
+3.    In `app.php`, define an array that contains properties named `url` and `development_mode`, where `development_mode` is a boolean variable.
+```php
+// config/app.php
+
+return [
+    // entrypoint for this application
+    'url' => '',
+
+    // keep on true for debugging, and false for production
+    'development_mode' => true
+];
+```
 
 ### php.ini
 
 For the `php.ini` we need to enable the extension opcache.
 
 1.  Enable opcache extension:
-
-        zend_extension=opcache
-
+```
+zend_extension=opcache
+```
 2.  Add opcache settings in `php.ini`:
-
-        opcache.enable=1
-        opcache.memory_consumption=128
-        opcache.interned_strings_buffer=8
-        opcache.max_accelerated_files=4000
-
+```
+opcache.enable=1
+opcache.memory_consumption=128
+opcache.interned_strings_buffer=8
+opcache.max_accelerated_files=4000
+```
 ## Additional Notes
 
 - This application relies on opcache. See [opcache](https://www.php.net/manual/en/opcache.installation.php).
