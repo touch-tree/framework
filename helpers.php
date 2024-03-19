@@ -143,7 +143,9 @@ function route(string $name, array $parameters = []): ?string
  */
 function server(string $key = null)
 {
-    return Application::get_instance()->get(Server::class)->get($key);
+    $server = Application::get_instance()->get(Server::class);
+
+    return $key ? $server->get($key) : $server;
 }
 
 
