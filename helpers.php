@@ -298,7 +298,7 @@ function back(): RedirectResponse
  */
 function url(string $path = null)
 {
-    return $path ? Url::route($path) : Application::get_instance()->get(Url::class);
+    return $path ? Url::to($path) : Application::get_instance()->get(Url::class);
 }
 
 /**
