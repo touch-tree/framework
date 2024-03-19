@@ -52,7 +52,7 @@ class Url
      */
     public static function base_url(): ?string
     {
-        $root = server('DOCUMENT_ROOT');
+        $root = rtrim(server('DOCUMENT_ROOT'), '/') . '/';
         $base = base_path();
 
         return config('app.url') ?: request()->root() . str_replace($root, '', url_slash($base));
