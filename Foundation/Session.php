@@ -66,17 +66,6 @@ class Session
      */
     public function push(string $key, $value): Session
     {
-        $exists = Collector::exists($_SESSION, $key);
-        $item = Collector::get($_SESSION, $key);
-
-        if ($exists && !is_array($item)) {
-            throw new Error('Session value is not an array: ' . $key);
-        }
-
-        if (!$exists) {
-            Collector::set($_SESSION, $key, []);
-        }
-
         Collector::push($_SESSION, $key, $value);
 
         return $this;

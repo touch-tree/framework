@@ -3,6 +3,7 @@
 namespace Framework\Support;
 
 use ArrayAccess;
+use Error;
 
 /**
  * The Collector class provides utility functions for navigating associative arrays using dot notation.
@@ -130,11 +131,15 @@ class Collector
      */
     public static function push(array &$array, string $key, $value): array
     {
-        foreach (self::explode_key($key) as $segment) {
-            $array = &$array[$segment];
+        $overwrite = self::get($array, $key, []);
+
+        if (!is_array($overwrite)) {
+            throw new Error('Session value is not an array: ' . $key);
         }
 
-        $array[] = $value;
+        $overwrite[] = $value;
+
+        self::set($array, $key, $overwrite);
 
         return $array;
     }

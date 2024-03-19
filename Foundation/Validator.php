@@ -105,7 +105,7 @@ class Validator
      * @param string $field The field for which the validation error occurred.
      * @param string $rule The rule that was not satisfied.
      */
-    protected function add_error(string $field, string $rule)
+    public function add_error(string $field, string $rule)
     {
         $this->errors->set($field, $this->errors->get($field, [$rule]));
     }
