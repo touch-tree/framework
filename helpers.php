@@ -148,7 +148,6 @@ function server(string $key = null)
     return $key ? $server->get($key) : $server;
 }
 
-
 /**
  * Get the current request instance.
  *
