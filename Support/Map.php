@@ -6,7 +6,7 @@ use ArrayAccess;
 use Error;
 
 /**
- * The Collector class provides utility functions for navigating associative arrays using dot notation.
+ * The Map class provides utility functions for navigating associative arrays using dot notation.
  *
  * This class offers methods to efficiently access, set, check, add, remove, and manipulate array elements
  * within nested arrays using dot notation. It also provides methods for extracting subsets of arrays,
@@ -14,7 +14,7 @@ use Error;
  *
  * @package Framework\Support
  */
-class Collector
+class Map
 {
     /**
      * Get an item from an array using 'dot' notation.
@@ -26,16 +26,16 @@ class Collector
      */
     public static function get(array $array, string $key, $default = null)
     {
-        if (!static::accessible($array)) {
+        if (!self::accessible($array)) {
             return $default;
         }
 
-        if (static::exists($array, $key)) {
+        if (self::exists($array, $key)) {
             return $array[$key];
         }
 
         foreach (self::explode_key($key) as $segment) {
-            if (static::accessible($array) && static::exists($array, $segment)) {
+            if (self::accessible($array) && self::exists($array, $segment)) {
                 $array = $array[$segment];
                 continue;
             }
@@ -77,7 +77,7 @@ class Collector
      * @param mixed $value The value to set.
      * @return $this
      */
-    public static function set(array &$array, string $key, $value): Collector
+    public static function set(array &$array, string $key, $value): Map
     {
         foreach (self::explode_key($key) as $segment) {
             if (!isset($array[$segment]) || !is_array($array[$segment])) {
@@ -101,7 +101,7 @@ class Collector
      */
     public static function has(array $array, string $key): bool
     {
-        return !is_null(static::get($array, $key));
+        return !is_null(self::get($array, $key));
     }
 
     /**
@@ -114,8 +114,8 @@ class Collector
      */
     public static function add(array $array, string $key, $value): array
     {
-        if (!static::has($array, $key)) {
-            $array = static::set($array, $key, $value);
+        if (!self::has($array, $key)) {
+            $array = self::set($array, $key, $value);
         }
 
         return $array;
@@ -181,12 +181,12 @@ class Collector
         $results = [];
 
         foreach ($array as $item) {
-            $item_value = is_array($item) ? static::get($item, $value) : null;
+            $item_value = is_array($item) ? self::get($item, $value) : null;
 
             if (is_null($key)) {
                 $results[] = $item_value;
             } else {
-                $item_key = is_array($item) ? static::get($item, $key) : null;
+                $item_key = is_array($item) ? self::get($item, $key) : null;
                 $results[$item_key] = $item_value;
             }
         }

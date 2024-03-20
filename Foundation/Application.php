@@ -2,7 +2,9 @@
 
 namespace Framework\Foundation;
 
-use Exception;
+use Error;
+use Framework\Http\Kernel;
+use Framework\Support\Collection;
 
 /**
  * The Application class is responsible for bootstrapping the application and registering services.
@@ -14,13 +16,6 @@ use Exception;
 class Application extends Container
 {
     /**
-     * The array of registered service providers.
-     *
-     * @var array<ServiceProvider>
-     */
-    private array $services = [];
-
-    /**
      * The base path of this application.
      *
      * @var string
@@ -28,15 +23,91 @@ class Application extends Container
     private string $base_path;
 
     /**
+     * Service providers in this application.
+     *
+     * @var Collection<ServiceProvider>
+     */
+    private Collection $services;
+
+    /**
+     * Requested service providers.
+     *
+     * @var string[]
+     */
+    private array $requested_services;
+
+    /**
      * Application constructor.
      *
-     * @param string $base_path The base path for this application.
+     * @param string|null $base_path The base path for this application.
      */
     public function __construct(string $base_path)
     {
         $this->base_path = $base_path;
+        $this->services = new Collection();
 
-        parent::__construct();
+        static::set_instance($this);
+    }
+
+    /**
+     * Bootstrap the application.
+     *
+     * @return void
+     */
+    public function bootstrap()
+    {
+        $this->bootstrap_services();
+    }
+
+    /**
+     * Bootstrap services.
+     *
+     * @return void
+     */
+    private function bootstrap_services(): void
+    {
+        foreach ($this->get_requested_services() as $service) {
+            $class = (string)$this->get($service);
+
+            if (is_a($class, ServiceProvider::class)) {
+                $class->register($this);
+
+                $this->services->set(get_class($class), $class);
+            }
+        }
+    }
+
+    /**
+     * Get every service provider in this application.
+     *
+     * @return Collection
+     */
+    public function get_services(): Collection
+    {
+        return $this->services;
+    }
+
+    /**
+     * Get requested services.
+     *
+     * @return string[]
+     */
+    public function get_requested_services(): array
+    {
+        return $this->requested_services;
+    }
+
+    /**
+     * Set services.
+     *
+     * @param array $services
+     * @return Application
+     */
+    public function set_services(array $services): Application
+    {
+        $this->requested_services = $services;
+
+        return $this;
     }
 
     /**
@@ -48,40 +119,5 @@ class Application extends Container
     public function base_path(?string $path = null): string
     {
         return $this->base_path . DIRECTORY_SEPARATOR . ltrim($path);
-    }
-
-    /**
-     * Register services.
-     *
-     * @param array<string> $services An array of service provider class names.
-     * @return void
-     */
-    public function register_services(array $services): void
-    {
-        $this->services = $services;
-
-        foreach ($services as $service) {
-            try {
-                $class = parent::get($service);
-            } catch (Exception $exception) {
-                $class = null;
-            }
-
-            if (!is_a($class, ServiceProvider::class)) {
-                continue;
-            }
-
-            $class->register(self::get_instance());
-        }
-    }
-
-    /**
-     * Get the registered services.
-     *
-     * @return array<ServiceProvider> An array of registered service provider instances.
-     */
-    public function services(): array
-    {
-        return $this->services;
     }
 }

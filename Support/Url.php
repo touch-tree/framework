@@ -36,7 +36,7 @@ class Url
      */
     public static function route(string $route_name, array $parameters = [], bool $absolute = true): string
     {
-        $route_uri = self::router()::route($route_name, $parameters);
+        $route_uri = self::router()->route($route_name, $parameters);
 
         if ($absolute) {
             $route_uri = request()->root() . ltrim($route_uri, '/');

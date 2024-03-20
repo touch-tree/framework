@@ -51,7 +51,7 @@ class Router
      * @param array $parameters Associative array of route parameters.
      * @return string|null The URL for the named route with parameters applied, or null if route not found.
      */
-    public static function route(string $name, array $parameters = []): ?string
+    public function route(string $name, array $parameters = []): ?string
     {
         if (is_null($route = self::routes()->get($name))) {
             return null;
@@ -122,14 +122,40 @@ class Router
     }
 
     /**
+     * Set middleware for a route.
+     *
+     * @param array|string $key
+     * @return $this
+     */
+    public function middleware($key): Router
+    {
+        $route = self::routes()->all()[count(self::routes()->all()) - 1];
+
+        if (is_array($key)) {
+            $route->set_middleware($key);
+        }
+
+        if (is_string($key)) {
+            $route->set_middleware([$key]);
+        }
+
+        return $this;
+    }
+
+    public function find_route(Request $request): ?Route
+    {
+        return self::routes()->match($request) ?: null;
+    }
+
+    /**
      * Resolve the matching route and dispatch the associated controller action with parameters.
      *
      * @param Request $request The current request.
      * @return View|RedirectResponse|JsonResponse|null The result of invoking the controller method, or null if no route matches request.
      */
-    public static function dispatch(Request $request)
+    public function dispatch(Request $request)
     {
-        $route = self::routes()->match($request);
+        $route = self::find_route($request);
 
         if (is_null($route)) {
             return null;
@@ -137,10 +163,9 @@ class Router
 
         try {
             [$class, $method] = $route->action();
-
             $route_uri = Url::to($route->uri(), [], true);
 
-            return self::resolve_controller([app($class), $method], self::get_parameters($route_uri, $request->request_uri()));
+            return $this->resolve_controller([app($class), $method], $this->get_parameters($route_uri, $request->request_uri()));
         } catch (Exception $exception) {
             return null;
         }
@@ -155,7 +180,7 @@ class Router
      *
      * @throws ReflectionException If an error occurs during reflection.
      */
-    private static function resolve_controller(array $action, array $parameters)
+    private function resolve_controller(array $action, array $parameters)
     {
         $reflection_method = new ReflectionMethod(...$action);
         $reflection_parameters = [];
@@ -191,9 +216,9 @@ class Router
      * @param string $url The actual URL.
      * @return array Associative array of route parameters, or empty array if no match.
      */
-    private static function get_parameters(string $route_url, string $url): ?array
+    private function get_parameters(string $route_url, string $url): ?array
     {
-        $pattern = self::get_pattern($route_url);
+        $pattern = $this->get_pattern($route_url);
 
         if (preg_match($pattern, $url, $matches)) {
             return array_filter($matches, fn($key) => is_string($key), ARRAY_FILTER_USE_KEY);
@@ -208,7 +233,7 @@ class Router
      * @param string $route_url The URL pattern of the route.
      * @return string The regex pattern for the route URL.
      */
-    public static function get_pattern(string $route_url): string
+    public function get_pattern(string $route_url): string
     {
         return '#^' . str_replace(['\{', '\}'], ['(?P<', '>[^/]+)'], preg_quote($route_url, '#')) . '$#';
     }

@@ -41,6 +41,13 @@ class Route
     protected ?string $name;
 
     /**
+     * Middleware.
+     *
+     * @var array
+     */
+    protected array $middleware;
+
+    /**
      * Route constructor.
      *
      * @param string $uri The URI pattern for the route.
@@ -53,6 +60,7 @@ class Route
         $this->method = $method;
         $this->action = $action;
         $this->name = null;
+        $this->middleware = [];
     }
 
     /**
@@ -106,5 +114,28 @@ class Route
     public function name(): ?string
     {
         return $this->name;
+    }
+
+    /**
+     * Set the middleware stack for the route.
+     *
+     * @param array $array
+     * @return $this
+     */
+    public function set_middleware(array $array): Route
+    {
+        $this->middleware = $array;
+
+        return $this;
+    }
+
+    /**
+     * Get the middleware stack of the route.
+     *
+     * @return array
+     */
+    public function middleware(): array
+    {
+        return $this->middleware;
     }
 }

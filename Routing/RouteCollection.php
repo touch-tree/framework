@@ -14,7 +14,7 @@ use Framework\Support\Url;
  *
  * @package Framework\Routing
  */
-class RouteCollection extends Collection
+class RouteCollection
 {
     /**
      * The routes registered in this collection.
@@ -53,7 +53,7 @@ class RouteCollection extends Collection
      * @param null $default
      * @return Route|null The Route object if found, otherwise null.
      */
-    public function get($key, $default = null): ?Route
+    public function get(string $key, $default = null): ?Route
     {
         foreach ($this->routes as $route) {
             if ($route->name() === $key) {

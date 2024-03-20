@@ -2,6 +2,7 @@
 
 namespace Framework\Http;
 
+use Framework\Foundation\Container;
 use Framework\Foundation\View;
 use Framework\Routing\Router;
 
@@ -14,6 +15,10 @@ use Framework\Routing\Router;
  */
 class Kernel
 {
+    protected array $middleware = [];
+
+    protected array $route_middleware = [];
+
     /**
      * Router instance.
      *
@@ -39,7 +44,7 @@ class Kernel
      */
     public function handle(Request $request): ?Response
     {
-        $response = $this->prepare_response($request, $this->router::dispatch($request));
+        $response = $this->prepare_response($request, $this->send_request_to_router($request));
 
         if (is_a($response, Response::class)) {
             echo $response->send();
@@ -48,6 +53,37 @@ class Kernel
         $this->terminate($request);
 
         return $response;
+    }
+
+    public function send_request_to_router(Request $request)
+    {
+        $route = $this->router->find_route($request);
+        $middlewares = [];
+
+        foreach ($route->middleware() as $route_middleware) {
+            if (array_key_exists($route_middleware, $this->route_middleware)) {
+                foreach ($this->route_middleware[$route_middleware] as $item) {
+                    $middlewares[] = new $item();
+                }
+            }
+        }
+
+        // Define a handler for middleware stack execution
+        $handleMiddleware = function ($request) use ($middlewares) {
+            $pipe = array_reduce(array_reverse($middlewares), function ($stack, $middleware) {
+                return function ($passable) use ($stack, $middleware) {
+                    $middlewareInstance = new $middleware();
+                    return $middlewareInstance->handle($passable, $stack);
+                };
+            }, function ($request) {
+                return $this->router->dispatch($request);
+            });
+
+            return $pipe($request);
+        };
+
+        // Start middleware processing
+        return $handleMiddleware($request);
     }
 
     /**

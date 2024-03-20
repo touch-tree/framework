@@ -132,7 +132,7 @@ function error(string $key): ?string
  */
 function route(string $name, array $parameters = []): ?string
 {
-    return Router::route($name, $parameters);
+    return Application::get_instance()->get(Router::class)->route($name, $parameters);
 }
 
 /**
@@ -198,16 +198,18 @@ function old(string $key, ?string $default = null)
  */
 function config($key = null, $default = null)
 {
+    $config = Application::get_instance()->get(Config::class);
+
     if (is_null($key)) {
-        return Config::all();
+        return $config->all();
     }
 
     if (is_array($key)) {
-        Config::set_many($key);
+        $config->set($key);
         return $key;
     }
 
-    return Config::get($key, $default);
+    return $config->get($key, $default);
 }
 
 /**
@@ -245,7 +247,7 @@ function app(string $abstract = null, array $parameters = [])
         return Application::get_instance();
     }
 
-    return Application::get_instance()::get($abstract, $parameters);
+    return Application::get_instance()->get($abstract, $parameters);
 }
 
 /**
