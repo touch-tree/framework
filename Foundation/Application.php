@@ -2,10 +2,6 @@
 
 namespace Framework\Foundation;
 
-use Error;
-use Framework\Http\Kernel;
-use Framework\Support\Collection;
-
 /**
  * The Application class is responsible for bootstrapping the application and registering services.
  *
@@ -25,16 +21,16 @@ class Application extends Container
     /**
      * Service providers in this application.
      *
-     * @var Collection<ServiceProvider>
+     * @var array<ServiceProvider>
      */
-    private Collection $services;
+    private array $services = [];
 
     /**
      * Requested service providers.
      *
-     * @var string[]
+     * @var array<string>
      */
-    private array $requested_services;
+    private array $requested_services = [];
 
     /**
      * Application constructor.
@@ -43,10 +39,22 @@ class Application extends Container
      */
     public function __construct(string $base_path)
     {
-        $this->base_path = $base_path;
-        $this->services = new Collection();
+        $this->set_base_path($base_path);
 
         static::set_instance($this);
+    }
+
+    /**
+     * Set base path.
+     *
+     * @param string $base_path
+     * @return Application
+     */
+    public function set_base_path(string $base_path): Application
+    {
+        $this->base_path = $base_path;
+
+        return $this;
     }
 
     /**
@@ -66,33 +74,29 @@ class Application extends Container
      */
     private function bootstrap_services(): void
     {
+        $services = [];
+
         foreach ($this->get_requested_services() as $service) {
-            $class = (string)$this->get($service);
+            $class = $this->get($service);
 
-            if (is_a($class, ServiceProvider::class)) {
-                $class->register($this);
-
-                $this->services->set(get_class($class), $class);
+            if (!is_string($class) || !is_a($class, ServiceProvider::class)) {
+                continue;
             }
-        }
-    }
 
-    /**
-     * Get every service provider in this application.
-     *
-     * @return Collection
-     */
-    public function get_services(): Collection
-    {
-        return $this->services;
+            $class->register($this);
+
+            $services[get_class($class)] = $class;
+        }
+
+        $this->services = $services;
     }
 
     /**
      * Get requested services.
      *
-     * @return string[]
+     * @return array<string>
      */
-    public function get_requested_services(): array
+    private function get_requested_services(): array
     {
         return $this->requested_services;
     }
@@ -108,6 +112,16 @@ class Application extends Container
         $this->requested_services = $services;
 
         return $this;
+    }
+
+    /**
+     * Get every service provider in this application.
+     *
+     * @return array<ServiceProvider>
+     */
+    public function get_services(): array
+    {
+        return $this->services;
     }
 
     /**
