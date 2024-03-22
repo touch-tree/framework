@@ -63,16 +63,15 @@ class Kernel
         foreach ($route->middleware() as $route_middleware) {
             if (array_key_exists($route_middleware, $this->route_middleware)) {
                 foreach ($this->route_middleware[$route_middleware] as $item) {
-                    $middlewares[] = new $item();
+                    $middlewares[] = $item;
                 }
             }
         }
 
-        // Define a handler for middleware stack execution
         $handleMiddleware = function ($request) use ($middlewares) {
             $pipe = array_reduce(array_reverse($middlewares), function ($stack, $middleware) {
                 return function ($passable) use ($stack, $middleware) {
-                    $middlewareInstance = new $middleware();
+                    $middlewareInstance = app()->get($middleware);
                     return $middlewareInstance->handle($passable, $stack);
                 };
             }, function ($request) {
@@ -82,7 +81,6 @@ class Kernel
             return $pipe($request);
         };
 
-        // Start middleware processing
         return $handleMiddleware($request);
     }
 

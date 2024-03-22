@@ -2,6 +2,8 @@
 
 namespace Framework\Routing;
 
+use Framework\Http\Kernel;
+
 /**
  * The Route class represents a singular route in the routing system.
  *

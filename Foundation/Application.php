@@ -2,6 +2,9 @@
 
 namespace Framework\Foundation;
 
+use App\Http\Kernel;
+use Framework\Http\Kernel as HttpKernel;
+
 /**
  * The Application class is responsible for bootstrapping the application and registering services.
  *
@@ -40,6 +43,7 @@ class Application extends Container
     public function __construct(string $base_path)
     {
         $this->set_base_path($base_path);
+        $this->register_core_bindings();
 
         static::set_instance($this);
     }
@@ -133,5 +137,14 @@ class Application extends Container
     public function base_path(?string $path = null): string
     {
         return $this->base_path . DIRECTORY_SEPARATOR . ltrim($path);
+    }
+
+    /**
+     *
+     * @return void
+     */
+    private function register_core_bindings()
+    {
+        $this->singleton(HttpKernel::class, Kernel::class);
     }
 }

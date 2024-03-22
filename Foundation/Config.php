@@ -2,6 +2,7 @@
 
 namespace Framework\Foundation;
 
+use Framework\Support\File;
 use Framework\Support\Map;
 
 /**
@@ -19,6 +20,21 @@ class Config
      * @var array
      */
     private static array $items = [];
+
+    /**
+     * Load configuration files from the specified path and merge them into the configuration array.
+     *
+     * @param string $path The path to the configuration files.
+     * @return void
+     */
+    public function load_configuration_files(string $path): void
+    {
+        foreach (File::files($path, ['php']) as $file) {
+            if (is_array($config = include $file)) {
+                self::$items = array_merge_recursive(self::$items, $config);
+            }
+        }
+    }
 
     /**
      * Get the entire configuration array.
