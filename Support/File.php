@@ -7,9 +7,9 @@ use RecursiveIteratorIterator;
 use SplFileInfo;
 
 /**
- * Class File
+ * The class File provides utility functions for handling files and directories.
  *
- * Provides utility functions for handling files and directories.
+ * @package Framework\Support
  */
 class File
 {

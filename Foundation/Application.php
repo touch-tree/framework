@@ -4,6 +4,7 @@ namespace Framework\Foundation;
 
 use App\Http\Kernel;
 use Framework\Http\Kernel as HttpKernel;
+use Framework\Support\Collection;
 
 /**
  * The Application class is responsible for bootstrapping the application and registering services.
@@ -22,18 +23,18 @@ class Application extends Container
     private string $base_path;
 
     /**
-     * Service providers in this application.
+     * Get loaded service providers in this application.
      *
      * @var array<ServiceProvider>
      */
-    private array $services = [];
+    private array $loaded_services = [];
 
     /**
-     * Requested service providers.
+     * Service providers.
      *
      * @var array<string>
      */
-    private array $requested_services = [];
+    private array $services = [];
 
     /**
      * Application constructor.
@@ -51,7 +52,7 @@ class Application extends Container
     /**
      * Set base path.
      *
-     * @param string $base_path
+     * @param string $base_path The base path for this application.
      * @return Application
      */
     public function set_base_path(string $base_path): Application
@@ -64,6 +65,8 @@ class Application extends Container
     /**
      * Bootstrap the application.
      *
+     * This method initiates the bootstrap process for the application, including the initialization of registered services.
+     *
      * @return void
      */
     public function bootstrap()
@@ -74,46 +77,59 @@ class Application extends Container
     /**
      * Bootstrap services.
      *
+     * This method iterates over the requested services and initializes them by calling their registration methods.
+     *
      * @return void
      */
-    private function bootstrap_services(): void
+    private function bootstrap_services()
     {
-        $services = [];
-
-        foreach ($this->get_requested_services() as $service) {
-            $class = $this->get($service);
-
-            if (!is_string($class) || !is_a($class, ServiceProvider::class)) {
-                continue;
-            }
-
-            $class->register($this);
-
-            $services[get_class($class)] = $class;
-        }
-
-        $this->services = $services;
+        $this->load_services();
+        $this->register_services();
     }
 
     /**
-     * Get requested services.
+     * Load services.
      *
-     * @return array<string>
+     * This method loads services into the application.
+     *
+     * @return void
      */
-    private function get_requested_services(): array
+    private function load_services()
     {
-        return $this->requested_services;
+        $services = new Collection($this->services);
+
+        $services = $services
+            ->each(fn(string $service) => $this->get($service))
+            ->to_array();
+
+        $this->loaded_services = $services;
+    }
+
+    /**
+     * Register services.
+     *
+     * This method registers loaded services into the application.
+     *
+     * @return void
+     */
+    private function register_services(): void
+    {
+        $services = new Collection($this->loaded_services);
+
+        $services
+            ->each(fn(ServiceProvider $service) => $service->register($this))
+            ->to_array();
     }
 
     /**
      * Set services.
      *
-     * @param array $services
+     * @param array $services The services to be set.
      * @return Application
      */
     public function set_services(array $services): Application
     {
-        $this->requested_services = $services;
+        $this->services = $services;
 
         return $this;
     }
@@ -121,25 +137,28 @@ class Application extends Container
     /**
      * Get every service provider in this application.
      *
-     * @return array<ServiceProvider>
+     * @return array<ServiceProvider> The array of loaded service providers.
      */
     public function get_services(): array
     {
-        return $this->services;
+        return $this->loaded_services;
     }
 
     /**
      * Get the absolute path to the base directory of the application.
      *
-     * @param string|null $path [optional] The relative path to append to the base path.
+     * @param string|null $path The relative path to append to the base path.
      * @return string The absolute path to the base directory of the application.
      */
     public function base_path(?string $path = null): string
     {
-        return $this->base_path . DIRECTORY_SEPARATOR . ltrim($path);
+        return $this->base_path . DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR);
     }
 
     /**
+     * Register core bindings.
+     *
+     * This method registers core bindings for the application.
      *
      * @return void
      */

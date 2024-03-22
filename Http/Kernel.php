@@ -5,6 +5,7 @@ namespace Framework\Http;
 use Framework\Foundation\Container;
 use Framework\Foundation\View;
 use Framework\Routing\Router;
+use Framework\Support\Pipeline;
 
 /**
  * The Kernel class is the central HTTP component of the application.
@@ -15,8 +16,18 @@ use Framework\Routing\Router;
  */
 class Kernel
 {
+    /**
+     * Array of global middleware to be applied to every request.
+     *
+     * @var array
+     */
     protected array $middleware = [];
 
+    /**
+     * Array of route-specific middleware.
+     *
+     * @var array
+     */
     protected array $route_middleware = [];
 
     /**
@@ -44,7 +55,7 @@ class Kernel
      */
     public function handle(Request $request): ?Response
     {
-        $response = $this->prepare_response($request, $this->send_request_to_router($request));
+        $response = $this->prepare_response($request, $this->send_request_through_router($request));
 
         if (is_a($response, Response::class)) {
             echo $response->send();
@@ -55,33 +66,38 @@ class Kernel
         return $response;
     }
 
-    public function send_request_to_router(Request $request)
+    /**
+     * Send the request through the router and middleware pipeline.
+     *
+     * @param Request $request The incoming HTTP request.
+     * @return mixed The response returned by the router and middleware pipeline.
+     */
+    public function send_request_through_router(Request $request)
     {
         $route = $this->router->find_route($request);
+        $middlewares = $this->get_middleware_for_route($route);
+
+        return app(Pipeline::class)
+            ->send($request)
+            ->through($middlewares)
+            ->then(fn($request) => $this->router->dispatch($request));
+    }
+
+    /**
+     * Get the middleware for the route.
+     *
+     * @param mixed $route The route object.
+     * @return array Array of middleware for the route.
+     */
+    protected function get_middleware_for_route($route): array
+    {
         $middlewares = [];
 
-        foreach ($route->middleware() as $route_middleware) {
-            if (array_key_exists($route_middleware, $this->route_middleware)) {
-                foreach ($this->route_middleware[$route_middleware] as $item) {
-                    $middlewares[] = $item;
-                }
-            }
+        foreach ($route->middleware() as $middleware) {
+            $middlewares[] = $this->route_middleware[$middleware] ?? [];
         }
 
-        $handleMiddleware = function ($request) use ($middlewares) {
-            $pipe = array_reduce(array_reverse($middlewares), function ($stack, $middleware) {
-                return function ($passable) use ($stack, $middleware) {
-                    $middlewareInstance = app()->get($middleware);
-                    return $middlewareInstance->handle($passable, $stack);
-                };
-            }, function ($request) {
-                return $this->router->dispatch($request);
-            });
-
-            return $pipe($request);
-        };
-
-        return $handleMiddleware($request);
+        return array_merge(...$middlewares);
     }
 
     /**

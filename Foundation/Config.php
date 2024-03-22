@@ -29,10 +29,14 @@ class Config
      */
     public function load_configuration_files(string $path): void
     {
-        foreach (File::files($path, ['php']) as $file) {
-            if (is_array($config = include $file)) {
-                self::$items = array_merge_recursive(self::$items, $config);
+        foreach (File::files($path, 'php') as $file) {
+            $file = @include $file;
+
+            if (!$file) {
+                continue;
             }
+
+            self::$items = array_merge_recursive(self::$items, $file);
         }
     }
 
