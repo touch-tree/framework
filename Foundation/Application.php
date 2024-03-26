@@ -4,6 +4,7 @@ namespace Framework\Foundation;
 
 use App\Http\Kernel;
 use Framework\Http\Kernel as HttpKernel;
+use Framework\Routing\Router;
 use Framework\Support\Collection;
 
 /**
@@ -114,11 +115,9 @@ class Application extends Container
      */
     private function register_services(): void
     {
-        $services = new Collection($this->loaded_services);
-
-        $services
-            ->each(fn(ServiceProvider $service) => $service->register($this))
-            ->to_array();
+        foreach ($this->loaded_services as $service) {
+            $service->register($this);
+        }
     }
 
     /**
@@ -165,5 +164,11 @@ class Application extends Container
     private function register_core_bindings()
     {
         $this->singleton(HttpKernel::class, Kernel::class);
+
+        $this->singleton(Router::class, function () {
+            return new Router($this);
+        });
+
+        $this->singleton(ExceptionHandler::class, ExceptionHandler::class);
     }
 }

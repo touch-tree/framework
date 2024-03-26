@@ -3,10 +3,14 @@
 namespace Framework\Support;
 
 use Closure;
-use Error;
+use Exception;
+use Framework\Foundation\Container;
+use Framework\Http\Middleware;
 
 /**
  * The Pipeline class allows for the execution of a sequence of operations (pipes) on an object.
+ *
+ * This class is used to run a through an array of functions.
  *
  * @package Framework\Support
  */
@@ -25,6 +29,31 @@ class Pipeline
      * @var mixed
      */
     protected $passable;
+
+    /**
+     * The container implementation.
+     *
+     * @var Container|null
+     */
+    private ?Container $container;
+
+    /**
+     * The method to be called when class is run through the pipeline.
+     *
+     * @var string
+     */
+    private string $method;
+
+    /**
+     * Create a new class instance.
+     *
+     * @param Container|null $container
+     * @return void
+     */
+    public function __construct(Container $container = null)
+    {
+        $this->container = $container;
+    }
 
     /**
      * Set the object being sent through the pipeline.
@@ -48,6 +77,19 @@ class Pipeline
     public function through($pipes): Pipeline
     {
         $this->pipes = is_array($pipes) ? $pipes : func_get_args();
+
+        return $this;
+    }
+
+    /**
+     * Set the method to call on the pipes.
+     *
+     * @param string $method
+     * @return $this
+     */
+    public function via(string $method): Pipeline
+    {
+        $this->method = $method;
 
         return $this;
     }
@@ -87,14 +129,31 @@ class Pipeline
     {
         return function ($stack, $pipe) {
             return function ($passable) use ($stack, $pipe) {
-                $middleware = app($pipe);
+                try {
+                    $pipe = $this->container->get($pipe);
 
-                if (method_exists($middleware, 'handle')) {
-                    return $middleware->handle($passable, $stack);
-                } else {
-                    throw new Error('This class needs to have a handle method');
+                    if (is_a($pipe, Middleware::class)) {
+                        return $pipe->handle($passable, $stack);
+                    }
+
+                    return method_exists($pipe, $this->method) ? $pipe->{$this->method}($passable, $stack) : $pipe($passable, $stack);
+                } catch (Exception $exception) {
+                    return $this->handle_exception($passable, $exception);
                 }
             };
         };
+    }
+
+    /**
+     * Handle an exception by rethrowing it.
+     *
+     * @param mixed $passable The data being passed through the pipeline.
+     * @param Exception $exception The exception to be handled.
+     *
+     * @throws Exception The exception is rethrown.
+     */
+    private function handle_exception($passable, Exception $exception)
+    {
+        throw $exception;
     }
 }

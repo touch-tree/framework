@@ -37,13 +37,16 @@ class Kernel
      */
     protected Router $router;
 
+    private Container $container;
+
     /**
      * Kernel constructor.
      *
      * @param Router $router The router instance.
      */
-    public function __construct(Router $router)
+    public function __construct(Container $container, Router $router)
     {
+        $this->container = $container;
         $this->router = $router;
     }
 
@@ -75,9 +78,10 @@ class Kernel
     public function send_request_through_router(Request $request)
     {
         $route = $this->router->find_route($request);
+
         $middlewares = $this->get_middleware_for_route($route);
 
-        return app(Pipeline::class)
+        return $this->container->get(Pipeline::class)
             ->send($request)
             ->through($middlewares)
             ->then(fn($request) => $this->router->dispatch($request));

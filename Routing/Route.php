@@ -47,7 +47,7 @@ class Route
      *
      * @var array
      */
-    protected array $middleware;
+    protected array $middleware = [];
 
     /**
      * Route constructor.
@@ -62,7 +62,6 @@ class Route
         $this->method = $method;
         $this->action = $action;
         $this->name = null;
-        $this->middleware = [];
     }
 
     /**

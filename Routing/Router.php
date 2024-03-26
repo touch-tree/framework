@@ -4,6 +4,7 @@ namespace Framework\Routing;
 
 use Error;
 use Exception;
+use Framework\Foundation\Container;
 use Framework\Foundation\View;
 use Framework\Http\JsonResponse;
 use Framework\Http\RedirectResponse;
@@ -29,6 +30,24 @@ class Router
      * @var RouteCollection
      */
     private static RouteCollection $routes;
+
+    private Container $container;
+
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
+    }
+
+    private static function get_instance(): self
+    {
+        static $instance;
+
+        if (!isset($instance)) {
+            $instance = new self(new Container());
+        }
+
+        return $instance;
+    }
 
     /**
      * Get the RouteCollection instance containing all registered routes.
@@ -75,7 +94,7 @@ class Router
      */
     public static function get(string $uri, array $action): Router
     {
-        return self::add_route('GET', $uri, $action);
+        return self::get_instance()->add_route('GET', $uri, $action);
     }
 
     /**
@@ -87,7 +106,7 @@ class Router
      */
     public static function post(string $uri, array $action): Router
     {
-        return self::add_route('POST', $uri, $action);
+        return self::get_instance()->add_route('POST', $uri, $action);
     }
 
     /**
@@ -102,7 +121,7 @@ class Router
     {
         self::routes()->add(new Route($uri, $method, $action));
 
-        return new self();
+        return self::get_instance();
     }
 
     /**
@@ -115,8 +134,9 @@ class Router
      */
     public function name(string $name): Router
     {
-        $route = self::routes()->all()[count(self::routes()->all()) - 1];
-        $route->set_name($name);
+        $routes = self::routes()->all();
+
+        end($routes)->set_name($name);
 
         return $this;
     }
@@ -129,7 +149,8 @@ class Router
      */
     public function middleware($key): Router
     {
-        $route = self::routes()->all()[count(self::routes()->all()) - 1];
+        $routes = self::routes()->all();
+        $route = end($routes);
 
         if (is_array($key)) {
             $route->set_middleware($key);
@@ -163,9 +184,10 @@ class Router
 
         try {
             [$class, $method] = $route->action();
+
             $route_uri = Url::to($route->uri(), [], true);
 
-            return $this->resolve_controller([app($class), $method], $this->get_parameters($route_uri, $request->request_uri()));
+            return $this->resolve_controller([$this->container->get($class), $method], $this->get_parameters($route_uri, $request->request_uri()));
         } catch (Exception $exception) {
             return null;
         }
@@ -199,7 +221,7 @@ class Router
             }
 
             if (is_subclass_of($type->getName(), Request::class)) {
-                $reflection_parameters[] = app($type->getName());
+                $reflection_parameters[] = $this->container->get($type->getName());
                 continue;
             }
 
