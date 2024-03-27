@@ -2,8 +2,6 @@
 
 namespace Framework\Foundation;
 
-use Framework\Foundation\Application;
-
 /**
  * Class ServiceProvider
  *

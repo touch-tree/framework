@@ -3,7 +3,6 @@
 namespace Framework\Http;
 
 use Exception;
-use Framework\Foundation\Session;
 use Framework\Foundation\Validator;
 
 /**

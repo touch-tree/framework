@@ -22,25 +22,6 @@ class Config
     private static array $items = [];
 
     /**
-     * Load configuration files from the specified path and merge them into the configuration array.
-     *
-     * @param string $path The path to the configuration files.
-     * @return void
-     */
-    public function load_configuration_files(string $path): void
-    {
-        foreach (File::files($path, 'php') as $file) {
-            $file = @include $file;
-
-            if (!$file) {
-                continue;
-            }
-
-            self::$items = array_merge_recursive(self::$items, $file);
-        }
-    }
-
-    /**
      * Get the entire configuration array.
      *
      * @return array The array of configuration values.
