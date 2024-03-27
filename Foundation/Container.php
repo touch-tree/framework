@@ -158,7 +158,7 @@ class Container
      * @param Closure|string|object $concrete The closure, class name, or instance.
      * @return void
      */
-    public function bind(string $abstract, $concrete): void
+    public function bind(string $abstract, $concrete)
     {
         self::$bindings[$abstract] = $concrete;
     }
@@ -172,7 +172,7 @@ class Container
      *
      * @throws Error
      */
-    public function singleton(string $abstract, $concrete): void
+    public function singleton(string $abstract, $concrete)
     {
         $this->bind($abstract, $concrete);
 
@@ -207,7 +207,7 @@ class Container
      * @param string $abstract The abstract class or interface.
      * @return void
      */
-    public function forget_binding(string $abstract): void
+    public function forget_binding(string $abstract)
     {
         unset(self::$bindings[$abstract]);
     }

@@ -75,7 +75,7 @@ class HeaderBag extends ParameterBag
      *
      * @param string $key The header key.
      */
-    public function remove(string $key): void
+    public function remove(string $key)
     {
         parent::remove($key);
     }

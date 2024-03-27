@@ -74,7 +74,7 @@ class Application extends Container
      * @param string $path The path to the configuration directory.
      * @return void
      */
-    public function set_config_path(string $path): void
+    public function set_config_path(string $path)
     {
         $this->config_path = $path;
     }
@@ -99,7 +99,7 @@ class Application extends Container
      *
      * @return void
      */
-    public function bootstrap(): void
+    public function bootstrap()
     {
         $this->bootstrap_services();
         $this->load_configuration_files();
@@ -112,7 +112,7 @@ class Application extends Container
      *
      * @return void
      */
-    private function register_core_bindings(): void
+    private function register_core_bindings()
     {
         $this->singleton(HttpKernel::class, Kernel::class);
 
@@ -128,7 +128,7 @@ class Application extends Container
      *
      * @return void
      */
-    public function load_configuration_files(): void
+    public function load_configuration_files()
     {
         foreach (File::files($this->get_config_path()) as $file) {
             $config = include $file;
@@ -148,7 +148,7 @@ class Application extends Container
      *
      * @return void
      */
-    private function bootstrap_services(): void
+    private function bootstrap_services()
     {
         $this->load_services();
         $this->register_services();
@@ -161,7 +161,7 @@ class Application extends Container
      *
      * @return void
      */
-    private function load_services(): void
+    private function load_services()
     {
         $services = new Collection($this->services);
 
@@ -179,7 +179,7 @@ class Application extends Container
      *
      * @return void
      */
-    private function register_services(): void
+    private function register_services()
     {
         foreach ($this->loaded_services as $service) {
             $service->register($this);
