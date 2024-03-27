@@ -3,6 +3,8 @@
 namespace Framework\Http;
 
 use Framework\Foundation\Container;
+use Framework\Foundation\Exception\HttpException;
+use Framework\Foundation\Exception\NotFoundHttpException;
 use Framework\Foundation\View;
 use Framework\Routing\Router;
 use Framework\Support\Pipeline;
@@ -55,6 +57,7 @@ class Kernel
      *
      * @param Request $request The incoming HTTP request to be handled.
      * @return Response|null The response to the request, or null if no response is generated.
+     * @throws NotFoundHttpException
      */
     public function handle(Request $request): ?Response
     {
@@ -74,12 +77,17 @@ class Kernel
      *
      * @param Request $request The incoming HTTP request.
      * @return mixed The response returned by the router and middleware pipeline.
+     * @throws NotFoundHttpException
      */
     public function send_request_through_router(Request $request)
     {
         $route = $this->router->find_route($request);
 
-        $middlewares = $this->get_middleware_for_route($route);
+        if (is_null($route)) {
+            throw new NotFoundHttpException();
+        }
+
+        $middlewares = array_merge($this->middleware, $this->get_middleware_for_route($route));
 
         return $this->container->get(Pipeline::class)
             ->send($request)
@@ -137,6 +145,6 @@ class Kernel
             return response($response->render(), Response::HTTP_OK, $response->get_headers());
         }
 
-        return response(view('errors.404')->render(), Response::HTTP_NOT_FOUND);
+        return null;
     }
 }

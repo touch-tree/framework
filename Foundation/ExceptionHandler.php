@@ -2,7 +2,10 @@
 
 namespace Framework\Foundation;
 
+use Error;
 use Exception;
+use Framework\Foundation\Exception\HttpException;
+use Framework\Http\Response;
 
 /**
  * The ExceptionHandler class handles exceptions thrown within the framework.
@@ -21,7 +24,12 @@ class ExceptionHandler
      */
     public function __construct()
     {
-        set_exception_handler(fn(Exception $e) => $this->handle($e));
+        set_exception_handler(fn($e) => $this->render($e));
+    }
+
+    private function render($e)
+    {
+        echo $this->handle($e)->send();
     }
 
     /**
@@ -30,9 +38,14 @@ class ExceptionHandler
      * This method is called when an uncaught exception occurs within the framework.
      * It provides a centralized location to handle exceptions and implement custom logic.
      *
-     * @param Exception $exception The exception to handle
+     * @param Exception|Error $exception The exception to handle
      */
-    public function handle(Exception $exception)
+    public function handle($exception): Response
     {
+        if (is_a($exception, HttpException::class)) {
+            return $exception->get_response();
+        }
+
+        return response(null, Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 }
