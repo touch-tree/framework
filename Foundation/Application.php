@@ -217,6 +217,6 @@ class Application extends Container
      */
     public function base_path(?string $path = null): string
     {
-        return $this->base_path . DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR);
+        return normalize_path($this->base_path . DIRECTORY_SEPARATOR . ltrim($path));
     }
 }

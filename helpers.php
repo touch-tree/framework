@@ -261,16 +261,15 @@ function base_path(string $path = null): string
 }
 
 /**
- * Converts backslashes to slashes in a string.
+ * Normalizes a file path by converting backslashes to slashes.
  *
  * This function replaces all occurrences of backslashes with forward slashes (/)
- * in the given string.
+ * in the given file path string.
  *
- * @param string $input The input string to convert.
- *
- * @return string The input string with backslashes converted to slashes.
+ * @param string $input The file path string to normalize.
+ * @return string The normalized file path with backslashes converted to slashes.
  */
-function url_slash(string $input): string
+function normalize_path(string $input): string
 {
     return str_replace(DIRECTORY_SEPARATOR, '/', $input);
 }

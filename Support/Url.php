@@ -45,7 +45,7 @@ class Url
         $root = server()->get('DOCUMENT_ROOT');
         $base = base_path();
 
-        return config('app.url') ?: request()->root() . str_replace(rtrim($root, '/') . '/', '', url_slash($base));
+        return config('app.url') ?: request()->root() . str_replace(rtrim($root, '/') . '/', '', normalize_path($base));
     }
 
     /**
