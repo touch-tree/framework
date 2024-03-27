@@ -6,7 +6,7 @@ use Framework\Http\Response;
 use Throwable;
 
 /**
- * Exception representing a 'not found' HTTP error.
+ * Exception representing a 'Not Found' HTTP error.
  *
  * This exception should be thrown when a requested resource is not found.
  *
@@ -17,14 +17,12 @@ class NotFoundHttpException extends HttpException
     /**
      * Create a new NotFoundHttpException instance.
      *
-     * @param string|null $message [optional] The error message (content).
-     * @param int $code [optional] The HTTP response code (default: 404).
-     * @param Throwable|null $previous [optional] The previous exception used for the exception chaining.
+     * @return void
      */
-    public function __construct(string $message = null, int $code = Response::HTTP_NOT_FOUND, Throwable $previous = null)
+    public function __construct()
     {
-        $default = view('errors.404')->render();
+        $view = view('errors.404');
 
-        parent::__construct($message ?? $default, $code, $previous);
+        parent::__construct($view->render(), Response::HTTP_NOT_FOUND);
     }
 }
