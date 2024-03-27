@@ -3,7 +3,6 @@
 namespace Framework\Routing;
 
 use Framework\Http\Request;
-use Framework\Support\Collection;
 use Framework\Support\Url;
 
 /**
@@ -75,7 +74,7 @@ class RouteCollection
         foreach ($this->routes as $route) {
             $route_uri = Url::to($route->uri(), [], true);
 
-            if ($request->method() === $route->method() && preg_match(app(Router::class)::get_pattern($route_uri), $request->path())) {
+            if ($request->method() === $route->method() && preg_match(app(Router::class)->get_pattern($route_uri), $request->path())) {
                 return $route;
             }
         }

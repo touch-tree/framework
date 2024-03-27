@@ -6,6 +6,7 @@ use App\Http\Kernel;
 use Framework\Http\Kernel as HttpKernel;
 use Framework\Routing\Router;
 use Framework\Support\Collection;
+use Framework\Support\File;
 
 /**
  * The Application class is responsible for bootstrapping the application and registering services.
@@ -38,6 +39,13 @@ class Application extends Container
     private array $services = [];
 
     /**
+     * The path to the configuration directory.
+     *
+     * @var string
+     */
+    private string $config_path;
+
+    /**
      * Application constructor.
      *
      * @param string|null $base_path The base path for this application.
@@ -48,6 +56,27 @@ class Application extends Container
         $this->register_core_bindings();
 
         static::set_instance($this);
+    }
+
+    /**
+     * Get the path to the configuration directory.
+     *
+     * @return string
+     */
+    public function get_config_path(): string
+    {
+        return $this->config_path;
+    }
+
+    /**
+     * Set the path to the configuration directory.
+     *
+     * @param string $path The path to the configuration directory.
+     * @return void
+     */
+    public function set_config_path(string $path): void
+    {
+        $this->config_path = $path;
     }
 
     /**
@@ -70,9 +99,46 @@ class Application extends Container
      *
      * @return void
      */
-    public function bootstrap()
+    public function bootstrap(): void
     {
         $this->bootstrap_services();
+        $this->load_configuration_files();
+    }
+
+    /**
+     * Register core bindings.
+     *
+     * This method registers core bindings for the application.
+     *
+     * @return void
+     */
+    private function register_core_bindings(): void
+    {
+        $this->singleton(HttpKernel::class, Kernel::class);
+
+        $this->singleton(Router::class, function () {
+            return new Router($this);
+        });
+
+        $this->singleton(ExceptionHandler::class, ExceptionHandler::class);
+    }
+
+    /**
+     * Load configuration files from the specified path and merge them into the configuration array.
+     *
+     * @return void
+     */
+    public function load_configuration_files(): void
+    {
+        foreach (File::files($this->get_config_path()) as $file) {
+            $config = include $file;
+
+            if (!is_array($config)) {
+                continue;
+            }
+
+            $this->get(Config::class)->set($config);
+        }
     }
 
     /**
@@ -82,7 +148,7 @@ class Application extends Container
      *
      * @return void
      */
-    private function bootstrap_services()
+    private function bootstrap_services(): void
     {
         $this->load_services();
         $this->register_services();
@@ -95,7 +161,7 @@ class Application extends Container
      *
      * @return void
      */
-    private function load_services()
+    private function load_services(): void
     {
         $services = new Collection($this->services);
 
@@ -152,23 +218,5 @@ class Application extends Container
     public function base_path(?string $path = null): string
     {
         return $this->base_path . DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR);
-    }
-
-    /**
-     * Register core bindings.
-     *
-     * This method registers core bindings for the application.
-     *
-     * @return void
-     */
-    private function register_core_bindings()
-    {
-        $this->singleton(HttpKernel::class, Kernel::class);
-
-        $this->singleton(Router::class, function () {
-            return new Router($this);
-        });
-
-        $this->singleton(ExceptionHandler::class, ExceptionHandler::class);
     }
 }

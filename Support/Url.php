@@ -17,16 +17,6 @@ use Framework\Routing\Router;
 class Url
 {
     /**
-     * Get the application's router.
-     *
-     * @return Router
-     */
-    protected static function router(): Router
-    {
-        return Application::get_instance()->get(Router::class);
-    }
-
-    /**
      * Generate a URL for the given route name.
      *
      * @param string $route_name The name of the route.
@@ -36,7 +26,7 @@ class Url
      */
     public static function route(string $route_name, array $parameters = [], bool $absolute = true): string
     {
-        $route_uri = self::router()->route($route_name, $parameters);
+        $route_uri = app(Router::class)->route($route_name, $parameters);
 
         if ($absolute) {
             $route_uri = request()->root() . ltrim($route_uri, '/');

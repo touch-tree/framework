@@ -34,5 +34,6 @@ class ExceptionHandler
      */
     public function handle(Exception $exception)
     {
+        echo $exception->getMessage();
     }
 }

@@ -14,7 +14,6 @@
 use Framework\Foundation\Application;
 use Framework\Foundation\Config;
 use Framework\Foundation\Container;
-use Framework\Foundation\ParameterBag;
 use Framework\Foundation\Session;
 use Framework\Foundation\View;
 use Framework\Http\HeaderBag;
