@@ -4,7 +4,7 @@ namespace Framework\Foundation;
 
 use Error;
 use Exception;
-use Framework\Foundation\Exception\HttpException;
+use Framework\Http\Exception\HttpException;
 use Framework\Http\Response;
 
 /**

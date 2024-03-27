@@ -3,9 +3,8 @@
 namespace Framework\Http;
 
 use Framework\Foundation\Container;
-use Framework\Foundation\Exception\HttpException;
-use Framework\Foundation\Exception\NotFoundHttpException;
 use Framework\Foundation\View;
+use Framework\Http\Exception\NotFoundHttpException;
 use Framework\Routing\Router;
 use Framework\Support\Pipeline;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Foundation\Exception;
+namespace Framework\Http\Exception;
 
 use Exception;
 use Framework\Http\HeaderBag;
@@ -9,7 +9,7 @@ use Framework\Http\Response;
 /**
  * The HttpException class represents an HTTP exception.
  *
- * @package Framework\Foundation\Exception
+ * @package Framework\Http\Exception
  */
 class HttpException extends Exception
 {
