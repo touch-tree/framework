@@ -73,6 +73,17 @@ function resource_path(string $path = null): string
 }
 
 /**
+ * Get the path to the 'public' directory.
+ *
+ * @param string|null $path [optional] Additional path within the 'public' directory.
+ * @return string The absolute path to the 'public' directory or its subdirectory.
+ */
+function public_path(string $path = null): string
+{
+    return Application::get_instance()->base_path('public/') . ltrim($path, '/');
+}
+
+/**
  * Get the path to the 'storage' directory.
  *
  * @param string|null $path [optional] Additional path within the 'storage' directory.
@@ -311,22 +322,4 @@ function url(string $path = null)
 function asset(string $path): string
 {
     return Url::to('/public/') . trim($path, '/');
-}
-
-/**
- * Search for an object in an array based on specified properties and values.
- *
- * @param array $array The array to search.
- * @param array $search The associative array of properties and values to match.
- * @return array|null The found object or null if not found.
- */
-function find_object_by_properties(array $array, array $search): ?array
-{
-    foreach ($array as $item) {
-        if (is_array($item) && array_intersect_assoc($search, $item) == $search) {
-            return $item;
-        }
-    }
-
-    return null;
 }
