@@ -11,19 +11,19 @@
 |-----------------------------------------------------------------------------
 */
 
-use Framework\Foundation\Application;
-use Framework\Foundation\Config;
-use Framework\Foundation\Container;
-use Framework\Foundation\Session;
-use Framework\Foundation\View;
-use Framework\Http\HeaderBag;
-use Framework\Http\Redirect;
-use Framework\Http\RedirectResponse;
-use Framework\Http\Request;
-use Framework\Http\Response;
-use Framework\Http\Server;
-use Framework\Routing\Router;
-use Framework\Support\Url;
+use framework\foundation\Application;
+use framework\foundation\Config;
+use framework\foundation\Container;
+use framework\foundation\Session;
+use framework\foundation\View;
+use framework\http\HeaderBag;
+use framework\http\Redirect;
+use framework\http\RedirectResponse;
+use framework\http\Request;
+use framework\http\Response;
+use framework\http\Server;
+use framework\routing\Router;
+use framework\support\Url;
 
 /**
  * Redirect to a specified route.
