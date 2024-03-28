@@ -1,10 +1,10 @@
 <?php
 
-namespace Framework\Foundation\exception;
+namespace Framework\Foundation\Exception;
 
 use Error;
 use Exception;
-use Framework\Http\exception\HttpException;
+use Framework\Http\Exception\HttpException;
 use Framework\Http\Response;
 
 /**
@@ -12,7 +12,7 @@ use Framework\Http\Response;
  *
  * It provides a centralized place for exception handling logic.
  *
- * @package Framework\Foundation\exception
+ * @package Framework\Foundation\Exception
  */
 class Handler
 {

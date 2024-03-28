@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Http\exception;
+namespace Framework\Http\Exception;
 
 use Framework\Http\Response;
 
@@ -9,7 +9,7 @@ use Framework\Http\Response;
  *
  * This exception should be thrown when a requested resource is not found.
  *
- * @package Framework\Http\exception
+ * @package Framework\Http\Exception
  */
 class NotFoundHttpException extends HttpException
 {

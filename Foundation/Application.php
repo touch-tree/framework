@@ -3,7 +3,7 @@
 namespace Framework\Foundation;
 
 use app\http\Kernel;
-use Framework\Foundation\exception\Handler;
+use Framework\Foundation\Exception\Handler;
 use Framework\Http\Kernel as HttpKernel;
 use Framework\Routing\Router;
 use Framework\Support\Collection;
