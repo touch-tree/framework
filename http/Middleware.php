@@ -1,6 +1,6 @@
 <?php
 
-namespace framework\http;
+namespace Framework\Http;
 
 use Closure;
 
@@ -9,7 +9,7 @@ use Closure;
  *
  * Middleware classes can perform tasks such as authentication, logging, or modifying request/response objects.
  *
- * @package framework\http
+ * @package Framework\Http
  */
 class Middleware
 {

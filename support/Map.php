@@ -1,6 +1,6 @@
 <?php
 
-namespace framework\support;
+namespace Framework\Support;
 
 use ArrayAccess;
 use Error;
@@ -12,7 +12,7 @@ use Error;
  * within nested arrays using dot notation. It also provides methods for extracting subsets of arrays,
  * plucking values, and collapsing arrays.
  *
- * @package framework\support
+ * @package Framework\Support
  */
 class Map
 {

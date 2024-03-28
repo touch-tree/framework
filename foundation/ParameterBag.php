@@ -1,13 +1,13 @@
 <?php
 
-namespace framework\foundation;
+namespace Framework\Foundation;
 
 /**
  * The ParameterBag class represents a simple class for managing a collection of parameters.
  *
  * This class provides methods to interact with parameters stored as an associative array.
  *
- * @package framework\foundation
+ * @package Framework\Foundation
  */
 class ParameterBag
 {

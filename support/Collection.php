@@ -1,6 +1,6 @@
 <?php
 
-namespace framework\support;
+namespace Framework\Support;
 
 /**
  * The Collection class represents a generic collection of items.
@@ -10,7 +10,7 @@ namespace framework\support;
  * It supports iteration, mapping, filtering, and retrieval of the first and last items in the collection.
  *
  * @template T
- * @package framework\support
+ * @package Framework\Support
  */
 class Collection
 {

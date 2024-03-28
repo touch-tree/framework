@@ -1,13 +1,13 @@
 <?php
 
-namespace framework\http;
+namespace Framework\Http;
 
 /**
  * The Response class represents an HTTP response in the application.
  *
  * This class encapsulates the content, status code, and headers of an HTTP response.
  *
- * @package framework\http
+ * @package Framework\Http
  */
 class Response
 {

@@ -1,19 +1,19 @@
 <?php
 
-namespace framework\http;
+namespace Framework\Http;
 
-use framework\foundation\Container;
-use framework\foundation\View;
-use framework\http\exception\NotFoundHttpException;
-use framework\routing\Router;
-use framework\support\Pipeline;
+use Framework\Foundation\Container;
+use Framework\Foundation\View;
+use Framework\Http\exception\NotFoundHttpException;
+use Framework\Routing\Router;
+use Framework\Support\Pipeline;
 
 /**
  * The Kernel class is the central HTTP component of the application.
  *
  * This class is responsible for handling HTTP requests and preparing responses, including middleware processing and event emits.
  *
- * @package framework\http
+ * @package Framework\Http
  */
 class Kernel
 {

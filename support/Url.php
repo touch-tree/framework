@@ -1,9 +1,9 @@
 <?php
 
-namespace framework\support;
+namespace Framework\Support;
 
-use framework\foundation\Application;
-use framework\routing\Router;
+use Framework\Foundation\Application;
+use Framework\Routing\Router;
 
 /**
  * The URL class represents a utility for generating and manipulating URLs.
@@ -12,7 +12,7 @@ use framework\routing\Router;
  * and getting the current URL. It supports handling of query parameters and provides options to exclude
  * the host from the generated URLs if needed.
  *
- * @package framework\support
+ * @package Framework\Support
  */
 class Url
 {

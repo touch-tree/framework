@@ -1,6 +1,6 @@
 <?php
 
-namespace framework\http;
+namespace Framework\Http;
 
 /**
  * Provides easy access to server variables.
@@ -8,7 +8,7 @@ namespace framework\http;
  * The Server class provides methods for accessing server variables ($_SERVER)
  * and provides a fallback default value if the variable is not set.
  *
- * @package framework\http
+ * @package Framework\Http
  */
 class Server
 {

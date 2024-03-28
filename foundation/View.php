@@ -1,8 +1,8 @@
 <?php
 
-namespace framework\foundation;
+namespace Framework\Foundation;
 
-use framework\http\HeaderBag;
+use Framework\Http\HeaderBag;
 use Throwable;
 
 /**
@@ -10,7 +10,7 @@ use Throwable;
  *
  * This class provides a simple method to render views with optional data.
  *
- * @package framework\foundation
+ * @package Framework\Foundation
  */
 class View
 {

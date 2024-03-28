@@ -1,6 +1,6 @@
 <?php
 
-namespace framework\routing;
+namespace Framework\Routing;
 
 /**
  * The Route class represents a singular route in the routing system.
@@ -8,7 +8,7 @@ namespace framework\routing;
  * This class encapsulates information about a single route, including its URI pattern,
  * associated HTTP method, and the action to be taken when the route is matched.
  *
- * @package framework\routing
+ * @package Framework\Routing
  */
 class Route
 {

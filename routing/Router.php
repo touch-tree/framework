@@ -1,15 +1,15 @@
 <?php
 
-namespace framework\routing;
+namespace Framework\Routing;
 
 use Error;
 use Exception;
-use framework\foundation\Container;
-use framework\foundation\View;
-use framework\http\JsonResponse;
-use framework\http\RedirectResponse;
-use framework\http\Request;
-use framework\support\Url;
+use Framework\Foundation\Container;
+use Framework\Foundation\View;
+use Framework\Http\JsonResponse;
+use Framework\Http\RedirectResponse;
+use Framework\Http\Request;
+use Framework\Support\Url;
 use ReflectionException;
 use ReflectionMethod;
 
@@ -20,7 +20,7 @@ use ReflectionMethod;
  * and parameter extraction from URLs. It allows for route registration, naming,
  * matching incoming requests to registered routes, and dispatching associated controller actions.
  *
- * @package framework\routing
+ * @package Framework\Routing
  */
 class Router
 {

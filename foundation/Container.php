@@ -1,6 +1,6 @@
 <?php
 
-namespace framework\foundation;
+namespace Framework\Foundation;
 
 use Closure;
 use Error;
@@ -14,7 +14,7 @@ use ReflectionException;
  *
  * Represents a service container.
  *
- * @package framework\foundation
+ * @package Framework\Foundation
  */
 class Container
 {

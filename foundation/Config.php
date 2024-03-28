@@ -1,16 +1,16 @@
 <?php
 
-namespace framework\foundation;
+namespace Framework\Foundation;
 
-use framework\support\File;
-use framework\support\Map;
+use Framework\Support\File;
+use Framework\Support\Map;
 
 /**
  * The Config class provides a simple configuration management system.
  *
  * This class allows setting, getting, and checking the existence of configuration values.
  *
- * @package framework\foundation
+ * @package Framework\Foundation
  */
 class Config
 {

@@ -1,15 +1,15 @@
 <?php
 
-namespace framework\http\exception;
+namespace Framework\Http\exception;
 
-use framework\http\Response;
+use Framework\Http\Response;
 
 /**
  * Exception representing a 'Not Found' HTTP error.
  *
  * This exception should be thrown when a requested resource is not found.
  *
- * @package framework\http\exception
+ * @package Framework\Http\exception
  */
 class NotFoundHttpException extends HttpException
 {

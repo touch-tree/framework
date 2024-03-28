@@ -1,20 +1,20 @@
 <?php
 
-namespace framework\foundation;
+namespace Framework\Foundation;
 
 use app\http\Kernel;
-use framework\foundation\exception\Handler;
-use framework\http\Kernel as HttpKernel;
-use framework\routing\Router;
-use framework\support\Collection;
-use framework\support\File;
+use Framework\Foundation\exception\Handler;
+use Framework\Http\Kernel as HttpKernel;
+use Framework\Routing\Router;
+use Framework\Support\Collection;
+use Framework\Support\File;
 
 /**
  * The Application class is responsible for bootstrapping the application and registering services.
  *
  * This class extends the Container class to provide dependency injection and service registration functionality.
  *
- * @package framework\foundation
+ * @package Framework\Foundation
  */
 class Application extends Container
 {

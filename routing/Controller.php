@@ -1,11 +1,11 @@
 <?php
 
-namespace framework\routing;
+namespace Framework\Routing;
 
 /**
  * Base controller class.
  *
- * @package framework\routing
+ * @package Framework\Routing
  */
 class Controller
 {

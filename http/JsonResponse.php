@@ -1,13 +1,13 @@
 <?php
 
-namespace framework\http;
+namespace Framework\Http;
 
 /**
  * The JsonResponse represents an HTTP response containing JSON data.
  *
  * This class is responsible for wrapping up data in JSON format and sending it as an HTTP response.
  *
- * @package framework\http
+ * @package Framework\Http
  */
 class JsonResponse extends Response
 {

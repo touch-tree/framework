@@ -1,15 +1,15 @@
 <?php
 
-namespace framework\http;
+namespace Framework\Http;
 
 use Error;
-use framework\foundation\Session;
+use Framework\Foundation\Session;
 
 /**
  * The Redirect class provides methods to redirect users to specific routes or URLs, creating redirects with flash data,
  * redirect back to the previous page, and generate JSON responses.
  *
- * @package framework\http
+ * @package Framework\Http
  */
 class Redirect
 {

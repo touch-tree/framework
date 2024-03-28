@@ -1,18 +1,18 @@
 <?php
 
-namespace framework\support;
+namespace Framework\Support;
 
 use Closure;
 use Exception;
-use framework\foundation\Container;
-use framework\http\Middleware;
+use Framework\Foundation\Container;
+use Framework\Http\Middleware;
 
 /**
  * The Pipeline class allows for the execution of a sequence of operations (pipes) on an object.
  *
  * This class is used to run a through an array of functions.
  *
- * @package framework\support
+ * @package Framework\Support
  */
 class Pipeline
 {

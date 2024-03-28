@@ -1,11 +1,11 @@
 <?php
 
-namespace framework\http;
+namespace Framework\Http;
 
 use Exception;
-use framework\foundation\Session;
-use framework\foundation\Validator;
-use framework\support\Collection;
+use Framework\Foundation\Session;
+use Framework\Foundation\Validator;
+use Framework\Support\Collection;
 
 /**
  * The Request class represents an HTTP request entity and provides methods to work with query parameters.
@@ -13,7 +13,7 @@ use framework\support\Collection;
  * This class provides methods to easier retrieve query parameters from a URL and provides
  * methods for handling form data, validation, and accessing request-related information.
  *
- * @package framework\http
+ * @package Framework\Http
  */
 class Request
 {

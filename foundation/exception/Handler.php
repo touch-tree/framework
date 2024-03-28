@@ -1,18 +1,18 @@
 <?php
 
-namespace framework\foundation\exception;
+namespace Framework\Foundation\exception;
 
 use Error;
 use Exception;
-use framework\http\exception\HttpException;
-use framework\http\Response;
+use Framework\Http\exception\HttpException;
+use Framework\Http\Response;
 
 /**
  * The Handler class handles exceptions thrown within the framework.
  *
  * It provides a centralized place for exception handling logic.
  *
- * @package framework\foundation\exception
+ * @package Framework\Foundation\exception
  */
 class Handler
 {

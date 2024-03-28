@@ -1,9 +1,9 @@
 <?php
 
-namespace framework\http;
+namespace Framework\Http;
 
 use Exception;
-use framework\foundation\Validator;
+use Framework\Foundation\Validator;
 
 /**
  * The FormRequest class represents a form request entity and extends the Base Request class.
@@ -11,7 +11,7 @@ use framework\foundation\Validator;
  * This class provides methods to handle and validate form data based on specified rules.
  * You can define custom validation rules within this class for specific use cases.
  *
- * @package framework\http
+ * @package Framework\Http
  */
 class FormRequest extends Request
 {

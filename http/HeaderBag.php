@@ -1,15 +1,15 @@
 <?php
 
-namespace framework\http;
+namespace Framework\Http;
 
-use framework\foundation\ParameterBag;
+use Framework\Foundation\ParameterBag;
 
 /**
  * The HeaderBag class represents a collection of HTTP headers.
  *
  * This class provides methods to manipulate HTTP headers easily.
  *
- * @package framework\http
+ * @package Framework\Http
  */
 class HeaderBag extends ParameterBag
 {

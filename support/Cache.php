@@ -1,6 +1,6 @@
 <?php
 
-namespace framework\support;
+namespace Framework\Support;
 
 /**
  * The Cache class provides file-based caching for storing and retrieving data from the filesystem.
@@ -9,7 +9,7 @@ namespace framework\support;
  * and removing items from the cache. It supports setting a time-to-live (TTL) for cached items and provides methods
  * for incrementing and decrementing cached values.
  *
- * @package framework\support
+ * @package Framework\Support
  */
 class Cache
 {

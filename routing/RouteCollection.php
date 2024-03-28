@@ -1,9 +1,9 @@
 <?php
 
-namespace framework\routing;
+namespace Framework\Routing;
 
-use framework\http\Request;
-use framework\support\Url;
+use Framework\Http\Request;
+use Framework\Support\Url;
 
 /**
  * The RouteCollection class represents a collection of routes in the routing system.
@@ -11,7 +11,7 @@ use framework\support\Url;
  * This class manages a collection of routes, allowing for the addition,
  * retrieval, and matching of routes based on incoming requests.
  *
- * @package framework\routing
+ * @package Framework\Routing
  */
 class RouteCollection
 {

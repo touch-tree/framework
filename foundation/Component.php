@@ -1,12 +1,12 @@
 <?php
 
-namespace framework\foundation;
+namespace Framework\Foundation;
 
 /**
  * This Component class provides a base for implementing services in the application.
  * Components are responsible for registering services into the application container.
  *
- * @package framework\foundation
+ * @package Framework\Foundation
  */
 class Component
 {

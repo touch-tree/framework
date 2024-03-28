@@ -1,9 +1,9 @@
 <?php
 
-namespace framework\http;
+namespace Framework\Http;
 
 use Error;
-use framework\support\Url;
+use Framework\Support\Url;
 use LogicException;
 
 /**
@@ -11,7 +11,7 @@ use LogicException;
  *
  * This class facilitates redirection to specific routes or URLs, including support for flash data.
  *
- * @package framework\http
+ * @package Framework\Http
  */
 class RedirectResponse extends Response
 {

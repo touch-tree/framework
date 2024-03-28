@@ -1,6 +1,6 @@
 <?php
 
-namespace framework\support;
+namespace Framework\Support;
 
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
@@ -10,7 +10,7 @@ use SplFileInfo;
 /**
  * The class File provides utility functions for handling files and directories.
  *
- * @package framework\support
+ * @package Framework\Support
  */
 class File
 {

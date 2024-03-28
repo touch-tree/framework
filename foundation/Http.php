@@ -1,15 +1,15 @@
 <?php
 
-namespace framework\foundation;
+namespace Framework\Foundation;
 
-use framework\http\HeaderBag;
+use Framework\Http\HeaderBag;
 
 /**
  * The Http class provides a simple interface for sending HTTP requests using cURL.
  *
  * This class provides methods to set custom headers and handle responses.
  *
- * @package framework\foundation
+ * @package Framework\Foundation
  */
 class Http
 {
