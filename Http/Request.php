@@ -5,6 +5,7 @@ namespace Framework\Http;
 use Exception;
 use Framework\Foundation\Session;
 use Framework\Foundation\Validator;
+use Framework\Support\Collection;
 
 /**
  * The Request class represents an HTTP request entity and provides methods to work with query parameters.
@@ -36,6 +37,13 @@ class Request
      * @var Session
      */
     public Session $session;
+
+    /**
+     * Request body.
+     *
+     * @var string
+     */
+    protected string $content;
 
     /**
      * Request constructor.
@@ -177,7 +185,7 @@ class Request
      */
     public function root(): string
     {
-        return ($this->is_secure() ? 'https' : 'http') . ':' . '/' . '/' . $this->host() . '/';
+        return ($this->is_secure() ? 'https' : 'http') . '://' . $this->host() . '/';
     }
 
     /**
@@ -212,5 +220,29 @@ class Request
         }
 
         return $this->headers;
+    }
+
+    /**
+     * Get the raw body content of the request.
+     *
+     * @return string The request body content
+     */
+    public function content(): string
+    {
+        if (!isset($this->content) && !in_array($this->method(), ['GET', 'HEAD'])) {
+            $this->content = file_get_contents('php://input');
+        }
+
+        return $this->content;
+    }
+
+    /**
+     * Get the parsed JSON content of the request body.
+     *
+     * @return Collection The parsed JSON content
+     */
+    public function json(): Collection
+    {
+        return new Collection(json_decode($this->content(), true));
     }
 }

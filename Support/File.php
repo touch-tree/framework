@@ -2,6 +2,7 @@
 
 namespace Framework\Support;
 
+use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
@@ -84,5 +85,53 @@ class File
         $file_extension = pathinfo($file->getPathname(), PATHINFO_EXTENSION);
 
         return in_array($file_extension, is_array($extension) ? $extension : [$extension]);
+    }
+
+    /**
+     * Delete one or multiple files or directories.
+     *
+     * @param string|array $paths The path(s) to the file(s) or directory(s) to delete.
+     * @return bool True if all paths were successfully deleted, false otherwise.
+     */
+    public static function delete($paths): bool
+    {
+        if (!is_array($paths)) {
+            $paths = [$paths];
+        }
+
+        $success = true;
+
+        foreach ($paths as $path) {
+            if (file_exists($path)) {
+                if (is_dir($path)) {
+                    $success = $success && self::delete_directory($path);
+                } else {
+                    $success = $success && unlink($path);
+                }
+            } else {
+                $success = false;
+            }
+        }
+
+        return $success;
+    }
+
+    /**
+     * Recursively delete a directory.
+     *
+     * @param string $directory The directory to delete.
+     * @return bool True if successfully deleted, false otherwise.
+     */
+    private static function delete_directory(string $directory): bool
+    {
+        foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST) as $file) {
+            if ($file->isDir()) {
+                rmdir($file->getRealPath());
+            } else {
+                unlink($file->getRealPath());
+            }
+        }
+
+        return rmdir($directory);
     }
 }
