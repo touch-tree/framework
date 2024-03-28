@@ -27,6 +27,13 @@ class Handler
         set_exception_handler(fn($e) => $this->render($e));
     }
 
+    /**
+     * Renders the exception.
+     *
+     * This method renders the exception by invoking the handle method and echoing its output.
+     *
+     * @param Exception|Error $e The exception to render
+     */
     private function render($e)
     {
         echo $this->handle($e)->send();
@@ -39,6 +46,7 @@ class Handler
      * It provides a centralized location to handle exceptions and implement custom logic.
      *
      * @param Exception|Error $exception The exception to handle
+     * @return Response The response to send
      */
     public function handle($exception): Response
     {
