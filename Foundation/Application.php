@@ -2,7 +2,7 @@
 
 namespace Framework\Foundation;
 
-use app\http\Kernel;
+use App\Http\Kernel;
 use Framework\Foundation\Exception\Handler;
 use Framework\Http\Kernel as HttpKernel;
 use Framework\Routing\Router;
