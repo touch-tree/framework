@@ -35,7 +35,7 @@ class HttpException extends Exception
      * @param Exception|null $previous [optional] The previous exception for chaining, null on default.
      * @param HeaderBag|null $headers [optional] The headers to be sent along with the response, null on default.
      */
-    public function __construct(string $message, int $status_code = Response::HTTP_INTERNAL_SERVER_ERROR, Exception $previous = null, HeaderBag $headers = null)
+    public function __construct(string $message, int $status_code = 500, Exception $previous = null, HeaderBag $headers = null)
     {
         $this->status_code = $status_code;
         $this->headers = $headers ?: new HeaderBag();

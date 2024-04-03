@@ -102,6 +102,22 @@ class Request
     }
 
     /**
+     * Retrieve an uploaded file.
+     *
+     * @param string $key The name of the file input field.
+     * @param mixed $default [optional] The default value if the file is not uploaded.
+     * @return mixed The file object or null if the file is not uploaded.
+     */
+    public function file(string $key, $default = null)
+    {
+        if (isset($_FILES[$key])) {
+            return $_FILES[$key];
+        }
+
+        return $default;
+    }
+
+    /**
      * Validate multiple parameters based on the given validation patterns.
      *
      * @param array $rules An associative array where keys are parameter names and values are validation patterns (e.g. ['name' => 'required|string|max:255']).

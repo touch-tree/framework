@@ -131,7 +131,7 @@ class Application extends Container
      */
     public function load_configuration_files()
     {
-        foreach (File::files($this->get_config_path()) as $file) {
+        foreach (File::get($this->get_config_path(), 'php') as $file) {
             $config = include $file;
 
             if (!is_array($config)) {

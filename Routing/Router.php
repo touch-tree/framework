@@ -31,13 +31,28 @@ class Router
      */
     private static RouteCollection $routes;
 
+    /**
+     * Container instance.
+     *
+     * @var Container
+     */
     private Container $container;
 
+    /**
+     * Router constructor.
+     *
+     * @param Container $container The dependency injection container.
+     */
     public function __construct(Container $container)
     {
         $this->container = $container;
     }
 
+    /**
+     * Get instance.
+     *
+     * @return self
+     */
     private static function get_instance(): self
     {
         static $instance;
@@ -163,6 +178,12 @@ class Router
         return $this;
     }
 
+    /**
+     * Find route corresponding to the request URI.
+     *
+     * @param Request $request
+     * @return Route|null
+     */
     public function find_route(Request $request): ?Route
     {
         return self::routes()->match($request) ?: null;

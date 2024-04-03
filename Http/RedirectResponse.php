@@ -27,7 +27,7 @@ class RedirectResponse extends Response
      *
      * @param int $status_code [optional] The status code for the redirect. Default is 301 (Moved Permanently).
      */
-    public function __construct(int $status_code = Response::HTTP_MOVED_PERMANENTLY)
+    public function __construct(int $status_code = 301)
     {
         $headers = new HeaderBag();
 

@@ -38,6 +38,11 @@ class Kernel
      */
     protected Router $router;
 
+    /**
+     * Container instance.
+     *
+     * @var Container
+     */
     private Container $container;
 
     /**

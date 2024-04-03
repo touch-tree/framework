@@ -128,7 +128,7 @@ class Cache
      */
     public static function clear()
     {
-        foreach (glob(storage_path('Framework/cache') . '/*.cache') as $file) {
+        foreach (File::get(storage_path('Framework/cache'), 'cache') as $file) {
             if (is_file($file)) {
                 unlink($file);
             }

@@ -21,9 +21,21 @@ class File
      * @param string|array|null $extension The extension to filter by. If null, returns all files.
      * @return array An array of file paths.
      */
-    public static function files(string $directory, $extension = null): array
+    public static function get(string $directory, $extension = null): array
     {
         return self::get_paths($directory, fn($file) => $file->isFile() && self::has_extension($file, $extension));
+    }
+
+    /**
+     * Write content to a file.
+     *
+     * @param string $filePath The path to the file.
+     * @param string $content The content to write to the file.
+     * @return bool true if the content was successfully written to the file, false otherwise.
+     */
+    public static function put(string $filePath, string $content): bool
+    {
+        return file_put_contents($filePath, $content);
     }
 
     /**
@@ -35,18 +47,6 @@ class File
     public static function directories(string $directory): array
     {
         return self::get_paths($directory, fn($file) => $file->isDir());
-    }
-
-    /**
-     * Get all files from a directory, including subdirectories.
-     *
-     * @param string $directory The directory path.
-     * @param string|array|null $extension The extension to filter by. If null, returns all files.
-     * @return array An array of file paths.
-     */
-    public static function all_files(string $directory, $extension = null): array
-    {
-        return self::get_paths($directory, fn($file) => $file->isFile() && self::has_extension($file, $extension));
     }
 
     /**
