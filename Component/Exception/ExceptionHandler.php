@@ -51,9 +51,7 @@ class ExceptionHandler
         if (is_a($exception, HttpException::class)) {
             return $exception->get_response();
         }
-
-        dd($exception);
-
+        
         return response(null, Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 }
