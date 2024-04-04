@@ -8,7 +8,7 @@ use Framework\Http\Kernel as HttpKernel;
 use Framework\Routing\Generator\RouteUrlGenerator;
 use Framework\Routing\Generator\UrlGenerator;
 use Framework\Routing\Router;
-use Framework\Routing\Services\RoutingServiceProvider;
+use Framework\Routing\Services\RoutingService;
 use Framework\Support\Collection;
 use Framework\Support\File;
 use Framework\Support\Helpers\Arr;
@@ -136,7 +136,7 @@ class Application extends Container
      */
     private function register_core_services()
     {
-        $this->register(RoutingServiceProvider::class);
+        $this->register(RoutingService::class);
     }
 
     /**

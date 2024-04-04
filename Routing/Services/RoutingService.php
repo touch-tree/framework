@@ -8,7 +8,7 @@ use Framework\Http\Redirector;
 use Framework\Routing\Generator\UrlGenerator;
 use Framework\Routing\Router;
 
-class RoutingServiceProvider extends Service
+class RoutingService extends Service
 {
     /**
      * Register the services.
