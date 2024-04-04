@@ -5,10 +5,13 @@ namespace Framework\Component;
 use App\Http\Kernel;
 use Framework\Component\Exception\ExceptionHandler;
 use Framework\Http\Kernel as HttpKernel;
+use Framework\Routing\Generator\RouteUrlGenerator;
 use Framework\Routing\Generator\UrlGenerator;
 use Framework\Routing\Router;
+use Framework\Routing\Services\RoutingServiceProvider;
 use Framework\Support\Collection;
 use Framework\Support\File;
+use Framework\Support\Helpers\Arr;
 use Framework\Support\Url;
 use http\Env\Request;
 
@@ -58,6 +61,7 @@ class Application extends Container
     {
         $this->set_base_path($base_path);
         $this->register_core_bindings();
+        $this->register_core_services();
 
         static::set_instance($this);
     }
@@ -120,15 +124,19 @@ class Application extends Container
     {
         $this->singleton(HttpKernel::class, Kernel::class);
 
-        $this->singleton(Router::class, function () {
-            return new Router($this);
-        });
-
-        $this->singleton(UrlGenerator::class, function () {
-            return new UrlGenerator($this->get(Router::class)->routes(), request());
-        });
-
         $this->singleton(ExceptionHandler::class, ExceptionHandler::class);
+    }
+
+    /**
+     * Register core services.
+     *
+     * This method registers core services for the application.
+     *
+     * @return void
+     */
+    private function register_core_services()
+    {
+        $this->register(RoutingServiceProvider::class);
     }
 
     /**
@@ -181,6 +189,53 @@ class Application extends Container
     }
 
     /**
+     * Get a service by class reference.
+     *
+     * @param Service|string $service
+     * @return array|false
+     */
+    public function get_service($service)
+    {
+        $name = is_string($service) ? $service : get_class($service);
+
+        $matches = Arr::where($this->services, fn($value) => $value === $name);
+
+        return reset($matches);
+    }
+
+    /**
+     * Resolve a service provider instance from the class name.
+     *
+     * @param string $service
+     * @return Service
+     */
+    public function resolve_service(string $service): Service
+    {
+        return new $service($this);
+    }
+
+    /**
+     * Get a service by class reference.
+     *
+     * @param Service|string $service
+     * @return array|Service|string
+     */
+    public function register($service)
+    {
+        if ($loaded = $this->get_service($service)) {
+            return $loaded;
+        }
+
+        if (is_string($service)) {
+            $service = $this->resolve_service($service);
+        }
+
+        $service->register();
+
+        return $service;
+    }
+
+    /**
      * Register services.
      *
      * This method registers loaded services into the application.
@@ -190,7 +245,7 @@ class Application extends Container
     private function register_services()
     {
         foreach ($this->loaded_services as $service) {
-            $service->register($this);
+            $service->register();
         }
     }
 

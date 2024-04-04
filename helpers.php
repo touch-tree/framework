@@ -17,7 +17,7 @@ use Framework\Component\Container;
 use Framework\Component\Session;
 use Framework\Component\View;
 use Framework\Http\HeaderBag;
-use Framework\Http\Redirect;
+use Framework\Http\Redirector;
 use Framework\Http\RedirectResponse;
 use Framework\Http\Request;
 use Framework\Http\Response;
@@ -33,7 +33,7 @@ use Framework\Support\Url;
  */
 function redirect(string $route = null): RedirectResponse
 {
-    return Application::get_instance()->get(Redirect::class)->to($route);
+    return Application::get_instance()->get(Redirector::class)->to($route);
 }
 
 /**
@@ -293,12 +293,12 @@ function normalize_path(string $input): string
  *
  * @return RedirectResponse
  *
- * @see Redirect::back()
+ * @see Redirector::back()
  * @see redirect()
  */
 function back(): RedirectResponse
 {
-    return Application::get_instance()->get(Redirect::class)->back();
+    return Application::get_instance()->get(Redirector::class)->back();
 }
 
 /**

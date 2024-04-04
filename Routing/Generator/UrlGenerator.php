@@ -42,6 +42,52 @@ class UrlGenerator
     }
 
     /**
+     * Get the Route URL generator instance.
+     *
+     * @return RouteUrlGenerator
+     */
+    protected function route_url(): RouteUrlGenerator
+    {
+        if (!isset($this->route_generator)) {
+            $this->route_generator = new RouteUrlGenerator($this);
+        }
+
+        return $this->route_generator;
+    }
+
+    /**
+     * Generate a URL for the given route name.
+     *
+     * @param string $name The name of the route.
+     * @param array $parameters [optional] Parameters to substitute into the route URI.
+     * @param bool $absolute [optional] Whether to generate an absolute URL (including scheme and host).
+     * @return string The generated URL.
+     */
+    public function route(string $name, array $parameters = [], bool $absolute = true): string
+    {
+        $route_path = $this->routes->get($name, $parameters);
+
+        if ($absolute) {
+            $route_path = $this->request->root() . ltrim($route_path, '/');
+        }
+
+        return $route_path;
+    }
+
+    /**
+     * Generate an absolute URL for the given path with route parameters, optionally excluding the host.
+     *
+     * @param string $path The path to the resource.
+     * @param array $parameters [optional] Route parameters to include in the URL.
+     * @param bool $absolute [optional] Whether to exclude the host from the generated URL.
+     * @return string The generated absolute URL.
+     */
+    public function to(string $path, array $parameters = [], bool $absolute = false): string
+    {
+        return $this->route_url()->to($path, $parameters, $absolute);
+    }
+
+    /**
      * Get the full base URL for the application.
      *
      * @return string|null The full base URL for the application. Returns null if 'app.url' is not set.
@@ -62,37 +108,12 @@ class UrlGenerator
     }
 
     /**
-     * Generate an absolute URL for the given path with route parameters, optionally excluding the host.
+     * Get the current URL.
      *
-     * @param string $path The path to the resource.
-     * @param array $parameters [optional] Route parameters to include in the URL.
-     * @param bool $exclude_host [optional] Whether to exclude the host from the generated URL.
-     * @return string The generated absolute URL.
+     * @return string The current URL.
      */
-    public function to(string $path, array $parameters = [], bool $exclude_host = false): string
+    public function current(): string
     {
-        $route_path = $this->populate_route_parameters($path, $parameters);
-
-        if ($exclude_host) {
-            return $route_path;
-        }
-
-        return $this->full() . ltrim($route_path, '/');
-    }
-
-    /**
-     * Populate route parameters in the given path with provided values.
-     *
-     * @param string $path The path containing route parameter placeholders.
-     * @param array $parameters The route parameters and their corresponding values.
-     * @return string The path with route parameters populated.
-     */
-    private function populate_route_parameters(string $path, array $parameters): string
-    {
-        foreach ($parameters as $key => $value) {
-            $path = str_replace('{' . $key . '}', $value, $path);
-        }
-
-        return $path;
+        return $this->request->root() . ltrim($this->request->path(), '/');
     }
 }

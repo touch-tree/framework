@@ -6,12 +6,12 @@ use Error;
 use Framework\Component\Session;
 
 /**
- * The Redirect class provides methods to redirect users to specific routes or URLs, creating redirects with flash data,
+ * The Redirector class provides methods to redirect users to specific routes or URLs, creating redirects with flash data,
  * redirect back to the previous page, and generate JSON responses.
  *
  * @package Framework\Http
  */
-class Redirect
+class Redirector
 {
     /**
      * The session manager for storing flash data.

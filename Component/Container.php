@@ -56,7 +56,7 @@ class Container
     public static function get_instance(): self
     {
         if (!isset(static::$instance)) {
-            static::$instance = new static;
+            static::$instance = new Container();
         }
 
         return static::$instance;
