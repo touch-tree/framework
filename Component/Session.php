@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Foundation;
+namespace Framework\Core;
 
 use Error;
 use Framework\Support\Map;

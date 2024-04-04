@@ -1,13 +1,15 @@
 <?php
 
-namespace Framework\Foundation;
+namespace Framework\Core;
 
 use App\Http\Kernel;
-use Framework\Foundation\Exception\Handler;
+use Framework\Core\Exception\ExceptionHandler;
 use Framework\Http\Kernel as HttpKernel;
 use Framework\Routing\Router;
 use Framework\Support\Collection;
 use Framework\Support\File;
+use Framework\Support\Url;
+use http\Env\Request;
 
 /**
  * The Application class is responsible for bootstrapping the application and registering services.
@@ -121,7 +123,11 @@ class Application extends Container
             return new Router($this);
         });
 
-        $this->singleton(Handler::class, Handler::class);
+        $this->singleton(Url::class, function () {
+            return new Url($this->get(Router::class)->routes(), $this->get(Request::class));
+        });
+
+        $this->singleton(ExceptionHandler::class, ExceptionHandler::class);
     }
 
     /**

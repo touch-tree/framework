@@ -1,8 +1,9 @@
 <?php
 
-namespace Framework\Foundation;
+namespace Framework\Core\Validation;
 
 use Exception;
+use Framework\Core\ParameterBag;
 
 /**
  * The Validator class provides a simple and extensible way to validate data based on specified rules.

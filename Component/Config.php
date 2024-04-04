@@ -1,8 +1,7 @@
 <?php
 
-namespace Framework\Foundation;
+namespace Framework\Core;
 
-use Framework\Support\File;
 use Framework\Support\Map;
 
 /**

@@ -1,13 +1,13 @@
 <?php
 
-namespace Framework\Support;
+namespace Framework\Console;
 
 use RuntimeException;
 
 /**
  * The Process class is a simple wrapper around proc_open to execute external processes and capture their output.
  *
- * @package Framework\Support
+ * @package Framework\Console
  */
 class Process
 {

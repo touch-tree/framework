@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Foundation\Exception;
+namespace Framework\Base\Exception;
 
 use Error;
 use Exception;
@@ -8,13 +8,11 @@ use Framework\Http\Exception\HttpException;
 use Framework\Http\Response;
 
 /**
- * The Handler class handles exceptions thrown within the framework.
- *
- * It provides a centralized place for exception handling logic.
+ * The ExceptionHandler class handles exceptions thrown within the framework providing a centralized place for exception handling logic.
  *
  * @package Framework\Foundation\Exception
  */
-class Handler
+class ExceptionHandler
 {
     /**
      * Handler constructor.
@@ -24,7 +22,7 @@ class Handler
      */
     public function __construct()
     {
-        set_exception_handler(fn($e) => $this->render($e));
+        set_exception_handler(fn($exception) => $this->render($exception));
     }
 
     /**
@@ -32,11 +30,11 @@ class Handler
      *
      * This method renders the exception by invoking the handle method and echoing its output.
      *
-     * @param Exception|Error $e The exception to render
+     * @param Exception|Error $exception The exception to render
      */
-    private function render($e)
+    private function render($exception)
     {
-        echo $this->handle($e)->send();
+        echo $this->handle($exception)->send();
     }
 
     /**
@@ -54,6 +52,6 @@ class Handler
             return $exception->get_response();
         }
 
-        return response(null, Response::HTTP_INTERNAL_SERVER_ERROR);
+        return response($exception, Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Foundation;
+namespace Framework\Core;
 
 use Closure;
 use Error;
@@ -55,7 +55,7 @@ class Container
      */
     public static function get_instance(): self
     {
-        if (is_null(static::$instance)) {
+        if (!isset(static::$instance)) {
             static::$instance = new static;
         }
 
@@ -77,15 +77,11 @@ class Container
      */
     public function get(string $abstract, array $parameters = []): ?object
     {
-        try {
-            if (isset(self::$bindings[$abstract])) {
-                return self::$instances[$abstract] = $this->resolve(self::$bindings[$abstract], $parameters);
-            }
-
-            return $this->resolve($abstract, $parameters);
-        } catch (Exception $exception) {
-            return null;
+        if (isset(self::$bindings[$abstract])) {
+            return self::$instances[$abstract] = $this->resolve(self::$bindings[$abstract], $parameters);
         }
+
+        return $this->resolve($abstract, $parameters);
     }
 
     /**

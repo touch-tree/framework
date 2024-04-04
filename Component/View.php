@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Foundation;
+namespace Framework\Core;
 
 use Framework\Http\HeaderBag;
 use Throwable;
