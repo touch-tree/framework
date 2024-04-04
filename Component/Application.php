@@ -123,7 +123,6 @@ class Application extends Container
     private function register_core_bindings()
     {
         $this->singleton(HttpKernel::class, Kernel::class);
-
         $this->singleton(ExceptionHandler::class, ExceptionHandler::class);
     }
 
