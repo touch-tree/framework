@@ -10,7 +10,7 @@ use Framework\Http\Response;
 /**
  * The ExceptionHandler class handles exceptions thrown within the framework providing a centralized place for exception handling logic.
  *
- * @package Framework\Foundation\Exception
+ * @package Framework\Component\Exception
  */
 class ExceptionHandler
 {

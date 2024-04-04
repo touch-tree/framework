@@ -14,7 +14,7 @@ use ReflectionException;
  *
  * Represents a service container.
  *
- * @package Framework\Foundation
+ * @package Framework\Component
  */
 class Container
 {

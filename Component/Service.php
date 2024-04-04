@@ -7,7 +7,7 @@ namespace Framework\Component;
  *
  * These classes are responsible for registering services into the application container.
  *
- * @package Framework\Foundation
+ * @package Framework\Component
  */
 class Service
 {

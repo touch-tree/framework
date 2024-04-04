@@ -7,7 +7,7 @@ namespace Framework\Component;
  *
  * This class provides methods to interact with parameters stored as an associative array.
  *
- * @package Framework\Foundation
+ * @package Framework\Component
  */
 class ParameterBag
 {

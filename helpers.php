@@ -14,7 +14,6 @@
 use Framework\Component\Application;
 use Framework\Component\Config;
 use Framework\Component\Container;
-use Framework\Component\Session;
 use Framework\Component\View;
 use Framework\Http\HeaderBag;
 use Framework\Http\Redirector;
@@ -23,6 +22,7 @@ use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Server;
 use Framework\Routing\Router;
+use Framework\Session\Session;
 use Framework\Support\Url;
 
 /**

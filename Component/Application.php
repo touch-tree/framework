@@ -20,7 +20,7 @@ use http\Env\Request;
  *
  * This class extends the Container class to provide dependency injection and service registration functionality.
  *
- * @package Framework\Foundation
+ * @package Framework\Component
  */
 class Application extends Container
 {

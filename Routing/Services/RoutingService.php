@@ -3,10 +3,10 @@
 namespace Framework\Routing\Services;
 
 use Framework\Component\Service;
-use Framework\Component\Session;
 use Framework\Http\Redirector;
 use Framework\Routing\Generator\UrlGenerator;
 use Framework\Routing\Router;
+use Framework\Session\Session;
 
 class RoutingService extends Service
 {

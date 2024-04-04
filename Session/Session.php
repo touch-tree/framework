@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Component;
+namespace Framework\Session;
 
 use Error;
 use Framework\Support\Map;
@@ -9,7 +9,7 @@ use Framework\Support\Map;
  * The Session class provides a simple interface for working with session data.
  * It includes methods for flashing data, retrieving data, and checking if a key exists in the session.
  *
- * @package Framework\Foundation
+ * @package Framework\Session
  */
 class Session
 {

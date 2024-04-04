@@ -9,7 +9,7 @@ use Framework\Support\Map;
  *
  * This class allows setting, getting, and checking the existence of configuration values.
  *
- * @package Framework\Foundation
+ * @package Framework\Component
  */
 class Config
 {

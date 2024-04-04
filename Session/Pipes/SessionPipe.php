@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Pipes;
+namespace Framework\Session\Pipes;
 
 use Closure;
 use Framework\Http\Pipe;
