@@ -50,7 +50,7 @@ class RedirectResponse extends Response
      */
     public function back(): RedirectResponse
     {
-        $this->path = request()->headers()->get('referer') ?? Url::base_url();
+        $this->path = request()->headers()->get('referer') ?? Url::full();
 
         return $this;
     }

@@ -3,8 +3,8 @@
 namespace Framework\Http;
 
 use Exception;
-use Framework\Foundation\Session;
-use Framework\Foundation\Validator;
+use Framework\Component\Session;
+use Framework\Component\Validation\Validator;
 use Framework\Support\Collection;
 
 /**
@@ -131,6 +131,17 @@ class Request
         $validator->validate();
 
         return $validator;
+    }
+
+    /**
+     * Retrieve a server variable from the request.
+     *
+     * @param string $key The key of the server variable to retrieve.
+     * @return mixed|null The value of the server variable if found, null otherwise.
+     */
+    public function server(string $key)
+    {
+        return $this->server->get($key);
     }
 
     /**

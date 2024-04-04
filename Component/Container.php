@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Core;
+namespace Framework\Component;
 
 use Closure;
 use Error;
@@ -10,7 +10,7 @@ use ReflectionMethod;
 use ReflectionException;
 
 /**
- * The Container class provides a simple Dependency Injection Container for managing and resolving instances of classes.
+ * The Dependency Injection Container for managing and resolving instances of classes.
  *
  * Represents a service container.
  *

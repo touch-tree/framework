@@ -21,9 +21,32 @@ class File
      * @param string|array|null $extension The extension to filter by. If null, returns all files.
      * @return array An array of file paths.
      */
-    public static function get(string $directory, $extension = null): array
+    public static function files(string $directory, $extension = null): array
     {
         return self::get_paths($directory, fn($file) => $file->isFile() && self::has_extension($file, $extension));
+    }
+
+    /**
+     * Retrieve all files and directories within a directory.
+     *
+     * @param string $directory The directory path.
+     * @param bool $recursive Whether to include subdirectories recursively.
+     * @return array An array containing the paths of files and directories.
+     */
+    public static function get(string $directory, bool $recursive = true): array
+    {
+        if ($recursive) {
+            $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::SELF_FIRST);
+        } else {
+            $iterator = new FilesystemIterator($directory, FilesystemIterator::SKIP_DOTS);
+        }
+
+        $paths = [];
+        foreach ($iterator as $file) {
+            $paths[] = $file->getPathname();
+        }
+
+        return $paths;
     }
 
     /**

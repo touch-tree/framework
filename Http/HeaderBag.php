@@ -2,7 +2,7 @@
 
 namespace Framework\Http;
 
-use Framework\Foundation\ParameterBag;
+use Framework\Component\ParameterBag;
 
 /**
  * The HeaderBag class represents a collection of HTTP headers.

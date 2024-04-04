@@ -2,7 +2,8 @@
 
 namespace Framework\Support;
 
-use Framework\Foundation\Application;
+use Framework\Http\Request;
+use Framework\Routing\RouteCollection;
 use Framework\Routing\Router;
 
 /**
@@ -17,22 +18,64 @@ use Framework\Routing\Router;
 class Url
 {
     /**
+     * Collection of registered routes.
+     *
+     * @var RouteCollection
+     */
+    protected RouteCollection $routes;
+
+    /**
+     * Request instance representing a HTTP request.
+     *
+     * @var Request
+     */
+    private Request $request;
+
+    /**
+     * Url constructor.
+     *
+     * @param RouteCollection $routes The route collection.
+     * @param Request $request The request instance.
+     */
+    public function __construct(RouteCollection $routes, Request $request)
+    {
+        $this->routes = $routes;
+        $this->request = $request;
+    }
+
+    /**
+     * Get instance.
+     *
+     * @return self
+     */
+    public static function get_instance(): self
+    {
+        static $instance;
+
+        if (!isset($instance)) {
+            $instance = new self(app(Router::class)->routes(), request());
+        }
+
+        return $instance;
+    }
+
+    /**
      * Generate a URL for the given route name.
      *
-     * @param string $route_name The name of the route.
+     * @param string $name The name of the route.
      * @param array $parameters [optional] Parameters to substitute into the route URI.
      * @param bool $absolute [optional] Whether to generate an absolute URL (including scheme and host).
      * @return string The generated URL.
      */
-    public static function route(string $route_name, array $parameters = [], bool $absolute = true): string
+    public static function route(string $name, array $parameters = [], bool $absolute = true): string
     {
-        $route_uri = app(Router::class)->route($route_name, $parameters);
+        $uri = self::get_instance()->routes->get($name, $parameters);
 
         if ($absolute) {
-            $route_uri = request()->root() . ltrim($route_uri, '/');
+            $uri = self::get_instance()->request->root() . ltrim($uri, '/');
         }
 
-        return $route_uri;
+        return $uri;
     }
 
     /**
@@ -40,12 +83,22 @@ class Url
      *
      * @return string|null The base URL for the application. Returns relative path of document root to project directory if 'app.url' is not set.
      */
-    public static function base_url(): ?string
+    public static function full(): ?string
     {
-        $root = server()->get('DOCUMENT_ROOT');
+        return config('app.url') ?: self::get_instance()->request->root() . self::get_instance()->get_document_path();
+    }
+
+    /**
+     * Get the relative path from the document root to the project directory.
+     *
+     * @return string The relative path from the document root to the project directory.
+     */
+    public function get_document_path(): string
+    {
+        $root = self::get_instance()->request->server('DOCUMENT_ROOT');
         $base = base_path();
 
-        return config('app.url') ?: request()->root() . str_replace(rtrim($root, '/') . '/', '', normalize_path($base));
+        return str_replace(rtrim($root, '/') . '/', '', $base);
     }
 
     /**
@@ -58,7 +111,7 @@ class Url
      */
     public static function to(string $path, array $parameters = [], bool $exclude_host = false): string
     {
-        $url = self::base_url() . ltrim($path, '/');
+        $url = self::get_instance()::full() . ltrim($path, '/');
 
         if (!empty($parameters)) {
             $url .= '?' . http_build_query($parameters);
@@ -83,7 +136,7 @@ class Url
      */
     public static function current(): string
     {
-        return request()->root() . ltrim(request()->path(), '/');
+        return self::get_instance()->request->root() . ltrim(self::get_instance()->request->path(), '/');
     }
 }
 

@@ -11,11 +11,11 @@
 |-----------------------------------------------------------------------------
 */
 
-use Framework\Foundation\Application;
-use Framework\Foundation\Config;
-use Framework\Foundation\Container;
-use Framework\Foundation\Session;
-use Framework\Foundation\View;
+use Framework\Component\Application;
+use Framework\Component\Config;
+use Framework\Component\Container;
+use Framework\Component\Session;
+use Framework\Component\View;
 use Framework\Http\HeaderBag;
 use Framework\Http\Redirect;
 use Framework\Http\RedirectResponse;
@@ -248,7 +248,6 @@ function dd(...$message)
  * @param array $parameters [optional] Parameters to override constructor parameters of the provided class or Closure.
  * @return T|Container|null An instance of the specified class, or null if the instance cannot be resolved.
  *
- * @throws Error
  * @see Container
  */
 function app(string $abstract = null, array $parameters = [])

@@ -2,9 +2,10 @@
 
 namespace Framework\Http;
 
-use Framework\Foundation\Container;
-use Framework\Foundation\View;
+use Framework\Component\Container;
+use Framework\Component\View;
 use Framework\Http\Exception\NotFoundHttpException;
+use Framework\Routing\Route;
 use Framework\Routing\Router;
 use Framework\Support\Pipeline;
 
@@ -22,14 +23,14 @@ class Kernel
      *
      * @var array
      */
-    protected array $middleware = [];
+    protected array $pipes = [];
 
     /**
      * Array of route-specific middleware.
      *
      * @var array
      */
-    protected array $route_middleware = [];
+    protected array $route_pipes = [];
 
     /**
      * Router instance.
@@ -91,11 +92,11 @@ class Kernel
             throw new NotFoundHttpException();
         }
 
-        $middlewares = array_merge($this->middleware, $this->get_middleware_for_route($route));
+        $pipes = array_merge($this->pipes, $this->get_pipes_for_route($route));
 
         return $this->container->get(Pipeline::class)
             ->send($request)
-            ->through($middlewares)
+            ->through($pipes)
             ->then(fn($request) => $this->router->dispatch($request));
     }
 
@@ -105,15 +106,17 @@ class Kernel
      * @param mixed $route The route object.
      * @return array Array of middleware for the route.
      */
-    protected function get_middleware_for_route($route): array
+    protected function get_pipes_for_route(Route $route): array
     {
-        $middlewares = [];
+        $pipes = [];
 
-        foreach ($route->middleware() as $middleware) {
-            $middlewares[] = $this->route_middleware[$middleware] ?? [];
+        foreach ($route->pipes() as $pipe) {
+            if (isset($this->route_pipes[$pipe])) {
+                $pipes[] = $this->route_pipes[$pipe];
+            }
         }
 
-        return array_merge(...$middlewares);
+        return array_merge(...$pipes);
     }
 
     /**

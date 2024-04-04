@@ -1,10 +1,11 @@
 <?php
 
-namespace Framework\Core;
+namespace Framework\Component;
 
 use App\Http\Kernel;
-use Framework\Core\Exception\ExceptionHandler;
+use Framework\Component\Exception\ExceptionHandler;
 use Framework\Http\Kernel as HttpKernel;
+use Framework\Routing\Generator\UrlGenerator;
 use Framework\Routing\Router;
 use Framework\Support\Collection;
 use Framework\Support\File;
@@ -28,14 +29,14 @@ class Application extends Container
     private string $base_path;
 
     /**
-     * Get loaded Components in this application.
+     * Get loaded Services in this application.
      *
-     * @var array<Component>
+     * @var array<Service>
      */
     private array $loaded_services = [];
 
     /**
-     * Components.
+     * Services.
      *
      * @var array<string>
      */
@@ -123,8 +124,8 @@ class Application extends Container
             return new Router($this);
         });
 
-        $this->singleton(Url::class, function () {
-            return new Url($this->get(Router::class)->routes(), $this->get(Request::class));
+        $this->singleton(UrlGenerator::class, function () {
+            return new UrlGenerator($this->get(Router::class)->routes(), request());
         });
 
         $this->singleton(ExceptionHandler::class, ExceptionHandler::class);
@@ -209,7 +210,7 @@ class Application extends Container
     /**
      * Get every component in this application.
      *
-     * @return array<Component> The array of loaded Components.
+     * @return array<Service> The array of loaded Services.
      */
     public function get_services(): array
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Core;
+namespace Framework\Component;
 
 /**
  * The ParameterBag class represents a simple class for managing a collection of parameters.

@@ -5,13 +5,13 @@ namespace Framework\Http;
 use Closure;
 
 /**
- * The Middleware class represents a middleware component that can intercept and process HTTP requests in a pipeline.
+ * The Pipe class represents a middleware component that can intercept and process HTTP requests in a pipeline.
  *
- * Middleware classes can perform tasks such as authentication, logging, or modifying request/response objects.
+ * Pipe classes can perform tasks such as authentication, logging, or modifying request/response objects.
  *
  * @package Framework\Http
  */
-class Middleware
+class Pipe
 {
     /**
      * Handle an incoming request for a pipeline.

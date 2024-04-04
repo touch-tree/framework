@@ -3,7 +3,7 @@
 namespace Framework\Http;
 
 use Error;
-use Framework\Foundation\Session;
+use Framework\Component\Session;
 
 /**
  * The Redirect class provides methods to redirect users to specific routes or URLs, creating redirects with flash data,

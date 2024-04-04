@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Base\Exception;
+namespace Framework\Component\Exception;
 
 use Error;
 use Exception;
@@ -52,6 +52,8 @@ class ExceptionHandler
             return $exception->get_response();
         }
 
-        return response($exception, Response::HTTP_INTERNAL_SERVER_ERROR);
+        dd($exception);
+
+        return response(null, Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 }

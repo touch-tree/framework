@@ -4,8 +4,8 @@ namespace Framework\Routing;
 
 use Error;
 use Exception;
-use Framework\Foundation\Container;
-use Framework\Foundation\View;
+use Framework\Component\Container;
+use Framework\Component\View;
 use Framework\Http\JsonResponse;
 use Framework\Http\RedirectResponse;
 use Framework\Http\Request;
@@ -49,27 +49,11 @@ class Router
     }
 
     /**
-     * Get instance.
-     *
-     * @return self
-     */
-    private static function get_instance(): self
-    {
-        static $instance;
-
-        if (!isset($instance)) {
-            $instance = new self(new Container());
-        }
-
-        return $instance;
-    }
-
-    /**
      * Get the RouteCollection instance containing all registered routes.
      *
      * @return RouteCollection The RouteCollection instance.
      */
-    public static function routes(): RouteCollection
+    public function routes(): RouteCollection
     {
         if (!isset(self::$routes)) {
             self::$routes = new RouteCollection();
@@ -87,17 +71,25 @@ class Router
      */
     public function route(string $name, array $parameters = []): ?string
     {
-        if (is_null($route = self::routes()->get($name))) {
-            return null;
-        }
+        $route = $this->routes()->get($name);
 
-        $route_uri = Url::to($route->uri(), [], true);
+        return $route ? $this->replace_route_parameters(Url::to($route->uri(), [], true), $parameters) : null;
+    }
 
+    /**
+     * Replace route parameters in the given path with their corresponding values.
+     *
+     * @param string $path The path containing route parameters.
+     * @param array $parameters Associative array of route parameters.
+     * @return string The path with route parameters replaced.
+     */
+    public function replace_route_parameters(string $path, array $parameters): string
+    {
         foreach ($parameters as $key => $value) {
-            $route_uri = str_replace('{' . $key . '}', $value, $route_uri);
+            $path = str_replace('{' . $key . '}', $value, $path);
         }
 
-        return $route_uri;
+        return $path;
     }
 
     /**
@@ -107,9 +99,9 @@ class Router
      * @param array $action An array representing the controller and method to be called for this route.
      * @return Router The Router instance.
      */
-    public static function get(string $uri, array $action): Router
+    public function get(string $uri, array $action): Router
     {
-        return self::get_instance()->add_route('GET', $uri, $action);
+        return $this->add_route('GET', $uri, $action);
     }
 
     /**
@@ -119,9 +111,9 @@ class Router
      * @param array $action An array representing the controller and method to be called for this route.
      * @return Router The Router instance.
      */
-    public static function post(string $uri, array $action): Router
+    public function post(string $uri, array $action): Router
     {
-        return self::get_instance()->add_route('POST', $uri, $action);
+        return $this->add_route('POST', $uri, $action);
     }
 
     /**
@@ -132,11 +124,11 @@ class Router
      * @param array $action An array representing the controller and method to be called for this route.
      * @return Router The Router instance.
      */
-    private static function add_route(string $method, string $uri, array $action): Router
+    private function add_route(string $method, string $uri, array $action): Router
     {
-        self::routes()->add(new Route($uri, $method, $action));
+        $this->routes()->add(new Route($uri, $method, $action));
 
-        return self::get_instance();
+        return $this;
     }
 
     /**
@@ -149,7 +141,7 @@ class Router
      */
     public function name(string $name): Router
     {
-        $routes = self::routes()->all();
+        $routes = $this->routes()->all();
 
         end($routes)->set_name($name);
 
@@ -162,17 +154,17 @@ class Router
      * @param array|string $key
      * @return $this
      */
-    public function middleware($key): Router
+    public function pipes($key): Router
     {
-        $routes = self::routes()->all();
+        $routes = $this->routes()->all();
         $route = end($routes);
 
         if (is_array($key)) {
-            $route->set_middleware($key);
+            $route->set_pipes($key);
         }
 
         if (is_string($key)) {
-            $route->set_middleware([$key]);
+            $route->set_pipes([$key]);
         }
 
         return $this;
@@ -186,7 +178,7 @@ class Router
      */
     public function find_route(Request $request): ?Route
     {
-        return self::routes()->match($request) ?: null;
+        return $this->routes()->match($request) ?: null;
     }
 
     /**
@@ -197,7 +189,7 @@ class Router
      */
     public function dispatch(Request $request)
     {
-        $route = self::find_route($request);
+        $route = $this->find_route($request);
 
         if (is_null($route)) {
             return null;

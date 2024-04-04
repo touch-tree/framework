@@ -4,8 +4,8 @@ namespace Framework\Support;
 
 use Closure;
 use Exception;
-use Framework\Foundation\Container;
-use Framework\Http\Middleware;
+use Framework\Component\Container;
+use Framework\Http\Pipe;
 
 /**
  * The Pipeline class allows for the execution of a sequence of operations (pipes) on an object.
@@ -132,7 +132,7 @@ class Pipeline
                 try {
                     $pipe = $this->container->get($pipe);
 
-                    if (is_a($pipe, Middleware::class)) {
+                    if (is_a($pipe, Pipe::class)) {
                         return $pipe->handle($passable, $stack);
                     }
 

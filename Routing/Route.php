@@ -41,11 +41,11 @@ class Route
     protected ?string $name;
 
     /**
-     * Middleware.
+     * Pipes.
      *
      * @var array
      */
-    protected array $middleware = [];
+    protected array $pipes = [];
 
     /**
      * Route constructor.
@@ -121,9 +121,9 @@ class Route
      * @param array $array
      * @return $this
      */
-    public function set_middleware(array $array): Route
+    public function set_pipes(array $array): Route
     {
-        $this->middleware = $array;
+        $this->pipes = $array;
 
         return $this;
     }
@@ -133,8 +133,8 @@ class Route
      *
      * @return array
      */
-    public function middleware(): array
+    public function pipes(): array
     {
-        return $this->middleware;
+        return $this->pipes;
     }
 }

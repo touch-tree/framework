@@ -5,11 +5,11 @@ namespace Framework\Console;
 use RuntimeException;
 
 /**
- * The Process class is a simple wrapper around proc_open to execute external processes and capture their output.
+ * The Procedure class is a simple wrapper around proc_open to execute external processes and capture their output.
  *
  * @package Framework\Console
  */
-class Process
+class Procedure
 {
     /**
      * Command to execute.
@@ -70,10 +70,10 @@ class Process
     /**
      * Runs the process.
      *
-     * @return Process
+     * @return Procedure
      * @throws RuntimeException If unable to open process.
      */
-    public function run(): Process
+    public function run(): Procedure
     {
         $command = implode(chr(32), $this->command);
 
