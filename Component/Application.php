@@ -195,7 +195,7 @@ class Application extends Container
      */
     public function get_service($service)
     {
-        $matches = Arr::where($this->services, fn($value) => $value === get_class($service));
+        $matches = Arr::where($this->loaded_services, fn($value) => $value === get_class($service));
 
         return reset($matches);
     }
