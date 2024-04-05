@@ -5,10 +5,10 @@ namespace Framework\Http;
 use Framework\Component\Container;
 use Framework\Component\View;
 use Framework\Http\Exception\NotFoundHttpException;
+use Framework\Pipeline\Pipeline;
 use Framework\Routing\Route;
 use Framework\Routing\Router;
 use Framework\Session\Pipes\SessionPipe;
-use Framework\Support\Pipeline;
 
 /**
  * The Kernel class is the central HTTP component of the application.

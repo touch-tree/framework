@@ -5,7 +5,7 @@ namespace Framework\Support;
 /**
  * The Str class provides utility methods for string manipulation.
  *
- * @package Framework\Support\Helpers
+ * @package Framework\Support
  */
 class Str
 {

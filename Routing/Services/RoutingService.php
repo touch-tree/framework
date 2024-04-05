@@ -54,7 +54,7 @@ class RoutingService extends Service
     private function register_redirector()
     {
         $this->app->singleton(Redirector::class, function () {
-            return new Redirector($this->app->get(Session::class));
+            return new Redirector($this->app->get(Session::class), $this->app->get(UrlGenerator::class));
         });
     }
 }

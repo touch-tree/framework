@@ -3,8 +3,8 @@
 namespace Framework\Session\Pipes;
 
 use Closure;
-use Framework\Http\Pipe;
 use Framework\Http\Request;
+use Framework\Pipeline\Pipe;
 use Framework\Session\Session;
 
 class SessionPipe extends Pipe

@@ -1,17 +1,19 @@
 <?php
 
-namespace Framework\Http;
+namespace Framework\Pipeline;
 
 use Closure;
+use Framework\Http\Request;
+use Framework\Pipeline\Interfaces\Pipeable;
 
 /**
  * The Pipe class represents a middleware component that can intercept and process HTTP requests in a pipeline.
  *
  * Pipe classes can perform tasks such as authentication, logging, or modifying request/response objects.
  *
- * @package Framework\Http
+ * @package Framework\Pipeline
  */
-class Pipe
+class Pipe implements Pipeable
 {
     /**
      * Handle an incoming request for a pipeline.

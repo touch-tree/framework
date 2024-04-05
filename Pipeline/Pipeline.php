@@ -1,25 +1,25 @@
 <?php
 
-namespace Framework\Support;
+namespace Framework\Pipeline;
 
 use Closure;
 use Exception;
 use Framework\Component\Container;
-use Framework\Http\Pipe;
+use Framework\Pipeline\Interfaces\Pipeable;
 
 /**
  * The Pipeline class allows for the execution of a sequence of operations (pipes) on an object.
  *
  * This class is used to run a through an array of functions.
  *
- * @package Framework\Support
+ * @package Framework\Pipeline
  */
 class Pipeline
 {
     /**
      * The array of pipes.
      *
-     * @var array
+     * @var array<Pipeable>
      */
     protected array $pipes = [];
 
@@ -71,12 +71,12 @@ class Pipeline
     /**
      * Set the array of pipes.
      *
-     * @param mixed $pipes The array of pipes or variadic arguments of pipes.
+     * @param array<Pipeable> $pipes The array of pipes or variadic arguments of pipes.
      * @return $this
      */
-    public function through($pipes): Pipeline
+    public function through(array $pipes): Pipeline
     {
-        $this->pipes = is_array($pipes) ? $pipes : func_get_args();
+        $this->pipes = $pipes;
 
         return $this;
     }
@@ -97,10 +97,10 @@ class Pipeline
     /**
      * Run the pipeline with a final destination callback.
      *
-     * @param mixed $destination The final destination callback.
+     * @param callable $destination The final destination callback.
      * @return mixed The result of the pipeline execution.
      */
-    public function then($destination)
+    public function then(callable $destination)
     {
         $callback = array_reduce(array_reverse($this->pipes), $this->carry(), $this->prepare_destination($destination));
 
@@ -132,7 +132,7 @@ class Pipeline
                 try {
                     $pipe = $this->container->get($pipe);
 
-                    if (is_a($pipe, Pipe::class)) {
+                    if (is_a($pipe, Pipe::class) || $pipe instanceof Pipeable) {
                         return $pipe->handle($passable, $stack);
                     }
 

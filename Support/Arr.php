@@ -5,7 +5,7 @@ namespace Framework\Support;
 /**
  * The Arr class provides utility methods for arrays.
  *
- * @package Framework\Support\Helpers
+ * @package Framework\Support
  */
 class Arr
 {
