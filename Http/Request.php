@@ -258,11 +258,9 @@ class Request
      */
     public function content(): string
     {
-        if (isset($this->content) || in_array($this->method(), ['GET', 'HEAD'])) {
-            return $this->content;
+        if (!isset($this->content) && !in_array($this->method(), ['GET', 'HEAD'])) {
+            $this->content = file_get_contents('php://input');
         }
-
-        $this->content = file_get_contents('php://input');
 
         return $this->content;
     }
