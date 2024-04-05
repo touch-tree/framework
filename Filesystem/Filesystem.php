@@ -18,7 +18,7 @@ class Filesystem
      * Get files from a directory matching a specific extension.
      *
      * @param string $directory The directory path.
-     * @param string|array|null $extension The extension to filter by. If null, returns all files.
+     * @param string|array|null $extension [optional] The extension to filter by. If null, returns all files.
      * @return array An array of file paths.
      */
     public static function files(string $directory, $extension = null): array
@@ -30,10 +30,10 @@ class Filesystem
      * Retrieve all files and directories within a directory.
      *
      * @param string $directory The directory path.
-     * @param bool $recursive Whether to include subdirectories recursively.
+     * @param bool $recursive [optional] Whether to include subdirectories recursively.
      * @return array An array containing the paths of files and directories.
      */
-    public static function get(string $directory, bool $recursive = true): array
+    public static function all_files(string $directory, bool $recursive = true): array
     {
         if ($recursive) {
             $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::SELF_FIRST);
@@ -156,5 +156,38 @@ class Filesystem
         }
 
         return rmdir($directory);
+    }
+
+    /**
+     * Get the contents of a file.
+     *
+     * @param string $file_path The path to the file.
+     * @return string|false The contents of the file, or false on failure.
+     */
+    public static function get(string $file_path)
+    {
+        return file_get_contents($file_path);
+    }
+
+    /**
+     * Check if a file or directory exists.
+     *
+     * @param string $path The path to the file or directory.
+     * @return bool True if the file or directory exists, false otherwise.
+     */
+    public static function exists(string $path): bool
+    {
+        return file_exists($path);
+    }
+
+    /**
+     * Create a directory.
+     *
+     * @param string $directory The directory path to create.
+     * @return bool true on success, false on failure.
+     */
+    public static function make_directory(string $directory): bool
+    {
+        return mkdir($directory, 0777, true);
     }
 }

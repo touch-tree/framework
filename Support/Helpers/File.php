@@ -36,18 +36,6 @@ class File extends Facade
     }
 
     /**
-     * Retrieve all files and directories within a directory.
-     *
-     * @param string $directory The directory path.
-     * @param bool $recursive Whether to include subdirectories recursively.
-     * @return array An array containing the paths of files and directories.
-     */
-    public static function get(string $directory, bool $recursive = true): array
-    {
-        return self::get_accessor_class()->get($directory, $recursive);
-    }
-
-    /**
      * Write content to a file.
      *
      * @param string $file_path The path to the file.
