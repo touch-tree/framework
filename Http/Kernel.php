@@ -2,8 +2,13 @@
 
 namespace Framework\Http;
 
-use Framework\Foundation\View;
+use Framework\Component\Container;
+use Framework\Component\View;
+use Framework\Http\Exception\NotFoundHttpException;
+use Framework\Pipeline\Pipeline;
+use Framework\Routing\Route;
 use Framework\Routing\Router;
+use Framework\Session\Pipes\SessionPipe;
 
 /**
  * The Kernel class is the central HTTP component of the application.
@@ -15,6 +20,22 @@ use Framework\Routing\Router;
 class Kernel
 {
     /**
+     * Array of global middleware to be applied to every request.
+     *
+     * @var array
+     */
+    protected array $pipes = [
+        SessionPipe::class
+    ];
+
+    /**
+     * Array of route-specific middleware.
+     *
+     * @var array
+     */
+    protected array $route_pipes = [];
+
+    /**
      * Router instance.
      *
      * @var Router
@@ -22,12 +43,20 @@ class Kernel
     protected Router $router;
 
     /**
+     * Container instance.
+     *
+     * @var Container
+     */
+    private Container $container;
+
+    /**
      * Kernel constructor.
      *
      * @param Router $router The router instance.
      */
-    public function __construct(Router $router)
+    public function __construct(Container $container, Router $router)
     {
+        $this->container = $container;
         $this->router = $router;
     }
 
@@ -36,10 +65,11 @@ class Kernel
      *
      * @param Request $request The incoming HTTP request to be handled.
      * @return Response|null The response to the request, or null if no response is generated.
+     * @throws NotFoundHttpException
      */
     public function handle(Request $request): ?Response
     {
-        $response = $this->prepare_response($request, $this->router::dispatch($request));
+        $response = $this->prepare_response($request, $this->send_request_through_router($request));
 
         if (is_a($response, Response::class)) {
             echo $response->send();
@@ -48,6 +78,48 @@ class Kernel
         $this->terminate($request);
 
         return $response;
+    }
+
+    /**
+     * Send the request through the router and middleware pipeline.
+     *
+     * @param Request $request The incoming HTTP request.
+     * @return mixed The response returned by the router and middleware pipeline.
+     * @throws NotFoundHttpException
+     */
+    public function send_request_through_router(Request $request)
+    {
+        $route = $this->router->find_route($request);
+
+        if (is_null($route)) {
+            throw new NotFoundHttpException();
+        }
+
+        $pipes = array_merge($this->pipes, $this->get_pipes_for_route($route));
+
+        return $this->container->get(Pipeline::class)
+            ->send($request)
+            ->through($pipes)
+            ->then(fn($request) => $this->router->dispatch($request));
+    }
+
+    /**
+     * Get the middleware for the route.
+     *
+     * @param mixed $route The route object.
+     * @return array Array of middleware for the route.
+     */
+    protected function get_pipes_for_route(Route $route): array
+    {
+        $pipes = [];
+
+        foreach ($route->pipes() as $pipe) {
+            if (isset($this->route_pipes[$pipe])) {
+                $pipes[] = $this->route_pipes[$pipe];
+            }
+        }
+
+        return array_merge(...$pipes);
     }
 
     /**
@@ -83,6 +155,6 @@ class Kernel
             return response($response->render(), Response::HTTP_OK, $response->get_headers());
         }
 
-        return response(view('errors.404')->render(), Response::HTTP_NOT_FOUND);
+        return null;
     }
 }

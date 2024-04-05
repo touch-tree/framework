@@ -2,6 +2,8 @@
 
 namespace Framework\Support;
 
+use Framework\Support\Helpers\File;
+
 /**
  * The Cache class provides file-based caching for storing and retrieving data from the filesystem.
  *
@@ -128,7 +130,7 @@ class Cache
      */
     public static function clear()
     {
-        foreach (glob(storage_path('Framework/cache') . '/*.cache') as $file) {
+        foreach (File::get(storage_path('Framework/cache'), 'cache') as $file) {
             if (is_file($file)) {
                 unlink($file);
             }

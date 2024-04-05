@@ -150,7 +150,7 @@ class Response
      * @param int $status_code The HTTP status code for the response. Default is 200 (OK).
      * @return JsonResponse The JsonResponse instance.
      */
-    public function json(array $data, int $status_code = Response::HTTP_OK): JsonResponse
+    public function json(array $data, int $status_code = 200): JsonResponse
     {
         return new JsonResponse($data, $status_code);
     }

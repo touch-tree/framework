@@ -3,8 +3,7 @@
 namespace Framework\Routing;
 
 use Framework\Http\Request;
-use Framework\Support\Collection;
-use Framework\Support\Url;
+use Framework\Support\Helpers\Url;
 
 /**
  * The RouteCollection class represents a collection of routes in the routing system.
@@ -14,7 +13,7 @@ use Framework\Support\Url;
  *
  * @package Framework\Routing
  */
-class RouteCollection extends Collection
+class RouteCollection
 {
     /**
      * The routes registered in this collection.
@@ -53,7 +52,7 @@ class RouteCollection extends Collection
      * @param null $default
      * @return Route|null The Route object if found, otherwise null.
      */
-    public function get($key, $default = null): ?Route
+    public function get(string $key, $default = null): ?Route
     {
         foreach ($this->routes as $route) {
             if ($route->name() === $key) {
@@ -75,7 +74,7 @@ class RouteCollection extends Collection
         foreach ($this->routes as $route) {
             $route_uri = Url::to($route->uri(), [], true);
 
-            if ($request->method() === $route->method() && preg_match(app(Router::class)::get_pattern($route_uri), $request->path())) {
+            if ($request->method() === $route->method() && preg_match(app(Router::class)->get_pattern($route_uri), $request->path())) {
                 return $route;
             }
         }

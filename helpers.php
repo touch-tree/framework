@@ -11,20 +11,19 @@
 |-----------------------------------------------------------------------------
 */
 
-use Framework\Foundation\Application;
-use Framework\Foundation\Config;
-use Framework\Foundation\Container;
-use Framework\Foundation\ParameterBag;
-use Framework\Foundation\Session;
-use Framework\Foundation\View;
+use Framework\Component\Application;
+use Framework\Component\Config;
+use Framework\Component\Container;
+use Framework\Component\View;
 use Framework\Http\HeaderBag;
-use Framework\Http\Redirect;
+use Framework\Http\Redirector;
 use Framework\Http\RedirectResponse;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Server;
 use Framework\Routing\Router;
-use Framework\Support\Url;
+use Framework\Session\Session;
+use Framework\Support\Helpers\Url;
 
 /**
  * Redirect to a specified route.
@@ -34,7 +33,7 @@ use Framework\Support\Url;
  */
 function redirect(string $route = null): RedirectResponse
 {
-    return Application::get_instance()->get(Redirect::class)->to($route);
+    return Application::get_instance()->get(Redirector::class)->to($route);
 }
 
 /**
@@ -71,6 +70,17 @@ function view(string $path, array $data = []): View
 function resource_path(string $path = null): string
 {
     return Application::get_instance()->base_path('resources/') . ltrim($path, '/');
+}
+
+/**
+ * Get the path to the 'public' directory.
+ *
+ * @param string|null $path [optional] Additional path within the 'public' directory.
+ * @return string The absolute path to the 'public' directory or its subdirectory.
+ */
+function public_path(string $path = null): string
+{
+    return Application::get_instance()->base_path('public/') . ltrim($path, '/');
 }
 
 /**
@@ -132,7 +142,7 @@ function error(string $key): ?string
  */
 function route(string $name, array $parameters = []): ?string
 {
-    return Router::route($name, $parameters);
+    return Application::get_instance()->get(Router::class)->route($name, $parameters);
 }
 
 /**
@@ -198,16 +208,18 @@ function old(string $key, ?string $default = null)
  */
 function config($key = null, $default = null)
 {
+    $config = Application::get_instance()->get(Config::class);
+
     if (is_null($key)) {
-        return Config::all();
+        return $config->all();
     }
 
     if (is_array($key)) {
-        Config::set_many($key);
+        $config->set($key);
         return $key;
     }
 
-    return Config::get($key, $default);
+    return $config->get($key, $default);
 }
 
 /**
@@ -236,7 +248,6 @@ function dd(...$message)
  * @param array $parameters [optional] Parameters to override constructor parameters of the provided class or Closure.
  * @return T|Container|null An instance of the specified class, or null if the instance cannot be resolved.
  *
- * @throws Error
  * @see Container
  */
 function app(string $abstract = null, array $parameters = [])
@@ -245,7 +256,7 @@ function app(string $abstract = null, array $parameters = [])
         return Application::get_instance();
     }
 
-    return Application::get_instance()::get($abstract, $parameters);
+    return Application::get_instance()->get($abstract, $parameters);
 }
 
 /**
@@ -260,16 +271,15 @@ function base_path(string $path = null): string
 }
 
 /**
- * Converts backslashes to slashes in a string.
+ * Normalizes a file path by converting backslashes to slashes.
  *
  * This function replaces all occurrences of backslashes with forward slashes (/)
- * in the given string.
+ * in the given file path string.
  *
- * @param string $input The input string to convert.
- *
- * @return string The input string with backslashes converted to slashes.
+ * @param string $input The file path string to normalize.
+ * @return string The normalized file path with backslashes converted to slashes.
  */
-function url_slash(string $input): string
+function normalize_path(string $input): string
 {
     return str_replace(DIRECTORY_SEPARATOR, '/', $input);
 }
@@ -283,12 +293,12 @@ function url_slash(string $input): string
  *
  * @return RedirectResponse
  *
- * @see Redirect::back()
+ * @see Redirector::back()
  * @see redirect()
  */
 function back(): RedirectResponse
 {
-    return Application::get_instance()->get(Redirect::class)->back();
+    return Application::get_instance()->get(Redirector::class)->back();
 }
 
 /**
@@ -311,22 +321,4 @@ function url(string $path = null)
 function asset(string $path): string
 {
     return Url::to('/public/') . trim($path, '/');
-}
-
-/**
- * Search for an object in an array based on specified properties and values.
- *
- * @param array $array The array to search.
- * @param array $search The associative array of properties and values to match.
- * @return array|null The found object or null if not found.
- */
-function find_object_by_properties(array $array, array $search): ?array
-{
-    foreach ($array as $item) {
-        if (is_array($item) && array_intersect_assoc($search, $item) == $search) {
-            return $item;
-        }
-    }
-
-    return null;
 }

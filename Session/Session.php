@@ -1,15 +1,15 @@
 <?php
 
-namespace Framework\Foundation;
+namespace Framework\Session;
 
 use Error;
-use Framework\Support\Collector;
+use Framework\Support\Map;
 
 /**
  * The Session class provides a simple interface for working with session data.
  * It includes methods for flashing data, retrieving data, and checking if a key exists in the session.
  *
- * @package Framework\Foundation
+ * @package Framework\Session
  */
 class Session
 {
@@ -22,7 +22,7 @@ class Session
      */
     public function flash(string $key, $value): Session
     {
-        Collector::set($_SESSION, 'flash.' . $key, $value);
+        Map::set($_SESSION, 'flash.' . $key, $value);
 
         return $this;
     }
@@ -36,9 +36,9 @@ class Session
      */
     public function pull(string $key, $default = null)
     {
-        $value = Collector::get($_SESSION, $key, $default);
+        $value = Map::get($_SESSION, $key, $default);
 
-        Collector::forget($_SESSION, $key);
+        Map::forget($_SESSION, $key);
 
         return $value;
     }
@@ -52,7 +52,7 @@ class Session
      */
     public function get(string $key, $default = null)
     {
-        return Collector::get($_SESSION, $key, $default);
+        return Map::get($_SESSION, $key, $default);
     }
 
     /**
@@ -66,7 +66,7 @@ class Session
      */
     public function push(string $key, $value): Session
     {
-        Collector::push($_SESSION, $key, $value);
+        Map::push($_SESSION, $key, $value);
 
         return $this;
     }
@@ -81,12 +81,12 @@ class Session
     public function put($key, $value = null): Session
     {
         if (is_string($key) && !is_null($value)) {
-            Collector::set($_SESSION, $key, $value);
+            Map::set($_SESSION, $key, $value);
         }
 
         if (is_array($key) && is_null($value)) {
             foreach ($key as $k => $v) {
-                Collector::set($_SESSION, $k, $v);
+                Map::set($_SESSION, $k, $v);
             }
         }
 
@@ -101,7 +101,7 @@ class Session
      */
     public function has(string $key): bool
     {
-        return Collector::has($_SESSION, $key);
+        return Map::has($_SESSION, $key);
     }
 
     /**
@@ -114,12 +114,12 @@ class Session
     {
         if (is_array($key)) {
             foreach ($key as $k) {
-                Collector::forget($_SESSION, $k);
+                Map::forget($_SESSION, $k);
             }
         }
 
         if (is_string($key)) {
-            Collector::forget($_SESSION, $key);
+            Map::forget($_SESSION, $key);
         }
 
         return $this;
@@ -152,7 +152,7 @@ class Session
      *
      * @return bool true when the session started successfully, else false.
      */
-    public static function start(): bool
+    public function start(): bool
     {
         return session_start();
     }

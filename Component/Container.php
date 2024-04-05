@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Foundation;
+namespace Framework\Component;
 
 use Closure;
 use Error;
@@ -8,14 +8,13 @@ use Exception;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionException;
-use ReflectionNamedType;
 
 /**
- * The Container class provides a simple Dependency Injection Container for managing and resolving instances of classes.
+ * The Dependency Injection Container for managing and resolving instances of classes.
  *
  * Represents a service container.
  *
- * @package Framework\Foundation
+ * @package Framework\Component
  */
 class Container
 {
@@ -41,13 +40,12 @@ class Container
     private static array $bindings = [];
 
     /**
-     * Container constructor.
+     * @param Container|null $container Set the shared instance of the container.
+     * @return Container|null
      */
-    public function __construct()
+    public static function set_instance(Container $container = null): ?Container
     {
-        if (!isset(static::$instance)) {
-            static::$instance = $this;
-        }
+        return static::$instance = $container;
     }
 
     /**
@@ -57,6 +55,10 @@ class Container
      */
     public static function get_instance(): self
     {
+        if (!isset(static::$instance)) {
+            static::$instance = new Container();
+        }
+
         return static::$instance;
     }
 
@@ -71,20 +73,15 @@ class Container
      * @param array $parameters [optional] Parameters to override constructor parameters of the provided class or Closure.
      * @return T|Container|null An instance of the specified class, or null if the instance cannot be resolved.
      *
-     * @throws Error
      * @see Container
      */
-    public static function get(string $abstract, array $parameters = []): ?object
+    public function get(string $abstract, array $parameters = []): ?object
     {
-        try {
-            if (isset(self::$bindings[$abstract])) {
-                return self::$instances[$abstract] = self::resolve(self::$bindings[$abstract], $parameters);
-            }
-
-            return self::resolve($abstract, $parameters);
-        } catch (Exception $exception) {
-            return null;
+        if (isset(self::$bindings[$abstract])) {
+            return self::$instances[$abstract] = $this->resolve(self::$bindings[$abstract], $parameters);
         }
+
+        return $this->resolve($abstract, $parameters);
     }
 
     /**
@@ -94,7 +91,7 @@ class Container
      * @param array $parameters [optional] Parameters to override constructor parameters.
      * @return object|null|false The resolved instance of the specified class. null if the class does not exist. false if the class constructor is not public or if the class does not have a constructor and the $args parameter contains one or more parameters.
      */
-    private static function resolve($abstract, array $parameters = []): ?object
+    private function resolve($abstract, array $parameters = []): ?object
     {
         if ($abstract instanceof Closure) {
             return $abstract();
@@ -108,7 +105,7 @@ class Container
 
         try {
             if ($constructor = $reflection_class->getConstructor()) {
-                return $reflection_class->newInstanceArgs(empty($parameters) ? self::resolve_dependencies($constructor) : $parameters);
+                return $reflection_class->newInstanceArgs(empty($parameters) ? $this->resolve_dependencies($constructor) : $parameters);
             }
 
             return $reflection_class->newInstance();
@@ -124,7 +121,7 @@ class Container
      * @param array $parameters [optional] Parameters to override constructor parameters.
      * @return array|null The resolved dependencies.
      */
-    public static function resolve_dependencies(ReflectionMethod $constructor, array $parameters = []): ?array
+    public function resolve_dependencies(ReflectionMethod $constructor, array $parameters = []): ?array
     {
         $dependencies = [];
 
@@ -135,7 +132,7 @@ class Container
                 $class_name = $type->getName();
 
                 if ($class_name) {
-                    $dependencies[] = self::get($class_name);
+                    $dependencies[] = $this->get($class_name);
                     continue;
                 }
             }
@@ -157,7 +154,7 @@ class Container
      * @param Closure|string|object $concrete The closure, class name, or instance.
      * @return void
      */
-    public static function bind(string $abstract, $concrete): void
+    public function bind(string $abstract, $concrete)
     {
         self::$bindings[$abstract] = $concrete;
     }
@@ -171,11 +168,11 @@ class Container
      *
      * @throws Error
      */
-    public static function singleton(string $abstract, $concrete): void
+    public function singleton(string $abstract, $concrete)
     {
-        self::bind($abstract, $concrete);
+        $this->bind($abstract, $concrete);
 
-        self::$instances[$abstract] = self::resolve($abstract);
+        self::$instances[$abstract] = $this->resolve($abstract);
     }
 
     /**
@@ -195,7 +192,7 @@ class Container
      * @param string $abstract The abstract class or interface.
      * @return Closure|string|object|null The closure, class name, or instance, or null if not bound.
      */
-    public static function get_binding(string $abstract)
+    public function get_binding(string $abstract)
     {
         return self::$bindings[$abstract] ?? null;
     }
@@ -206,7 +203,7 @@ class Container
      * @param string $abstract The abstract class or interface.
      * @return void
      */
-    public static function forget_binding(string $abstract): void
+    public function forget_binding(string $abstract)
     {
         unset(self::$bindings[$abstract]);
     }

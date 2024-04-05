@@ -2,7 +2,7 @@
 
 namespace Framework\Http;
 
-use Framework\Foundation\ParameterBag;
+use Framework\Component\ParameterBag;
 
 /**
  * The HeaderBag class represents a collection of HTTP headers.
@@ -75,7 +75,7 @@ class HeaderBag extends ParameterBag
      *
      * @param string $key The header key.
      */
-    public function remove(string $key): void
+    public function remove(string $key)
     {
         parent::remove($key);
     }

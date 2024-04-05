@@ -81,6 +81,21 @@ class Collection
     }
 
     /**
+     * Apply a callback to each item in the collection.
+     *
+     * @param callable(T) $callback The callback function to apply to each item.
+     * @return Collection<T>
+     */
+    public function each(callable $callback): Collection
+    {
+        foreach ($this->items as $item) {
+            $callback($item);
+        }
+
+        return $this;
+    }
+
+    /**
      * Apply a callback to each item in the collection and return a new collection.
      *
      * @param callable(T): mixed $callback The callback function to apply to each item.
@@ -120,5 +135,15 @@ class Collection
     public function last()
     {
         return end($this->items);
+    }
+
+    /**
+     * Convert the collection to a plain array.
+     *
+     * @return array<T> The plain array representation of the collection.
+     */
+    public function to_array(): array
+    {
+        return $this->items;
     }
 }

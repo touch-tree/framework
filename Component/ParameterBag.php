@@ -1,13 +1,13 @@
 <?php
 
-namespace Framework\Foundation;
+namespace Framework\Component;
 
 /**
  * The ParameterBag class represents a simple class for managing a collection of parameters.
  *
  * This class provides methods to interact with parameters stored as an associative array.
  *
- * @package Framework\Foundation
+ * @package Framework\Component
  */
 class ParameterBag
 {
@@ -89,7 +89,7 @@ class ParameterBag
      * @param string $key The key of the parameter to be removed.
      * @return void
      */
-    public function remove(string $key): void
+    public function remove(string $key)
     {
         unset($this->parameters[$key]);
     }

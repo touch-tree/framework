@@ -41,6 +41,13 @@ class Route
     protected ?string $name;
 
     /**
+     * Pipes.
+     *
+     * @var array
+     */
+    protected array $pipes = [];
+
+    /**
      * Route constructor.
      *
      * @param string $uri The URI pattern for the route.
@@ -106,5 +113,28 @@ class Route
     public function name(): ?string
     {
         return $this->name;
+    }
+
+    /**
+     * Set the middleware stack for the route.
+     *
+     * @param array $array
+     * @return $this
+     */
+    public function set_pipes(array $array): Route
+    {
+        $this->pipes = $array;
+
+        return $this;
+    }
+
+    /**
+     * Get the middleware stack of the route.
+     *
+     * @return array
+     */
+    public function pipes(): array
+    {
+        return $this->pipes;
     }
 }

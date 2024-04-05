@@ -3,8 +3,7 @@
 namespace Framework\Http;
 
 use Exception;
-use Framework\Foundation\Session;
-use Framework\Foundation\Validator;
+use Framework\Component\Validation\Validator;
 
 /**
  * The FormRequest class represents a form request entity and extends the Base Request class.

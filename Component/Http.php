@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Foundation;
+namespace Framework\Component;
 
 use Framework\Http\HeaderBag;
 
@@ -9,7 +9,7 @@ use Framework\Http\HeaderBag;
  *
  * This class provides methods to set custom headers and handle responses.
  *
- * @package Framework\Foundation
+ * @package Framework\Component
  */
 class Http
 {

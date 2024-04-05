@@ -17,7 +17,7 @@ class JsonResponse extends Response
      * @param array $data The data to be JSON-encoded and sent in the response.
      * @param int $status_code [optional] The HTTP status code for the response. Default is 200 (OK).
      */
-    public function __construct(array $data, int $status_code = Response::HTTP_OK)
+    public function __construct(array $data, int $status_code = 200)
     {
         $headers = new HeaderBag();
 

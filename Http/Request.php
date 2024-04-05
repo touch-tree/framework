@@ -3,8 +3,9 @@
 namespace Framework\Http;
 
 use Exception;
-use Framework\Foundation\Session;
-use Framework\Foundation\Validator;
+use Framework\Component\Validation\Validator;
+use Framework\Session\Session;
+use Framework\Support\Collection;
 
 /**
  * The Request class represents an HTTP request entity and provides methods to work with query parameters.
@@ -36,6 +37,13 @@ class Request
      * @var Session
      */
     public Session $session;
+
+    /**
+     * Request body.
+     *
+     * @var string
+     */
+    protected string $content;
 
     /**
      * Request constructor.
@@ -94,6 +102,22 @@ class Request
     }
 
     /**
+     * Retrieve an uploaded file.
+     *
+     * @param string $key The name of the file input field.
+     * @param mixed $default [optional] The default value if the file is not uploaded.
+     * @return mixed The file object or null if the file is not uploaded.
+     */
+    public function file(string $key, $default = null)
+    {
+        if (isset($_FILES[$key])) {
+            return $_FILES[$key];
+        }
+
+        return $default;
+    }
+
+    /**
      * Validate multiple parameters based on the given validation patterns.
      *
      * @param array $rules An associative array where keys are parameter names and values are validation patterns (e.g. ['name' => 'required|string|max:255']).
@@ -107,6 +131,17 @@ class Request
         $validator->validate();
 
         return $validator;
+    }
+
+    /**
+     * Retrieve a server variable from the request.
+     *
+     * @param string $key The key of the server variable to retrieve.
+     * @return mixed|null The value of the server variable if found, null otherwise.
+     */
+    public function server(string $key)
+    {
+        return $this->server->get($key);
     }
 
     /**
@@ -177,7 +212,7 @@ class Request
      */
     public function root(): string
     {
-        return ($this->is_secure() ? 'https' : 'http') . ':' . '/' . '/' . $this->host() . '/';
+        return ($this->is_secure() ? 'https' : 'http') . '://' . $this->host() . '/';
     }
 
     /**
@@ -212,5 +247,29 @@ class Request
         }
 
         return $this->headers;
+    }
+
+    /**
+     * Get the raw body content of the request.
+     *
+     * @return string The request body content
+     */
+    public function content(): string
+    {
+        if (!isset($this->content) && !in_array($this->method(), ['GET', 'HEAD'])) {
+            $this->content = file_get_contents('php://input');
+        }
+
+        return $this->content;
+    }
+
+    /**
+     * Get the parsed JSON content of the request body.
+     *
+     * @return Collection The parsed JSON content
+     */
+    public function json(): Collection
+    {
+        return new Collection(json_decode($this->content(), true));
     }
 }

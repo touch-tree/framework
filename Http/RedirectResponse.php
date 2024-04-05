@@ -3,7 +3,8 @@
 namespace Framework\Http;
 
 use Error;
-use Framework\Support\Url;
+use Framework\Session\Session;
+use Framework\Support\Helpers\Url;
 use LogicException;
 
 /**
@@ -16,6 +17,20 @@ use LogicException;
 class RedirectResponse extends Response
 {
     /**
+     * Session instance.
+     *
+     * @var Session
+     */
+    private Session $session;
+
+    /**
+     * Request instance.
+     *
+     * @var Request
+     */
+    private Request $request;
+
+    /**
      * The destination path for the redirect.
      *
      * @var string|null
@@ -27,7 +42,7 @@ class RedirectResponse extends Response
      *
      * @param int $status_code [optional] The status code for the redirect. Default is 301 (Moved Permanently).
      */
-    public function __construct(int $status_code = Response::HTTP_MOVED_PERMANENTLY)
+    public function __construct(int $status_code = 301)
     {
         $headers = new HeaderBag();
 
@@ -41,6 +56,54 @@ class RedirectResponse extends Response
     }
 
     /**
+     * Set the session.
+     *
+     * @param Session $session
+     * @return $this
+     */
+    public function set_session(Session $session): RedirectResponse
+    {
+        $this->session = $session;
+
+        return $this;
+    }
+
+    /**
+     * Get the session.
+     *
+     * @param Session $session
+     * @return Session
+     */
+    public function get_session(Session $session): Session
+    {
+        return $this->session;
+    }
+
+    /**
+     * Set the request.
+     *
+     * @param Request $request
+     * @return $this
+     */
+    public function set_request(Request $request): RedirectResponse
+    {
+        $this->request = $request;
+
+        return $this;
+    }
+
+    /**
+     * Get the request.
+     *
+     * @param Request $request
+     * @return Request
+     */
+    public function get_request(Request $request): Request
+    {
+        return $this->request;
+    }
+
+    /**
      * Redirect back to the previous page or the base URL if no referer is provided.
      *
      * This method retrieves the URL from the 'Referer' header in the HTTP request headers.
@@ -50,7 +113,7 @@ class RedirectResponse extends Response
      */
     public function back(): RedirectResponse
     {
-        $this->path = request()->headers()->get('referer') ?? Url::base_url();
+        $this->path = request()->headers()->get('referer') ?? Url::full();
 
         return $this;
     }
@@ -81,7 +144,7 @@ class RedirectResponse extends Response
      */
     public function with(string $key, $value): RedirectResponse
     {
-        session()->flash($key, $value);
+        $this->session->flash($key, $value);
 
         return $this;
     }
@@ -98,7 +161,7 @@ class RedirectResponse extends Response
     public function with_errors(array $errors): RedirectResponse
     {
         foreach ($errors as $key => $value) {
-            session()->push('errors.form.' . $key, $value);
+            $this->session->push('errors.form.' . $key, $value);
         }
 
         return $this;

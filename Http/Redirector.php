@@ -3,15 +3,16 @@
 namespace Framework\Http;
 
 use Error;
-use Framework\Foundation\Session;
+use Framework\Routing\Generator\UrlGenerator;
+use Framework\Session\Session;
 
 /**
- * The Redirect class provides methods to redirect users to specific routes or URLs, creating redirects with flash data,
+ * The Redirector class provides methods to redirect users to specific routes or URLs, creating redirects with flash data,
  * redirect back to the previous page, and generate JSON responses.
  *
  * @package Framework\Http
  */
-class Redirect
+class Redirector
 {
     /**
      * The session manager for storing flash data.
@@ -21,15 +22,23 @@ class Redirect
     protected Session $session;
 
     /**
+     * The URL generator instance.
+     *
+     * @var UrlGenerator
+     */
+    private UrlGenerator $url;
+
+    /**
      * Redirect constructor.
      *
      * @param Session $session The session manager for storing flash data.
      *
      * @throws Error If the provided route is invalid.
      */
-    public function __construct(Session $session)
+    public function __construct(Session $session, UrlGenerator $url)
     {
         $this->session = $session;
+        $this->url = $url;
     }
 
     /**
@@ -41,6 +50,10 @@ class Redirect
     public function to(string $path): RedirectResponse
     {
         $response = new RedirectResponse();
+
+        $response
+            ->set_request($this->url->get_request())
+            ->set_session($this->session);
 
         return $response->route($path);
     }
@@ -57,6 +70,10 @@ class Redirect
     public function back(): RedirectResponse
     {
         $response = new RedirectResponse();
+
+        $response
+            ->set_request($this->url->get_request())
+            ->set_session($this->session);
 
         return $response->back();
     }
