@@ -5,15 +5,10 @@ namespace Framework\Component;
 use App\Http\Kernel;
 use Framework\Component\Exception\ExceptionHandler;
 use Framework\Http\Kernel as HttpKernel;
-use Framework\Routing\Generator\RouteUrlGenerator;
-use Framework\Routing\Generator\UrlGenerator;
-use Framework\Routing\Router;
 use Framework\Routing\Services\RoutingService;
+use Framework\Support\Arr;
 use Framework\Support\Collection;
-use Framework\Support\File;
-use Framework\Support\Helpers\Arr;
-use Framework\Support\Url;
-use http\Env\Request;
+use Framework\Support\Helpers\File;
 
 /**
  * The Application class is responsible for bootstrapping the application and registering services.
@@ -195,7 +190,7 @@ class Application extends Container
      */
     public function get_service($service)
     {
-        $matches = Arr::where($this->loaded_services, fn($value) => $value === get_class($service));
+        $matches = Arr::where($this->get_services(), fn($value) => $value === get_class($service));
 
         return reset($matches);
     }

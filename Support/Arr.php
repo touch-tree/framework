@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Support\Helpers;
+namespace Framework\Support;
 
 /**
  * The Arr class provides utility methods for arrays.

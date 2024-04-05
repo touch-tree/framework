@@ -3,7 +3,7 @@
 namespace Framework\Routing;
 
 use Framework\Http\Request;
-use Framework\Support\Url;
+use Framework\Support\Helpers\Url;
 
 /**
  * The RouteCollection class represents a collection of routes in the routing system.

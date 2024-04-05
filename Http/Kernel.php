@@ -7,6 +7,7 @@ use Framework\Component\View;
 use Framework\Http\Exception\NotFoundHttpException;
 use Framework\Routing\Route;
 use Framework\Routing\Router;
+use Framework\Session\Pipes\SessionPipe;
 use Framework\Support\Pipeline;
 
 /**
@@ -23,7 +24,9 @@ class Kernel
      *
      * @var array
      */
-    protected array $pipes = [];
+    protected array $pipes = [
+        SessionPipe::class
+    ];
 
     /**
      * Array of route-specific middleware.

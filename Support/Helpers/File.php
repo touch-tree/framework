@@ -1,19 +1,28 @@
 <?php
 
-namespace Framework\Support;
+namespace Framework\Support\Helpers;
 
-use FilesystemIterator;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
+use Framework\Support\FileManager;
 use SplFileInfo;
 
 /**
- * The class File provides utility functions for handling files and directories.
+ * File facade.
  *
- * @package Framework\Support
+ * @package Framework\Support\Helpers
+ * @see FileManager
  */
-class File
+class File extends Facade
 {
+    /**
+     * Set the accessor for the facade.
+     *
+     * @return string
+     */
+    static protected function accessor(): string
+    {
+        return FileManager::class;
+    }
+
     /**
      * Get files from a directory matching a specific extension.
      *
@@ -23,7 +32,7 @@ class File
      */
     public static function files(string $directory, $extension = null): array
     {
-        return self::get_paths($directory, fn($file) => $file->isFile() && self::has_extension($file, $extension));
+        return self::get_accessor_class()->files($directory, $extension);
     }
 
     /**
@@ -35,30 +44,19 @@ class File
      */
     public static function get(string $directory, bool $recursive = true): array
     {
-        if ($recursive) {
-            $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::SELF_FIRST);
-        } else {
-            $iterator = new FilesystemIterator($directory, FilesystemIterator::SKIP_DOTS);
-        }
-
-        $paths = [];
-        foreach ($iterator as $file) {
-            $paths[] = $file->getPathname();
-        }
-
-        return $paths;
+        return self::get_accessor_class()->get($directory, $recursive);
     }
 
     /**
      * Write content to a file.
      *
-     * @param string $filePath The path to the file.
+     * @param string $file_path The path to the file.
      * @param string $content The content to write to the file.
      * @return bool true if the content was successfully written to the file, false otherwise.
      */
-    public static function put(string $filePath, string $content): bool
+    public static function put(string $file_path, string $content): bool
     {
-        return file_put_contents($filePath, $content);
+        return self::get_accessor_class()->put($file_path, $content);
     }
 
     /**
@@ -69,7 +67,7 @@ class File
      */
     public static function directories(string $directory): array
     {
-        return self::get_paths($directory, fn($file) => $file->isDir());
+        return self::get_accessor_class()->directories($directory);
     }
 
     /**
@@ -81,15 +79,7 @@ class File
      */
     private static function get_paths(string $directory, callable $callback): array
     {
-        $paths = [];
-
-        foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory)) as $file) {
-            if ($callback($file)) {
-                $paths[] = $file->getPathname();
-            }
-        }
-
-        return $paths;
+        return self::get_accessor_class()->get_paths($directory, $callback);
     }
 
     /**
@@ -101,13 +91,7 @@ class File
      */
     private static function has_extension(SplFileInfo $file, $extension): bool
     {
-        if (is_null($extension)) {
-            return true;
-        }
-
-        $file_extension = pathinfo($file->getPathname(), PATHINFO_EXTENSION);
-
-        return in_array($file_extension, is_array($extension) ? $extension : [$extension]);
+        return self::get_accessor_class()->has_extension($file, $extension);
     }
 
     /**
@@ -118,25 +102,7 @@ class File
      */
     public static function delete($paths): bool
     {
-        if (!is_array($paths)) {
-            $paths = [$paths];
-        }
-
-        $success = true;
-
-        foreach ($paths as $path) {
-            if (file_exists($path)) {
-                if (is_dir($path)) {
-                    $success = $success && self::delete_directory($path);
-                } else {
-                    $success = $success && unlink($path);
-                }
-            } else {
-                $success = false;
-            }
-        }
-
-        return $success;
+        return self::get_accessor_class()->delete($paths);
     }
 
     /**
@@ -147,14 +113,6 @@ class File
      */
     private static function delete_directory(string $directory): bool
     {
-        foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST) as $file) {
-            if ($file->isDir()) {
-                rmdir($file->getRealPath());
-            } else {
-                unlink($file->getRealPath());
-            }
-        }
-
-        return rmdir($directory);
+        return self::get_accessor_class()->delete_directory($directory);
     }
 }

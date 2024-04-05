@@ -2,6 +2,8 @@
 
 namespace Framework\Support;
 
+use Framework\Support\Helpers\File;
+
 /**
  * The Cache class provides file-based caching for storing and retrieving data from the filesystem.
  *

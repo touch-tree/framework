@@ -3,6 +3,7 @@
 namespace Framework\Http;
 
 use Error;
+use Framework\Routing\Generator\UrlGenerator;
 use Framework\Session\Session;
 
 /**
@@ -21,15 +22,23 @@ class Redirector
     protected Session $session;
 
     /**
+     * The URL generator instance.
+     *
+     * @var UrlGenerator
+     */
+    private UrlGenerator $url;
+
+    /**
      * Redirect constructor.
      *
      * @param Session $session The session manager for storing flash data.
      *
      * @throws Error If the provided route is invalid.
      */
-    public function __construct(Session $session)
+    public function __construct(Session $session, UrlGenerator $url)
     {
         $this->session = $session;
+        $this->url = $url;
     }
 
     /**
@@ -41,6 +50,10 @@ class Redirector
     public function to(string $path): RedirectResponse
     {
         $response = new RedirectResponse();
+
+        $response
+            ->set_request($this->url->get_request())
+            ->set_session($this->session);
 
         return $response->route($path);
     }
@@ -57,6 +70,10 @@ class Redirector
     public function back(): RedirectResponse
     {
         $response = new RedirectResponse();
+
+        $response
+            ->set_request($this->url->get_request())
+            ->set_session($this->session);
 
         return $response->back();
     }

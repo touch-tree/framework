@@ -4,6 +4,7 @@ namespace Framework\Routing\Generator;
 
 use Framework\Http\Request;
 use Framework\Routing\RouteCollection;
+use Framework\Support\UrlParser;
 
 /**
  * The RouteUrlGenerator class generates URLs for routes and resources within the application.
@@ -44,7 +45,9 @@ class RouteUrlGenerator
         $route_path = $this->populate_route_parameters($path, $parameters);
 
         if ($absolute) {
-            return $route_path;
+            $url = new UrlParser($this->url->full());
+
+            return $url->get_path();
         }
 
         return $this->url->full() . ltrim($route_path, '/');

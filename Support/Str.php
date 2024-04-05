@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Support\Helpers;
+namespace Framework\Support;
 
 /**
  * The Str class provides utility methods for string manipulation.

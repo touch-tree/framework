@@ -9,7 +9,7 @@ use Framework\Component\View;
 use Framework\Http\JsonResponse;
 use Framework\Http\RedirectResponse;
 use Framework\Http\Request;
-use Framework\Support\Url;
+use Framework\Support\Helpers\Url;
 use ReflectionException;
 use ReflectionMethod;
 

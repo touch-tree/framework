@@ -23,7 +23,7 @@ use Framework\Http\Response;
 use Framework\Http\Server;
 use Framework\Routing\Router;
 use Framework\Session\Session;
-use Framework\Support\Url;
+use Framework\Support\Helpers\Url;
 
 /**
  * Redirect to a specified route.

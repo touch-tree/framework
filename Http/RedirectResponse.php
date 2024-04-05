@@ -3,7 +3,8 @@
 namespace Framework\Http;
 
 use Error;
-use Framework\Support\Url;
+use Framework\Session\Session;
+use Framework\Support\Helpers\Url;
 use LogicException;
 
 /**
@@ -15,6 +16,20 @@ use LogicException;
  */
 class RedirectResponse extends Response
 {
+    /**
+     * Session instance.
+     *
+     * @var Session
+     */
+    private Session $session;
+
+    /**
+     * Request instance.
+     *
+     * @var Request
+     */
+    private Request $request;
+
     /**
      * The destination path for the redirect.
      *
@@ -38,6 +53,54 @@ class RedirectResponse extends Response
             ->set('Expires', '0');
 
         parent::__construct(null, $status_code, $headers);
+    }
+
+    /**
+     * Set the session.
+     *
+     * @param Session $session
+     * @return $this
+     */
+    public function set_session(Session $session): RedirectResponse
+    {
+        $this->session = $session;
+
+        return $this;
+    }
+
+    /**
+     * Get the session.
+     *
+     * @param Session $session
+     * @return Session
+     */
+    public function get_session(Session $session): Session
+    {
+        return $this->session;
+    }
+
+    /**
+     * Set the request.
+     *
+     * @param Request $request
+     * @return $this
+     */
+    public function set_request(Request $request): RedirectResponse
+    {
+        $this->request = $request;
+
+        return $this;
+    }
+
+    /**
+     * Get the request.
+     *
+     * @param Request $request
+     * @return Request
+     */
+    public function get_request(Request $request): Request
+    {
+        return $this->request;
     }
 
     /**
@@ -81,7 +144,7 @@ class RedirectResponse extends Response
      */
     public function with(string $key, $value): RedirectResponse
     {
-        session()->flash($key, $value);
+        $this->session->flash($key, $value);
 
         return $this;
     }
@@ -98,7 +161,7 @@ class RedirectResponse extends Response
     public function with_errors(array $errors): RedirectResponse
     {
         foreach ($errors as $key => $value) {
-            session()->push('errors.form.' . $key, $value);
+            $this->session->push('errors.form.' . $key, $value);
         }
 
         return $this;

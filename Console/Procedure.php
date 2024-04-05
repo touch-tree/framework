@@ -75,7 +75,7 @@ class Procedure
      */
     public function run(): Procedure
     {
-        $command = implode(chr(32), $this->command);
+        $command = implode(' ', $this->command);
 
         $process = proc_open($command,
             [

@@ -4,7 +4,7 @@ namespace Framework\Routing\Generator;
 
 use Framework\Http\Request;
 use Framework\Routing\RouteCollection;
-use Framework\Support\Helpers\Str;
+use Framework\Support\Str;
 
 /**
  * The UrlGenerator class generates URLs for routes and resources within the application.
@@ -39,6 +39,16 @@ class UrlGenerator
     {
         $this->routes = $routes;
         $this->request = $request;
+    }
+
+    /**
+     * Get request.
+     *
+     * @return Request
+     */
+    public function get_request(): Request
+    {
+        return $this->request;
     }
 
     /**
@@ -90,9 +100,9 @@ class UrlGenerator
     /**
      * Get the full base URL for the application.
      *
-     * @return string|null The full base URL for the application. Returns null if 'app.url' is not set.
+     * @return string The full base URL for the application. Returns the relative path if 'app.url' is not set.
      */
-    public function full(): ?string
+    public function full(): string
     {
         return config('app.url') ?: $this->request->root() . $this->get_relative_path();
     }
@@ -105,6 +115,17 @@ class UrlGenerator
     private function get_relative_path(): string
     {
         return str_replace(Str::finish($this->request->server('DOCUMENT_ROOT'), '/'), '', base_path());
+    }
+
+    /**
+     * Build a query string from an array of parameters.
+     *
+     * @param array $parameters The parameters to include in the query string.
+     * @return string The generated query string.
+     */
+    public function build_query_string(array $parameters): string
+    {
+        return http_build_query($parameters);
     }
 
     /**
