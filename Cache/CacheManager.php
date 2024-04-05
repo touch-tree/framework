@@ -1,19 +1,20 @@
 <?php
 
-namespace Framework\Support;
+namespace Framework\Cache;
 
-use Framework\Support\Helpers\File;
+use Framework\Filesystem\Filesystem;
+use Framework\Support\Str;
 
 /**
- * The Cache class provides file-based caching for storing and retrieving data from the filesystem.
+ * The CacheManager class provides file-based caching for storing and retrieving data from the filesystem.
  *
  * This class offers methods to interact with the cache, including storing, retrieving, checking existence,
  * and removing items from the cache. It supports setting a time-to-live (TTL) for cached items and provides methods
  * for incrementing and decrementing cached values.
  *
- * @package Framework\Support
+ * @package Framework\Cache
  */
-class Cache
+class CacheManager
 {
     /**
      * Get an item from the cache.
@@ -24,11 +25,11 @@ class Cache
      */
     public static function get(string $key, $default = null)
     {
-        if (!file_exists($file = self::get_cache_file($key))) {
+        if (!Filesystem::exists($file = self::get_cache_file($key))) {
             return $default;
         }
 
-        if (self::is_expired($cached = unserialize(file_get_contents($file)))) {
+        if (self::is_expired($cached = unserialize(Filesystem::get($file)))) {
             self::forget($key);
             return $default;
         }
@@ -59,11 +60,11 @@ class Cache
     {
         $file = self::get_cache_file($key);
 
-        if (!file_exists($file)) {
+        if (!Filesystem::exists($file)) {
             touch($file);
         }
 
-        file_put_contents($file, serialize(
+        Filesystem::put($file, serialize(
             [
                 'expires' => $ttl > 0 ? time() + $ttl : 0,
                 'value' => $value,
@@ -79,7 +80,7 @@ class Cache
      */
     public static function has(string $key): bool
     {
-        return file_exists(self::get_cache_file($key));
+        return Filesystem::exists(self::get_cache_file($key));
     }
 
     /**
@@ -90,8 +91,8 @@ class Cache
      */
     public static function forget(string $key): bool
     {
-        if (file_exists($file = self::get_cache_file($key))) {
-            return unlink($file);
+        if (Filesystem::exists($file = self::get_cache_file($key))) {
+            return Filesystem::delete($file);
         }
 
         return false;
@@ -130,9 +131,9 @@ class Cache
      */
     public static function clear()
     {
-        foreach (File::get(storage_path('Framework/cache'), 'cache') as $file) {
+        foreach (Filesystem::files(storage_path('Framework/cache'), 'cache') as $file) {
             if (is_file($file)) {
-                unlink($file);
+                Filesystem::delete($file);
             }
         }
     }
@@ -145,10 +146,12 @@ class Cache
      */
     protected static function get_cache_file(string $key): string
     {
-        if (!file_exists($path = storage_path('Framework/cache'))) {
-            mkdir($path, 0777, true);
+        $path = storage_path('Framework/cache');
+
+        if (!Filesystem::exists($path)) {
+            Filesystem::make_directory($path);
         }
 
-        return $path . '/' . md5($key) . '.cache';
+        return Str::finish($path, '/') . md5($key) . '.cache';
     }
 }
