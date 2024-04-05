@@ -1,16 +1,16 @@
 <?php
 
-namespace Framework\Component\Exception;
+namespace Framework\Component\Exceptions;
 
 use Error;
 use Exception;
-use Framework\Http\Exception\HttpException;
+use Framework\Http\Exceptions\HttpException;
 use Framework\Http\Response;
 
 /**
  * The ExceptionHandler class handles exceptions thrown within the framework providing a centralized place for exception handling logic.
  *
- * @package Framework\Component\Exception
+ * @package Framework\Component\Exceptions
  */
 class ExceptionHandler
 {

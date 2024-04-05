@@ -4,7 +4,7 @@ namespace Framework\Http;
 
 use Framework\Component\Container;
 use Framework\Component\View;
-use Framework\Http\Exception\NotFoundHttpException;
+use Framework\Http\Exceptions\NotFoundHttpException;
 use Framework\Pipeline\Pipeline;
 use Framework\Routing\Route;
 use Framework\Routing\Router;
