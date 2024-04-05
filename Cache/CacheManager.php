@@ -2,7 +2,7 @@
 
 namespace Framework\Cache;
 
-use Framework\Filesystem\Filesystem;
+use Framework\Support\Helpers\File;
 use Framework\Support\Str;
 
 /**
@@ -23,14 +23,14 @@ class CacheManager
      * @param mixed $default The default value to return if the item is not found in the cache.
      * @return mixed|null The cached item value or the default value if the item is not found.
      */
-    public static function get(string $key, $default = null)
+    public function get(string $key, $default = null)
     {
-        if (!Filesystem::exists($file = self::get_cache_file($key))) {
+        if (!File::exists($file = $this->get_cache_file($key))) {
             return $default;
         }
 
-        if (self::is_expired($cached = unserialize(Filesystem::get($file)))) {
-            self::forget($key);
+        if ($this->is_expired($cached = unserialize(File::get($file)))) {
+            $this->forget($key);
             return $default;
         }
 
@@ -43,7 +43,7 @@ class CacheManager
      * @param array $cached The cached item data.
      * @return bool true if the item is expired, false otherwise.
      */
-    private static function is_expired(array $cached): bool
+    private function is_expired(array $cached): bool
     {
         return $cached['expires'] > 0 && $cached['expires'] < time();
     }
@@ -56,15 +56,15 @@ class CacheManager
      * @param int $ttl The time-to-live for the cached item in seconds.
      * @return void
      */
-    public static function put(string $key, $value, int $ttl)
+    public function put(string $key, $value, int $ttl)
     {
-        $file = self::get_cache_file($key);
+        $file = $this->get_cache_file($key);
 
-        if (!Filesystem::exists($file)) {
+        if (!File::exists($file)) {
             touch($file);
         }
 
-        Filesystem::put($file, serialize(
+        File::put($file, serialize(
             [
                 'expires' => $ttl > 0 ? time() + $ttl : 0,
                 'value' => $value,
@@ -78,9 +78,9 @@ class CacheManager
      * @param string $key The unique identifier for the cached item.
      * @return bool true if the item exists in the cache, false otherwise.
      */
-    public static function has(string $key): bool
+    public function has(string $key): bool
     {
-        return Filesystem::exists(self::get_cache_file($key));
+        return File::exists($this->get_cache_file($key));
     }
 
     /**
@@ -89,10 +89,10 @@ class CacheManager
      * @param string $key The unique identifier for the cached item to be removed.
      * @return bool true if the item was successfully removed, false otherwise.
      */
-    public static function forget(string $key): bool
+    public function forget(string $key): bool
     {
-        if (Filesystem::exists($file = self::get_cache_file($key))) {
-            return Filesystem::delete($file);
+        if (File::exists($file = $this->get_cache_file($key))) {
+            return File::delete($file);
         }
 
         return false;
@@ -105,9 +105,9 @@ class CacheManager
      * @param int $value The value to increment the cached item by.
      * @return int|bool The new value of the cached item or false on failure.
      */
-    public static function increment(string $key, int $value = 1)
+    public function increment(string $key, int $value = 1)
     {
-        self::put($key, $new = self::get($key, 0) + $value, 0);
+        $this->put($key, $new = $this->get($key, 0) + $value, 0);
 
         return $new;
     }
@@ -119,9 +119,9 @@ class CacheManager
      * @param int $value The value to decrement the cached item by.
      * @return int|bool The new value of the cached item or false on failure.
      */
-    public static function decrement(string $key, int $value = 1)
+    public function decrement(string $key, int $value = 1)
     {
-        return self::increment($key, -$value);
+        return $this->increment($key, -$value);
     }
 
     /**
@@ -129,11 +129,11 @@ class CacheManager
      *
      * @return void
      */
-    public static function clear()
+    public function clear()
     {
-        foreach (Filesystem::files(storage_path('Framework/cache'), 'cache') as $file) {
+        foreach (File::files(storage_path('Framework/cache'), 'cache') as $file) {
             if (is_file($file)) {
-                Filesystem::delete($file);
+                File::delete($file);
             }
         }
     }
@@ -144,12 +144,10 @@ class CacheManager
      * @param string $key The cache key.
      * @return string The filename for the cache key.
      */
-    protected static function get_cache_file(string $key): string
+    protected function get_cache_file(string $key): string
     {
-        $path = storage_path('Framework/cache');
-
-        if (!Filesystem::exists($path)) {
-            Filesystem::make_directory($path);
+        if (!File::exists($path = storage_path('Framework/cache'))) {
+            File::make_directory($path);
         }
 
         return Str::finish($path, '/') . md5($key) . '.cache';

@@ -36,6 +36,18 @@ class File extends Facade
     }
 
     /**
+     * Retrieve all files and directories within a directory.
+     *
+     * @param string $directory The directory path.
+     * @param bool $recursive [optional] Whether to include subdirectories recursively.
+     * @return array An array containing the paths of files and directories.
+     */
+    public static function all_files(string $directory, bool $recursive = true): array
+    {
+        return self::get_accessor_class()->all_files($directory, $recursive);
+    }
+
+    /**
      * Write content to a file.
      *
      * @param string $file_path The path to the file.
@@ -56,6 +68,39 @@ class File extends Facade
     public static function directories(string $directory): array
     {
         return self::get_accessor_class()->directories($directory);
+    }
+
+    /**
+     * Get the contents of a file.
+     *
+     * @param string $file_path The path to the file.
+     * @return string|false The contents of the file, or false on failure.
+     */
+    public static function get(string $file_path)
+    {
+        return self::get_accessor_class()->get($file_path);
+    }
+
+    /**
+     * Check if a file or directory exists.
+     *
+     * @param string $path The path to the file or directory.
+     * @return bool True if the file or directory exists, false otherwise.
+     */
+    public static function exists(string $path): bool
+    {
+        return self::get_accessor_class()->exists($path);
+    }
+
+    /**
+     * Create a directory.
+     *
+     * @param string $directory The directory path to create.
+     * @return bool true on success, false on failure.
+     */
+    public static function make_directory(string $directory): bool
+    {
+        return self::get_accessor_class()->make_directory($directory);
     }
 
     /**

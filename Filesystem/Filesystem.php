@@ -21,7 +21,7 @@ class Filesystem
      * @param string|array|null $extension [optional] The extension to filter by. If null, returns all files.
      * @return array An array of file paths.
      */
-    public static function files(string $directory, $extension = null): array
+    public function files(string $directory, $extension = null): array
     {
         return self::get_paths($directory, fn($file) => $file->isFile() && self::has_extension($file, $extension));
     }
@@ -33,7 +33,7 @@ class Filesystem
      * @param bool $recursive [optional] Whether to include subdirectories recursively.
      * @return array An array containing the paths of files and directories.
      */
-    public static function all_files(string $directory, bool $recursive = true): array
+    public function all_files(string $directory, bool $recursive = true): array
     {
         if ($recursive) {
             $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::SELF_FIRST);
@@ -56,7 +56,7 @@ class Filesystem
      * @param string $content The content to write to the file.
      * @return bool true if the content was successfully written to the file, false otherwise.
      */
-    public static function put(string $file_path, string $content): bool
+    public function put(string $file_path, string $content): bool
     {
         return file_put_contents($file_path, $content);
     }
@@ -67,7 +67,7 @@ class Filesystem
      * @param string $directory The directory path.
      * @return array An array of directory paths.
      */
-    public static function directories(string $directory): array
+    public function directories(string $directory): array
     {
         return self::get_paths($directory, fn($file) => $file->isDir());
     }
@@ -79,7 +79,7 @@ class Filesystem
      * @param callable $callback The callback function defining the condition.
      * @return array An array of paths that meet the condition.
      */
-    private static function get_paths(string $directory, callable $callback): array
+    private function get_paths(string $directory, callable $callback): array
     {
         $paths = [];
 
@@ -99,7 +99,7 @@ class Filesystem
      * @param string|array $extension The extension(s) to check against.
      * @return bool True if the file has the specified extension, false otherwise.
      */
-    private static function has_extension(SplFileInfo $file, $extension): bool
+    private function has_extension(SplFileInfo $file, $extension): bool
     {
         if (is_null($extension)) {
             return true;
@@ -116,7 +116,7 @@ class Filesystem
      * @param string|array $paths The path(s) to the file(s) or directory(s) to delete.
      * @return bool True if all paths were successfully deleted, false otherwise.
      */
-    public static function delete($paths): bool
+    public function delete($paths): bool
     {
         if (!is_array($paths)) {
             $paths = [$paths];
@@ -145,7 +145,7 @@ class Filesystem
      * @param string $directory The directory to delete.
      * @return bool True if successfully deleted, false otherwise.
      */
-    private static function delete_directory(string $directory): bool
+    private function delete_directory(string $directory): bool
     {
         foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST) as $file) {
             if ($file->isDir()) {
@@ -164,7 +164,7 @@ class Filesystem
      * @param string $file_path The path to the file.
      * @return string|false The contents of the file, or false on failure.
      */
-    public static function get(string $file_path)
+    public function get(string $file_path)
     {
         return file_get_contents($file_path);
     }
@@ -175,7 +175,7 @@ class Filesystem
      * @param string $path The path to the file or directory.
      * @return bool True if the file or directory exists, false otherwise.
      */
-    public static function exists(string $path): bool
+    public function exists(string $path): bool
     {
         return file_exists($path);
     }
@@ -186,7 +186,7 @@ class Filesystem
      * @param string $directory The directory path to create.
      * @return bool true on success, false on failure.
      */
-    public static function make_directory(string $directory): bool
+    public function make_directory(string $directory): bool
     {
         return mkdir($directory, 0777, true);
     }

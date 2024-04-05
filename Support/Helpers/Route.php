@@ -2,6 +2,7 @@
 
 namespace Framework\Support\Helpers;
 
+use Framework\Routing\RouteCollection;
 use Framework\Routing\Router;
 
 /**
@@ -44,5 +45,15 @@ class Route extends Facade
     public static function post(string $uri, array $action): Router
     {
         return self::get_accessor_class()->post($uri, $action);
+    }
+
+    /**
+     * Get the RouteCollection instance containing all registered routes.
+     *
+     * @return RouteCollection The RouteCollection instance.
+     */
+    public function routes(): RouteCollection
+    {
+        return self::get_accessor_class()->routes();
     }
 }
