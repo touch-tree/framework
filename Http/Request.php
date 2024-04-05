@@ -106,15 +106,17 @@ class Request
      *
      * @param string $key The name of the file input field.
      * @param mixed $default [optional] The default value if the file is not uploaded.
-     * @return mixed The file object or null if the file is not uploaded.
+     * @return UploadedFile|mixed The file object or null if the file is not uploaded.
      */
     public function file(string $key, $default = null)
     {
-        if (isset($_FILES[$key])) {
-            return $_FILES[$key];
+        if (!isset($_FILES[$key])) {
+            return $default;
         }
 
-        return $default;
+        $file = $_FILES[$key];
+
+        return new UploadedFile($file['tmp_name'], $file['name'], $file['type'] ?? null, $file['size'] ?? null, $file['error'] ?? null);
     }
 
     /**
@@ -256,9 +258,11 @@ class Request
      */
     public function content(): string
     {
-        if (!isset($this->content) && !in_array($this->method(), ['GET', 'HEAD'])) {
-            $this->content = file_get_contents('php://input');
+        if (isset($this->content) || in_array($this->method(), ['GET', 'HEAD'])) {
+            return $this->content;
         }
+
+        $this->content = file_get_contents('php://input');
 
         return $this->content;
     }
