@@ -3,7 +3,7 @@
 namespace Framework\Component;
 
 use App\Http\Kernel;
-use Framework\Component\Exception\ExceptionHandler;
+use Framework\Component\Exceptions\ExceptionHandler;
 use Framework\Http\Kernel as HttpKernel;
 use Framework\Routing\Services\RoutingService;
 use Framework\Support\Arr;

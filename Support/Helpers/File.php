@@ -2,14 +2,14 @@
 
 namespace Framework\Support\Helpers;
 
-use Framework\Support\FileManager;
+use Framework\Filesystem\Filesystem;
 use SplFileInfo;
 
 /**
  * File facade.
  *
  * @package Framework\Support\Helpers
- * @see FileManager
+ * @see Filesystem
  */
 class File extends Facade
 {
@@ -20,7 +20,7 @@ class File extends Facade
      */
     static protected function accessor(): string
     {
-        return FileManager::class;
+        return Filesystem::class;
     }
 
     /**

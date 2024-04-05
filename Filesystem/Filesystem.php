@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Support;
+namespace Framework\Filesystem;
 
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
@@ -8,11 +8,11 @@ use RecursiveIteratorIterator;
 use SplFileInfo;
 
 /**
- * The class File provides utility functions for handling files and directories.
+ * The class Filesystem provides utility functions for handling files and directories.
  *
- * @package Framework\Support
+ * @package Framework\Filesystem
  */
-class FileManager
+class Filesystem
 {
     /**
      * Get files from a directory matching a specific extension.
