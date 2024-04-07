@@ -55,8 +55,8 @@ class Application extends Container
     public function __construct(string $base_path)
     {
         $this->set_base_path($base_path);
-        $this->register_core_bindings();
-        $this->register_core_services();
+        $this->register_base_bindings();
+        $this->register_base_services();
 
         static::set_instance($this);
     }
@@ -109,26 +109,26 @@ class Application extends Container
     }
 
     /**
-     * Register core bindings.
+     * Register base bindings.
      *
-     * This method registers core bindings for the application.
+     * This method registers base bindings for the application.
      *
      * @return void
      */
-    private function register_core_bindings()
+    private function register_base_bindings()
     {
         $this->singleton(HttpKernel::class, Kernel::class);
         $this->singleton(ExceptionHandler::class, ExceptionHandler::class);
     }
 
     /**
-     * Register core services.
+     * Register base services.
      *
-     * This method registers core services for the application.
+     * This method registers base services for the application.
      *
      * @return void
      */
-    private function register_core_services()
+    private function register_base_services()
     {
         $this->register(RoutingService::class);
     }
