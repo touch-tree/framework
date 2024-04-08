@@ -43,7 +43,7 @@ class Url extends Facade
      * @param bool $absolute [optional] Whether to generate an absolute URL (including scheme and host).
      * @return string The generated URL.
      */
-    public function route(string $name, array $parameters = [], bool $absolute = true): string
+    public static function route(string $name, array $parameters = [], bool $absolute = true): string
     {
         return self::get_accessor_class()->route($name, $parameters, $absolute);
     }
