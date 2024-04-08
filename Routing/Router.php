@@ -40,21 +40,13 @@ class Router
     private Container $container;
 
     /**
-     * UrlGenerator instance.
-     *
-     * @var UrlGenerator
-     */
-    private UrlGenerator $url;
-
-    /**
      * Router constructor.
      *
      * @param Container $container The dependency injection container.
      */
-    public function __construct(Container $container, UrlGenerator $url)
+    public function __construct(Container $container)
     {
         $this->container = $container;
-        $this->url = $url;
     }
 
     /**
@@ -65,7 +57,7 @@ class Router
     public function routes(): RouteCollection
     {
         if (!isset(self::$routes)) {
-            self::$routes = new RouteCollection($this->url);
+            self::$routes = new RouteCollection();
         }
 
         return self::$routes;
@@ -82,7 +74,7 @@ class Router
     {
         $route = $this->routes()->get($name);
 
-        return $route ? $this->url->route_url()->populate_route_parameters(Url::to($route->uri(), [], true), $parameters) : null;
+        return $route ? $this->container->get(UrlGenerator::class)->route_url()->populate_route_parameters(Url::to($route->uri(), [], false), $parameters) : null;
     }
 
     /**
@@ -150,6 +142,7 @@ class Router
     {
         $routes = $this->routes()->all();
         $route = end($routes);
+
         $route->set_pipes(is_array($key) ? $key : [$key]);
 
         return $this;
@@ -183,7 +176,7 @@ class Router
         try {
             [$class, $method] = $route->action();
 
-            $route_uri = Url::to($route->uri(), [], true);
+            $route_uri = Url::to($route->uri(), [], false);
 
             return $this->resolve_controller([$this->container->get($class), $method], $this->get_parameters($route_uri, $request->request_uri()));
         } catch (Exception $exception) {
@@ -238,7 +231,7 @@ class Router
      */
     private function get_parameters(string $route_url, string $url): ?array
     {
-        $compiled_route = $this->url->compile_route($route_url);
+        $compiled_route = $this->container->get(UrlGenerator::class)->compile_route($route_url);
 
         if (preg_match($compiled_route, $url, $matches)) {
             return array_filter($matches, fn($key) => is_string($key), ARRAY_FILTER_USE_KEY);

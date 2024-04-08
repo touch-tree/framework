@@ -40,7 +40,7 @@ class RouteUrlGenerator
      * @param bool $absolute [optional] Whether to generate an absolute URL (including scheme and host).
      * @return string The generated absolute URL.
      */
-    public function to(string $path, array $parameters = [], bool $absolute = false): string
+    public function to(string $path, array $parameters = [], bool $absolute = true): string
     {
         $route_path = $this->populate_route_parameters($path, $parameters);
 
