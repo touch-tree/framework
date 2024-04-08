@@ -24,7 +24,14 @@ class Kernel
      *
      * @var array
      */
-    protected array $pipes = [
+    protected array $pipes = [];
+
+    /**
+     * Array of global base middleware to be applied to every request.
+     *
+     * @var array
+     */
+    protected array $base_pipes = [
         SessionPipe::class
     ];
 
@@ -95,7 +102,7 @@ class Kernel
             throw new NotFoundHttpException();
         }
 
-        $pipes = array_merge($this->pipes, $this->get_pipes_for_route($route));
+        $pipes = array_merge($this->pipes, $this->base_pipes, $this->get_pipes_for_route($route));
 
         return $this->container->get(Pipeline::class)
             ->send($request)
