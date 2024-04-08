@@ -9,6 +9,7 @@ use Framework\Component\View;
 use Framework\Http\JsonResponse;
 use Framework\Http\RedirectResponse;
 use Framework\Http\Request;
+use Framework\Routing\Generator\UrlGenerator;
 use Framework\Support\Helpers\Url;
 use ReflectionException;
 use ReflectionMethod;
@@ -39,13 +40,21 @@ class Router
     private Container $container;
 
     /**
+     * UrlGenerator instance.
+     *
+     * @var UrlGenerator
+     */
+    private UrlGenerator $url;
+
+    /**
      * Router constructor.
      *
      * @param Container $container The dependency injection container.
      */
-    public function __construct(Container $container)
+    public function __construct(Container $container, UrlGenerator $url)
     {
         $this->container = $container;
+        $this->url = $url;
     }
 
     /**
@@ -56,7 +65,7 @@ class Router
     public function routes(): RouteCollection
     {
         if (!isset(self::$routes)) {
-            self::$routes = new RouteCollection();
+            self::$routes = new RouteCollection($this->url);
         }
 
         return self::$routes;
@@ -73,23 +82,7 @@ class Router
     {
         $route = $this->routes()->get($name);
 
-        return $route ? $this->replace_route_parameters(Url::to($route->uri(), [], true), $parameters) : null;
-    }
-
-    /**
-     * Replace route parameters in the given path with their corresponding values.
-     *
-     * @param string $path The path containing route parameters.
-     * @param array $parameters Associative array of route parameters.
-     * @return string The path with route parameters replaced.
-     */
-    public function replace_route_parameters(string $path, array $parameters): string
-    {
-        foreach ($parameters as $key => $value) {
-            $path = str_replace('{' . $key . '}', $value, $path);
-        }
-
-        return $path;
+        return $route ? $this->url->route_url()->populate_route_parameters(Url::to($route->uri(), [], true), $parameters) : null;
     }
 
     /**
@@ -142,7 +135,6 @@ class Router
     public function name(string $name): Router
     {
         $routes = $this->routes()->all();
-
         end($routes)->set_name($name);
 
         return $this;
@@ -158,14 +150,7 @@ class Router
     {
         $routes = $this->routes()->all();
         $route = end($routes);
-
-        if (is_array($key)) {
-            $route->set_pipes($key);
-        }
-
-        if (is_string($key)) {
-            $route->set_pipes([$key]);
-        }
+        $route->set_pipes(is_array($key) ? $key : [$key]);
 
         return $this;
     }
@@ -253,23 +238,12 @@ class Router
      */
     private function get_parameters(string $route_url, string $url): ?array
     {
-        $pattern = $this->get_pattern($route_url);
+        $compiled_route = $this->url->compile_route($route_url);
 
-        if (preg_match($pattern, $url, $matches)) {
+        if (preg_match($compiled_route, $url, $matches)) {
             return array_filter($matches, fn($key) => is_string($key), ARRAY_FILTER_USE_KEY);
         }
 
         return [];
-    }
-
-    /**
-     * Get the regex pattern for the route URL.
-     *
-     * @param string $route_url The URL pattern of the route.
-     * @return string The regex pattern for the route URL.
-     */
-    public function get_pattern(string $route_url): string
-    {
-        return '#^' . str_replace(['\{', '\}'], ['(?P<', '>[^/]+)'], preg_quote($route_url, '#')) . '$#';
     }
 }

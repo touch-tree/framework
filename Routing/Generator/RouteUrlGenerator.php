@@ -25,7 +25,7 @@ class RouteUrlGenerator
     /**
      * RouteUrlGenerator constructor.
      *
-     * @param UrlGenerator $url The URL generator instance.
+     * @param UrlGenerator $url The UrlGenerator instance.
      */
     public function __construct(UrlGenerator $url)
     {
@@ -37,7 +37,7 @@ class RouteUrlGenerator
      *
      * @param string $path The path to the resource.
      * @param array $parameters [optional] Route parameters to include in the URL.
-     * @param bool $absolute [optional] Whether to exclude the host from the generated URL.
+     * @param bool $absolute [optional] Whether to generate an absolute URL (including scheme and host).
      * @return string The generated absolute URL.
      */
     public function to(string $path, array $parameters = [], bool $absolute = false): string
@@ -45,12 +45,12 @@ class RouteUrlGenerator
         $route_path = $this->populate_route_parameters($path, $parameters);
 
         if ($absolute) {
-            $url = new UrlParser($this->url->full());
-
-            return $url->get_path();
+            return $this->url->full() . ltrim($route_path, '/');
         }
 
-        return $this->url->full() . ltrim($route_path, '/');
+        $url = new UrlParser($this->url->full());
+
+        return $url->get_path();
     }
 
     /**

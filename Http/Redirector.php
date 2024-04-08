@@ -22,7 +22,7 @@ class Redirector
     protected Session $session;
 
     /**
-     * The URL generator instance.
+     * UrlGenerator instance.
      *
      * @var UrlGenerator
      */
