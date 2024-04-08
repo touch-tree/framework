@@ -24,23 +24,6 @@ class RouteCollection
     private array $routes = [];
 
     /**
-     * UrlGenerator instance.
-     *
-     * @var UrlGenerator
-     */
-    private UrlGenerator $url;
-
-    /**
-     * RouteCollection constructor.
-     *
-     * @param UrlGenerator $url
-     */
-    public function __construct(UrlGenerator $url)
-    {
-        $this->url = $url;
-    }
-
-    /**
      * Get all routes registered in the collection.
      *
      * @return array<Route> An array of Route objects.
@@ -91,9 +74,8 @@ class RouteCollection
     {
         foreach ($this->routes as $route) {
             $route_uri = Url::to($route->uri(), [], false);
-            $compiled_route = $this->url->compile_route($route_uri);
 
-            if ($request->method() === $route->method() && preg_match($compiled_route, $request->path())) {
+            if ($request->method() === $route->method() && preg_match(app(UrlGenerator::class)->compile_route($route_uri), $request->path())) {
                 return $route;
             }
         }
