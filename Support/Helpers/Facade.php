@@ -10,6 +10,7 @@ namespace Framework\Support\Helpers;
  * available in the application's service container.
  *
  * @package Framework\Support\Helpers
+ * @template T
  */
 abstract class Facade
 {
@@ -19,7 +20,7 @@ abstract class Facade
      * This method should be implemented by subclasses to return the fully
      * qualified class name of the accessor class that the facade represents.
      *
-     * @return string The fully qualified class name of the accessor class.
+     * @return class-string<T> The fully qualified class name of the accessor class.
      */
     abstract static protected function accessor(): string;
 
@@ -32,7 +33,7 @@ abstract class Facade
      *
      * The accessor's dependencies will be resolved when retrieved from the service container.
      *
-     * @return mixed The instance of the accessor class.
+     * @return T The instance of the accessor class.
      */
     public static function get_accessor_class()
     {
