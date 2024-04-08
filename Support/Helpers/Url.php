@@ -36,6 +36,19 @@ class Url extends Facade
     }
 
     /**
+     * Generate a URL for the given route name.
+     *
+     * @param string $name The name of the route.
+     * @param array $parameters [optional] Parameters to substitute into the route URI.
+     * @param bool $absolute [optional] Whether to generate an absolute URL (including scheme and host).
+     * @return string The generated URL.
+     */
+    public static function route(string $name, array $parameters = [], bool $absolute = true): string
+    {
+        return self::get_accessor_class()->route($name, $parameters, $absolute);
+    }
+
+    /**
      * Get the full base URL for the application.
      *
      * @return string The full base URL for the application. Returns the relative path if 'app.url' is not set.

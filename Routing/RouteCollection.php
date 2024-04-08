@@ -3,6 +3,7 @@
 namespace Framework\Routing;
 
 use Framework\Http\Request;
+use Framework\Routing\Generator\UrlGenerator;
 use Framework\Support\Helpers\Url;
 
 /**
@@ -21,6 +22,23 @@ class RouteCollection
      * @var array<Route>
      */
     private array $routes = [];
+
+    /**
+     * UrlGenerator instance.
+     *
+     * @var UrlGenerator
+     */
+    private UrlGenerator $url;
+
+    /**
+     * RouteCollection constructor.
+     *
+     * @param UrlGenerator $url
+     */
+    public function __construct(UrlGenerator $url)
+    {
+        $this->url = $url;
+    }
 
     /**
      * Get all routes registered in the collection.
@@ -73,8 +91,9 @@ class RouteCollection
     {
         foreach ($this->routes as $route) {
             $route_uri = Url::to($route->uri(), [], true);
+            $compiled_route = $this->url->compile_route($route_uri);
 
-            if ($request->method() === $route->method() && preg_match(app(Router::class)->get_pattern($route_uri), $request->path())) {
+            if ($request->method() === $route->method() && preg_match($compiled_route, $request->path())) {
                 return $route;
             }
         }

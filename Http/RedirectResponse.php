@@ -3,6 +3,7 @@
 namespace Framework\Http;
 
 use Error;
+use Framework\Routing\Generator\UrlGenerator;
 use Framework\Session\Session;
 use Framework\Support\Helpers\Url;
 use LogicException;
@@ -125,10 +126,11 @@ class RedirectResponse extends Response
      * @return RedirectResponse
      *
      * @throws Error If the provided route is invalid.
+     * @see route()
      */
     public function route(string $path): RedirectResponse
     {
-        $this->path = route($path) ?: $path;
+        $this->path = Url::route($path) ?: $path;
 
         return $this;
     }

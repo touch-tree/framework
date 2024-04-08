@@ -30,12 +30,12 @@ class RoutingService extends Service
     private function register_router()
     {
         $this->app->singleton(Router::class, function () {
-            return new Router($this->app);
+            return new Router($this->app, $this->app->get(UrlGenerator::class));
         });
     }
 
     /**
-     * Register URL generator.
+     * Register UrlGenerator.
      *
      * @return void
      */

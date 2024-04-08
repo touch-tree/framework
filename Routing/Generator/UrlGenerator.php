@@ -52,17 +52,28 @@ class UrlGenerator
     }
 
     /**
-     * Get the Route URL generator instance.
+     * Get the Route UrlGenerator instance.
      *
      * @return RouteUrlGenerator
      */
-    protected function route_url(): RouteUrlGenerator
+    public function route_url(): RouteUrlGenerator
     {
         if (!isset($this->route_generator)) {
             $this->route_generator = new RouteUrlGenerator($this);
         }
 
         return $this->route_generator;
+    }
+
+    /**
+     * Get the regex pattern for the route URL.
+     *
+     * @param string $route_url The URL pattern of the route.
+     * @return string The regex pattern for the route URL.
+     */
+    public function compile_route(string $route_url): string
+    {
+        return '#^' . str_replace(['\{', '\}'], ['(?P<', '>[^/]+)'], preg_quote($route_url, '#')) . '$#';
     }
 
     /**
