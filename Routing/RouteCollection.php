@@ -90,7 +90,7 @@ class RouteCollection
     public function match(Request $request): ?Route
     {
         foreach ($this->routes as $route) {
-            $route_uri = Url::to($route->uri(), [], true);
+            $route_uri = Url::to($route->uri(), [], false);
             $compiled_route = $this->url->compile_route($route_uri);
 
             if ($request->method() === $route->method() && preg_match($compiled_route, $request->path())) {

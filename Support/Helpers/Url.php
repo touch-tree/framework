@@ -30,7 +30,7 @@ class Url extends Facade
      * @param bool $absolute [optional] Whether to exclude the host from the generated URL.
      * @return string The generated absolute URL.
      */
-    public static function to(string $path, array $parameters = [], bool $absolute = false): string
+    public static function to(string $path, array $parameters = [], bool $absolute = true): string
     {
         return self::get_accessor_class()->to($path, $parameters, $absolute);
     }

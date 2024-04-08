@@ -82,7 +82,7 @@ class Router
     {
         $route = $this->routes()->get($name);
 
-        return $route ? $this->url->route_url()->populate_route_parameters(Url::to($route->uri(), [], true), $parameters) : null;
+        return $route ? $this->url->route_url()->populate_route_parameters(Url::to($route->uri(), [], false), $parameters) : null;
     }
 
     /**
@@ -183,7 +183,7 @@ class Router
         try {
             [$class, $method] = $route->action();
 
-            $route_uri = Url::to($route->uri(), [], true);
+            $route_uri = Url::to($route->uri(), [], false);
 
             return $this->resolve_controller([$this->container->get($class), $method], $this->get_parameters($route_uri, $request->request_uri()));
         } catch (Exception $exception) {
