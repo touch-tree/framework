@@ -36,6 +36,6 @@ abstract class Facade
      */
     public static function get_accessor_class()
     {
-        return app()->get(static::accessor());
+        return get_service(static::accessor());
     }
 }

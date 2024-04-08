@@ -238,7 +238,7 @@ function dd(...$message)
 }
 
 /**
- * Get an instance of the specified class from the Container class.
+ * Get an instance of the specified class from the Service Container class.
  *
  * This function acts as a convenient entry point to retrieve instances of
  * classes from the application's Dependency Injection (DI) Container.
@@ -250,7 +250,7 @@ function dd(...$message)
  *
  * @see Container
  */
-function app(string $abstract = null, array $parameters = [])
+function get_service(string $abstract = null, array $parameters = [])
 {
     if (is_null($abstract)) {
         return Application::get_instance();
