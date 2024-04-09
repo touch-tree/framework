@@ -10,9 +10,7 @@ use ReflectionMethod;
 use ReflectionException;
 
 /**
- * The Dependency Injection Container for managing and resolving instances of classes.
- *
- * Represents a service container.
+ * The service container for managing and resolving instances of classes.
  *
  * @package Framework\Component
  */
