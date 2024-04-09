@@ -21,6 +21,7 @@ use Framework\Http\RedirectResponse;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Server;
+use Framework\Routing\Generator\UrlGenerator;
 use Framework\Routing\Router;
 use Framework\Session\Session;
 use Framework\Support\Helpers\Url;
@@ -309,11 +310,11 @@ function back(): RedirectResponse
  * Generate a URL based on the given route.
  *
  * @param string|null $path [optional] The path for the URL.
- * @return Url|string The generated URL.
+ * @return UrlGenerator|string The generated URL.
  */
 function url(string $path = null)
 {
-    return $path ? Url::to($path) : Application::get_instance()->get(Url::class);
+    return $path ? Url::to($path) : Application::get_instance()->get(UrlGenerator::class);
 }
 
 /**
