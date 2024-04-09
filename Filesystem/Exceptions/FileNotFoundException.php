@@ -2,7 +2,9 @@
 
 namespace Framework\Filesystem\Exceptions;
 
-class FileNotFoundException
+use Exception;
+
+class FileNotFoundException extends Exception
 {
 
 }

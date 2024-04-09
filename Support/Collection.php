@@ -83,7 +83,7 @@ class Collection
     /**
      * Apply a callback to each item in the collection.
      *
-     * @param callable(T) $callback The callback function to apply to each item.
+     * @param callable(T): Collection $callback The callback function to apply to each item.
      * @return Collection<T>
      */
     public function each(callable $callback): Collection
