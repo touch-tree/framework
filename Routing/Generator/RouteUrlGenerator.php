@@ -33,24 +33,18 @@ class RouteUrlGenerator
     }
 
     /**
-     * Generate an absolute URL for the given path with route parameters, optionally excluding the host.
+     * Generate a URL for the given path with route parameters.
      *
      * @param string $path The path to the resource.
      * @param array $parameters [optional] Route parameters to include in the URL.
      * @param bool $absolute [optional] Whether to generate an absolute URL (including scheme and host).
-     * @return string The generated absolute URL.
+     * @return string The generated URL.
      */
     public function to(string $path, array $parameters = [], bool $absolute = true): string
     {
-        $route_path = $this->populate_route_parameters($path, $parameters);
+        $url = new UrlParser($this->url->full() . ltrim($this->populate_route_parameters($path, $parameters), '/'));
 
-        if ($absolute) {
-            return $this->url->full() . ltrim($route_path, '/');
-        }
-
-        $url = new UrlParser($this->url->full());
-
-        return $url->get_path();
+        return $absolute ? $url->get_url() : $url->get_path();
     }
 
     /**

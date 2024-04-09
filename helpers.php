@@ -325,5 +325,5 @@ function url(string $path = null)
  */
 function asset(string $path): string
 {
-    return Url::to('/public/') . trim($path, '/');
+    return Url::to('public/') . trim($path, '/');
 }
