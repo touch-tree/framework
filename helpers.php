@@ -238,10 +238,14 @@ function dd(...$message)
 }
 
 /**
- * Get an instance of the specified class from the Service Container class.
+ * Get an instance of the specified class from the Container.
  *
  * This function acts as a convenient entry point to retrieve instances of
- * classes from the application's Dependency Injection (DI) Container.
+ * classes from the service container. The container serves as a collection of instances of
+ * classes used in this application, allowing for reuse and reference to instances without declaring
+ * anything on a global scope.
+ *
+ * If no class name is provided, the function returns the service container itself.
  *
  * @template T
  * @param class-string<T>|null $abstract [optional] The fully qualified class name to resolve.

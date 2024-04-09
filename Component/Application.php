@@ -111,12 +111,14 @@ class Application extends Container
     /**
      * Register base bindings.
      *
-     * This method registers base bindings for the application.
-     *
      * @return void
      */
     private function register_base_bindings()
     {
+        // Bindings are references to classes registered in our service container.
+        // They allow us to retrieve a global instance of a class using an identifier or namespace,
+        // enabling us to reuse the same instance instead of creating a new one each time.
+
         $this->singleton(HttpKernel::class, Kernel::class);
         $this->singleton(ExceptionHandler::class, ExceptionHandler::class);
     }
@@ -124,12 +126,13 @@ class Application extends Container
     /**
      * Register base services.
      *
-     * This method registers base services for the application.
-     *
      * @return void
      */
     private function register_base_services()
     {
+        // Here we register classes and components needed in this framework.
+        // In this instance, the routing service is needed to register components related to our routing system.
+
         $this->register(RoutingService::class);
     }
 
@@ -154,8 +157,6 @@ class Application extends Container
     /**
      * Bootstrap services.
      *
-     * This method iterates over the requested services and initializes them by calling their registration methods.
-     *
      * @return void
      */
     private function bootstrap_services()
@@ -165,9 +166,7 @@ class Application extends Container
     }
 
     /**
-     * Load services.
-     *
-     * This method loads services into the application.
+     * Load services into the application.
      *
      * @return void
      */
@@ -228,9 +227,7 @@ class Application extends Container
     }
 
     /**
-     * Register services.
-     *
-     * This method registers loaded services into the application.
+     * Register loaded services into the application.
      *
      * @return void
      */
