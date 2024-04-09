@@ -13,8 +13,6 @@ use Framework\Support\Helpers\File;
 /**
  * The Application class is responsible for bootstrapping the application and registering services.
  *
- * This class extends the Container class to provide dependency injection and service registration functionality.
- *
  * @package Framework\Component
  */
 class Application extends Container
