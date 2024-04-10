@@ -2,6 +2,8 @@
 
 namespace Framework\Http;
 
+use Exception;
+use Framework\Component\Exceptions\ValidationException;
 use Framework\Component\Validation\Validator;
 use Framework\Session\Session;
 use Framework\Support\Collection;
@@ -125,7 +127,7 @@ class Request
      * @param array $rules An associative array where keys are parameter names and values are validation patterns (e.g. ['name' => 'required|string|max:255']).
      * @return Validator The Validator instance.
      *
-     * @throws Exception
+     * @throws ValidationException
      */
     public function validate(array $rules): Validator
     {

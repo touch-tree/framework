@@ -135,7 +135,7 @@ class Pipeline
                     return $pipe->handle($passable, $stack);
                 }
 
-                return method_exists($pipe, $this->method) ? $pipe->{$this->method}($passable, $stack) : $pipe($passable, $stack);
+                return $pipe->{$this->method}($passable, $stack);
             } catch (Exception $exception) {
                 return $this->handle_exception($passable, $exception);
             }

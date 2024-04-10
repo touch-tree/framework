@@ -39,6 +39,6 @@ class JsonResponse extends Response
      */
     public function send(): string
     {
-        return json_encode(parent::send(), JSON_THROW_ON_ERROR);
+        return json_encode(parent::send());
     }
 }

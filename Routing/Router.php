@@ -70,8 +70,6 @@ class Router
      * @param string $name The name of the route.
      * @param array $parameters Associative array of route parameters.
      * @return string|null The URL for the named route with parameters applied, or null if route not found.
-     *
-     * @throws BindingResolutionException
      */
     public function route(string $name, array $parameters = []): ?string
     {
@@ -124,8 +122,6 @@ class Router
      *
      * @param string $name The name for the route.
      * @return $this The current Router instance.
-     *
-     * @throws Error If a duplicate route name is detected.
      */
     public function name(string $name): Router
     {
@@ -156,8 +152,6 @@ class Router
      *
      * @param Request $request
      * @return Route|null
-     *
-     * @throws BindingResolutionException
      */
     public function find_route(Request $request): ?Route
     {
@@ -198,7 +192,7 @@ class Router
      * @param array $parameters Associative array of parameters.
      * @return View|RedirectResponse|JsonResponse|null The result of invoking the controller method.
      *
-     * @throws ReflectionException|BindingResolutionException
+     * @throws ReflectionException
      */
     private function resolve_controller(array $action, array $parameters)
     {
@@ -235,8 +229,6 @@ class Router
      * @param string $route_url The URL pattern of the route.
      * @param string $url The actual URL.
      * @return array Associative array of route parameters, or empty array if no match.
-     *
-     * @throws BindingResolutionException
      */
     private function get_parameters(string $route_url, string $url): ?array
     {

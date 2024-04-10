@@ -30,8 +30,6 @@ class File extends Facade
      * @param string $directory The directory path.
      * @param string|array|null $extension The extension to filter by. If null, returns all files.
      * @return array An array of file paths.
-     *
-     * @throws BindingResolutionException
      */
     public static function files(string $directory, $extension = null): array
     {
@@ -44,8 +42,6 @@ class File extends Facade
      * @param string $directory The directory path.
      * @param bool $recursive [optional] Whether to include subdirectories recursively.
      * @return array An array containing the paths of files and directories.
-     *
-     * @throws BindingResolutionException
      */
     public static function all_files(string $directory, bool $recursive = true): array
     {
@@ -58,8 +54,6 @@ class File extends Facade
      * @param string $file_path The path to the file.
      * @param string $content The content to write to the file.
      * @return bool true if the content was successfully written to the file, false otherwise.
-     *
-     * @throws BindingResolutionException
      */
     public static function put(string $file_path, string $content): bool
     {
@@ -71,8 +65,6 @@ class File extends Facade
      *
      * @param string $directory The directory path.
      * @return array An array of directory paths.
-     *
-     * @throws BindingResolutionException
      */
     public static function directories(string $directory): array
     {
@@ -84,8 +76,6 @@ class File extends Facade
      *
      * @param string $file_path The path to the file.
      * @return string|false The contents of the file, or false on failure.
-     *
-     * @throws BindingResolutionException
      */
     public static function get(string $file_path)
     {
@@ -97,8 +87,6 @@ class File extends Facade
      *
      * @param string $path The path to the file or directory.
      * @return bool true if the file or directory exists, false otherwise.
-     *
-     * @throws BindingResolutionException
      */
     public static function exists(string $path): bool
     {
@@ -110,8 +98,6 @@ class File extends Facade
      *
      * @param string $directory The directory path to create.
      * @return bool true on success, false on failure.
-     *
-     * @throws BindingResolutionException
      */
     public static function make_directory(string $directory): bool
     {
@@ -124,8 +110,6 @@ class File extends Facade
      * @param string $directory The directory path.
      * @param callable $callback The callback function defining the condition.
      * @return array An array of paths that meet the condition.
-     *
-     * @throws BindingResolutionException
      */
     private static function get_paths(string $directory, callable $callback): array
     {
@@ -138,8 +122,6 @@ class File extends Facade
      * @param SplFileInfo $file The file object.
      * @param string|array $extension The extension(s) to check against.
      * @return bool true if the file has the specified extension, false otherwise.
-     *
-     * @throws BindingResolutionException
      */
     private static function has_extension(SplFileInfo $file, $extension): bool
     {
@@ -151,8 +133,6 @@ class File extends Facade
      *
      * @param string|array $paths The path(s) to the file(s) or directory(s) to delete.
      * @return bool true if all paths were successfully deleted, false otherwise.
-     *
-     * @throws BindingResolutionException
      */
     public static function delete($paths): bool
     {
@@ -164,8 +144,6 @@ class File extends Facade
      *
      * @param string $directory The directory to delete.
      * @return bool true if successfully deleted, false otherwise.
-     *
-     * @throws BindingResolutionException
      */
     private static function delete_directory(string $directory): bool
     {

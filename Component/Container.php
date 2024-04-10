@@ -39,8 +39,10 @@ class Container
     private static array $bindings = [];
 
     /**
-     * @param Container|null $container Set the shared instance of the container.
-     * @return Container|null
+     * Set the shared instance of the container.
+     *
+     * @param Container|null $container The container instance to be set as shared.
+     * @return Container|null The shared container instance.
      */
     public static function set_instance(Container $container = null): ?Container
     {
@@ -62,37 +64,33 @@ class Container
     }
 
     /**
-     * Get an instance of the specified class from the Container class.
-     *
-     * This function acts as a convenient entry point to retrieve instances of
-     * classes from the application's Dependency Injection (DI) Container.
+     * Get an instance of the specified class from the service container.
      *
      * @template T
-     * @param class-string<T>|null $abstract [optional] The fully qualified class name to resolve.
+     * @param class-string<T> $abstract The fully qualified class name to resolve.
      * @param array $parameters [optional] Parameters to override constructor parameters of the provided class or Closure.
      * @return T An instance of the specified class.
-     *
-     * @throws BindingResolutionException If the instance cannot be resolved.
-     *
-     * @see Container
      */
-    public function get(string $abstract, array $parameters = []): object
+    public function get(string $abstract, array $parameters = [])
     {
-        if (isset(self::$bindings[$abstract])) {
-            $instance = $this->resolve(self::$bindings[$abstract], $parameters);
+        $concrete = $this->get_concrete($abstract);
 
-            if ($instance !== null) {
-                return self::$instances[$abstract] = $instance;
-            }
+        if ($concrete instanceof Closure) {
+            return $concrete(...$parameters);
         }
 
-        $instance = $this->resolve($abstract, $parameters);
+        return self::$instances[$abstract] = $this->resolve($concrete, $parameters);
+    }
 
-        if ($instance === null) {
-            throw new BindingResolutionException($abstract);
-        }
-
-        return $instance;
+    /**
+     * Get concrete.
+     *
+     * @param string $abstract
+     * @return Closure|object|string
+     */
+    protected function get_concrete(string $abstract)
+    {
+        return $this->bindings[$abstract] ?? $abstract;
     }
 
     /**
@@ -100,28 +98,22 @@ class Container
      *
      * @param Closure|string $abstract The fully qualified class name or Closure.
      * @param array $parameters [optional] Parameters to override constructor parameters.
-     * @return object|null The resolved instance of the specified class. null if the class does not exist or if the class constructor is not public or if the class does not have a constructor and the $args parameter contains one or more parameters.
+     * @return object The resolved instance of the specified class.
+     *
+     * @throws BindingResolutionException
      */
     private function resolve($abstract, array $parameters = []): ?object
     {
-        if ($abstract instanceof Closure) {
-            return $abstract();
-        }
-
         try {
             $reflection_class = new ReflectionClass($abstract);
-        } catch (ReflectionException $exception) {
-            return null;
-        }
 
-        try {
             if ($constructor = $reflection_class->getConstructor()) {
                 return $reflection_class->newInstanceArgs(empty($parameters) ? $this->resolve_dependencies($constructor) : $parameters);
             }
 
             return $reflection_class->newInstance();
         } catch (Exception $exception) {
-            return null;
+            throw new BindingResolutionException($abstract);
         }
     }
 
@@ -141,20 +133,16 @@ class Container
         foreach ($constructor->getParameters() as $param) {
             $type = $param->getType();
 
-            if ($type) {
-                $class_name = $type->getName();
-
-                if ($class_name) {
-                    $dependencies[] = $this->get($class_name);
-                    continue;
-                }
+            if ($type && $class_name = $type->getName()) {
+                $dependencies[] = $this->get($class_name);
+                continue;
             }
 
-            if (array_key_exists($param->getName(), $parameters)) {
-                $dependencies[] = $parameters[$param->getName()];
-            } else {
-                return null;
+            if (!array_key_exists($param = $param->getName(), $parameters)) {
+                throw new BindingResolutionException($param);
             }
+
+            $dependencies[] = $parameters[$param];
         }
 
         return $dependencies;
@@ -178,8 +166,6 @@ class Container
      * @param string $abstract The abstract class or interface.
      * @param Closure|string|object $concrete The closure, class name, or instance.
      * @return void
-     *
-     * @throws Error
      */
     public function singleton(string $abstract, $concrete): void
     {
@@ -194,7 +180,7 @@ class Container
      * @param string $abstract The abstract class or interface.
      * @return bool True if the abstract type is bound, false otherwise.
      */
-    public static function bound(string $abstract): bool
+    public static function is_bound(string $abstract): bool
     {
         return isset(self::$bindings[$abstract]);
     }

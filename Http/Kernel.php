@@ -73,7 +73,6 @@ class Kernel
      *
      * @param Request $request The incoming HTTP request to be handled.
      * @return Response|null The response to the request, or null if no response is generated.
-     * @throws NotFoundHttpException
      */
     public function handle(Request $request): ?Response
     {

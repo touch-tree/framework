@@ -100,8 +100,6 @@ class Application extends Container
      * This method initiates the bootstrap process for the application, including the initialization of registered services.
      *
      * @return void
-     *
-     * @throws BindingResolutionException
      */
     public function bootstrap(): void
     {
@@ -120,9 +118,6 @@ class Application extends Container
      */
     private function register_base_bindings(): void
     {
-        // If no additional kernel is provided, use the base kernel.
-        // This prevents the kernel from being unable to be used when its overwrite implementation is missing.
-
         if (class_exists(Kernel::class) && is_a(Kernel::class, HttpKernel::class, true)) {
             $this->singleton(HttpKernel::class, Kernel::class);
         } else {
@@ -151,8 +146,6 @@ class Application extends Container
      * Load configuration files from the specified path and merge them into the configuration array.
      *
      * @return void
-     *
-     * @throws BindingResolutionException
      */
     public function load_configuration_files(): void
     {
@@ -171,8 +164,6 @@ class Application extends Container
      * Bootstrap services.
      *
      * @return void
-     *
-     * @throws BindingResolutionException
      */
     private function bootstrap_services(): void
     {
@@ -184,8 +175,6 @@ class Application extends Container
      * Load services into the application.
      *
      * @return void
-     *
-     * @throws BindingResolutionException
      */
     private function load_services(): void
     {

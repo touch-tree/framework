@@ -2,7 +2,9 @@
 
 namespace Framework\Support\Helpers;
 
+use Error;
 use Framework\Component\Exceptions\BindingResolutionException;
+use http\Exception\RuntimeException;
 
 /**
  * Abstract class for creating facades.
@@ -36,11 +38,13 @@ abstract class Facade
      * The accessor's dependencies will be resolved when retrieved from the service container.
      *
      * @return T The instance of the accessor class.
-     *
-     * @throws BindingResolutionException
      */
     public static function get_accessor_class()
     {
-        return get_service(static::accessor());
+        if (!class_exists($accessor = static::accessor())) {
+            throw new RuntimeException('Class does not exist: ' . $accessor);
+        }
+
+        return get_service($accessor);
     }
 }

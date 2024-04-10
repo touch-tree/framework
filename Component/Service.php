@@ -39,7 +39,6 @@ class Service
      */
     public function register(): void
     {
-        // this is not abstract since not every service has to be registered for it
-        // to be able to be used in our service container
+
     }
 }

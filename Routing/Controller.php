@@ -3,6 +3,7 @@
 namespace Framework\Routing;
 
 use Exception;
+use Framework\Component\Exceptions\ValidationException;
 use Framework\Component\Validation\Validator;
 use Framework\Http\Request;
 
@@ -18,11 +19,13 @@ class Controller
      *
      * @param Request $request The request to be validated.
      * @param array $rules The validation rules to apply.
-     * @return bool true if the validation passes, false otherwise.
-     * @throws Exception If an unsupported validation rule is encountered.
+     * @return void
+     *
+     * @throws ValidationException If validation fails.
      */
-    public function validate(Request $request, array $rules): bool
+    public function validate(Request $request, array $rules): void
     {
-        return (new Validator($request->all(), $rules))->validate();
+        $validator = new Validator($request->all(), $rules);
+        $validator->validate();
     }
 }
