@@ -208,10 +208,14 @@ class Http
     /**
      * Get the response as JSON.
      *
-     * @return array The decoded JSON response
+     * @return array|null The decoded JSON response, or null if decoding fails.
      */
     public function json(): ?array
     {
-        return json_decode($this->response, true, 512, JSON_THROW_ON_ERROR);
+        try {
+            return json_decode($this->response, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            return null;
+        }
     }
 }
