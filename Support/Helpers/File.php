@@ -2,7 +2,6 @@
 
 namespace Framework\Support\Helpers;
 
-use Framework\Component\Exceptions\BindingResolutionException;
 use Framework\Filesystem\Filesystem;
 use SplFileInfo;
 
@@ -28,10 +27,10 @@ class File extends Facade
      * Get files from a directory matching a specific extension.
      *
      * @param string $directory The directory path.
-     * @param string|array|null $extension The extension to filter by. If null, returns all files.
-     * @return array An array of file paths.
+     * @param string|array|null $extension [optional] The extension(s) to filter by. If null, returns all files.
+     * @return array<SplFileInfo> An array of files.
      */
-    public static function files(string $directory, $extension = null): array
+    public static function files(string $directory, $extension = []): array
     {
         return self::get_accessor_class()->files($directory, $extension);
     }
@@ -41,7 +40,7 @@ class File extends Facade
      *
      * @param string $directory The directory path.
      * @param bool $recursive [optional] Whether to include subdirectories recursively.
-     * @return array An array containing the paths of files and directories.
+     * @return array<SplFileInfo> An array of files and directories.
      */
     public static function all_files(string $directory, bool $recursive = true): array
     {

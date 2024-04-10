@@ -15,15 +15,15 @@ use SplFileInfo;
 class Filesystem
 {
     /**
-     * Get files from a directory matching a specific extension.
+     * Get files from a directory matching a specific extension while ignoring specified extensions.
      *
      * @param string $directory The directory path.
-     * @param string|array|null $extension [optional] The extension to filter by. If null, returns all files.
-     * @return array An array of file paths.
+     * @param string|array|null $extension [optional] The extension(s) to filter by. If null, returns all files.
+     * @return array<SplFileInfo> An array of files.
      */
-    public function files(string $directory, $extension = null): array
+    public function files(string $directory, $extension = []): array
     {
-        return $this->get_paths($directory, fn($file) => $file->isFile() && self::has_extension($file, $extension));
+        return $this->get_paths($directory, fn(SplFileInfo $file) => $file->isFile() && self::has_extension($file, $extension));
     }
 
     /**
@@ -31,7 +31,7 @@ class Filesystem
      *
      * @param string $directory The directory path.
      * @param bool $recursive [optional] Whether to include subdirectories recursively.
-     * @return array An array containing the paths of files and directories.
+     * @return array<SplFileInfo> An array of files and directories.
      */
     public function all_files(string $directory, bool $recursive = true): array
     {
@@ -43,7 +43,7 @@ class Filesystem
 
         $paths = [];
         foreach ($iterator as $file) {
-            $paths[] = $file->getPathname();
+            $paths[] = $file;
         }
 
         return $paths;
@@ -77,7 +77,7 @@ class Filesystem
      *
      * @param string $directory The directory path.
      * @param callable $callback The callback function defining the condition.
-     * @return array An array of paths that meet the condition.
+     * @return array<SplFileInfo> An array of files that meet the condition.
      */
     private function get_paths(string $directory, callable $callback): array
     {
@@ -85,7 +85,7 @@ class Filesystem
 
         foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory)) as $file) {
             if ($callback($file)) {
-                $paths[] = $file->getPathname();
+                $paths[] = $file;
             }
         }
 

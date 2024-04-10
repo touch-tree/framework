@@ -133,8 +133,8 @@ class CacheManager
     public function clear(): void
     {
         foreach (File::files(storage_path('Framework/cache'), 'cache') as $file) {
-            if (is_file($file)) {
-                File::delete($file);
+            if (is_file($name = $file->getFilename())) {
+                File::delete($name);
             }
         }
     }

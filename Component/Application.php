@@ -10,6 +10,7 @@ use Framework\Routing\Services\RoutingService;
 use Framework\Support\Arr;
 use Framework\Support\Collection;
 use Framework\Support\Helpers\File;
+use SplFileInfo;
 
 /**
  * The Application class is responsible for bootstrapping the application and registering services.
@@ -150,13 +151,13 @@ class Application extends Container
     public function load_configuration_files(): void
     {
         foreach (File::files($this->get_config_path(), 'php') as $file) {
-            $config = include $file;
+            $config = include $file->getPathname();
 
             if (!is_array($config)) {
                 continue;
             }
 
-            $this->get(Config::class)->set($config);
+            $this->get(Config::class)->set([$file->getBasename() => $config]);
         }
     }
 
