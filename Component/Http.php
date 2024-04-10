@@ -125,8 +125,6 @@ class Http
      * @param string $endpoint The API endpoint URL.
      * @param array $data [optional] The data to send with the request.
      * @return Http
-     *
-     * @throws JsonException
      */
     public function patch(string $endpoint, array $data = []): Http
     {
@@ -141,8 +139,6 @@ class Http
      * @param string $endpoint The API endpoint URL.
      * @param array $data [optional] The data to send with the request.
      * @return Http
-     *
-     * @throws JsonException
      */
     public function post(string $endpoint, array $data = []): Http
     {
@@ -157,8 +153,6 @@ class Http
      * @param string $endpoint The API endpoint URL.
      * @param array $data [optional] The data to send with the request.
      * @return Http
-     *
-     * @throws JsonException
      */
     public function get(string $endpoint, array $data = []): Http
     {
@@ -189,8 +183,6 @@ class Http
      * @param string $endpoint The API endpoint URL.
      * @param array $data [optional] The data to send with the request.
      * @return Http
-     *
-     * @throws JsonException
      */
     public function update(string $endpoint, array $data = []): Http
     {
@@ -205,8 +197,6 @@ class Http
      * @param string $endpoint The API endpoint URL.
      * @param array $data [optional] The data to send with the request.
      * @return Http
-     *
-     * @throws JsonException
      */
     public function delete(string $endpoint, array $data = []): Http
     {
@@ -218,14 +208,10 @@ class Http
     /**
      * Get the response as JSON.
      *
-     * @return array|null The decoded JSON response, or null if decoding fails.
+     * @return array The decoded JSON response
      */
     public function json(): ?array
     {
-        try {
-            return json_decode($this->response, true, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException $e) {
-            return null;
-        }
+        return json_decode($this->response, true, 512, JSON_THROW_ON_ERROR);
     }
 }
