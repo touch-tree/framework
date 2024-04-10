@@ -34,8 +34,6 @@ class FormRequest extends Request
      *
      * @param array $rules [optional] Set options to overwrite set options of custom rules.
      * @return Validator
-     *
-     * @throws Exception
      */
     public function validate(array $rules = []): Validator
     {

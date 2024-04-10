@@ -42,6 +42,16 @@ class Collection
     }
 
     /**
+     * Check if the collection is empty.
+     *
+     * @return bool true if the collection is empty, false otherwise.
+     */
+    public function is_empty(): bool
+    {
+        return empty($this->items);
+    }
+
+    /**
      * Get an item by key from the collection.
      *
      * @param string|int $key The key of the item to retrieve.
@@ -115,6 +125,23 @@ class Collection
     public function filter(callable $callback): Collection
     {
         return new self(array_filter($this->items, $callback));
+    }
+
+    /**
+     * Check if the collection contains an item that passes the given condition.
+     *
+     * @param callable(T): bool $callback The callback function to use for the condition.
+     * @return bool true if the collection contains an item that passes the condition, false otherwise.
+     */
+    public function contains(callable $callback): bool
+    {
+        foreach ($this->items as $item) {
+            if ($callback($item)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
