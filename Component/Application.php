@@ -208,7 +208,9 @@ class Application extends Container
      */
     public function resolve_service(string $service): Service
     {
-        return new $service($this);
+        $instance = new $service();
+
+        return $instance->set_container($this);
     }
 
     /**

@@ -16,16 +16,19 @@ class Service
      *
      * @var Container
      */
-    protected Container $app;
+    protected Container $container;
 
     /**
-     * Service constructor.
+     * Set the service container.
      *
-     * @param Container $app The Container instance.
+     * @param Container $app
+     * @return $this
      */
-    public function __construct(Container $app)
+    public function set_container(Container $app): Service
     {
-        $this->app = $app;
+        $this->container = $app;
+
+        return $this;
     }
 
     /**

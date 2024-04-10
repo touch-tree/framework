@@ -29,8 +29,8 @@ class RoutingService extends Service
      */
     private function register_router(): void
     {
-        $this->app->singleton(Router::class, function () {
-            return new Router($this->app);
+        $this->container->singleton(Router::class, function () {
+            return new Router($this->container);
         });
     }
 
@@ -41,8 +41,8 @@ class RoutingService extends Service
      */
     private function register_url_generator(): void
     {
-        $this->app->singleton(UrlGenerator::class, function () {
-            return new UrlGenerator($this->app->get(Router::class)->routes(), request());
+        $this->container->singleton(UrlGenerator::class, function () {
+            return new UrlGenerator($this->container->get(Router::class)->routes(), request());
         });
     }
 
@@ -53,8 +53,8 @@ class RoutingService extends Service
      */
     private function register_redirector(): void
     {
-        $this->app->singleton(Redirector::class, function () {
-            return new Redirector($this->app->get(Session::class), $this->app->get(UrlGenerator::class));
+        $this->container->singleton(Redirector::class, function () {
+            return new Redirector($this->container->get(Session::class), $this->container->get(UrlGenerator::class));
         });
     }
 }
