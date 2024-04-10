@@ -5,6 +5,7 @@ namespace Framework\Routing;
 use Error;
 use Exception;
 use Framework\Component\Container;
+use Framework\Component\Exceptions\BindingResolutionException;
 use Framework\Component\View;
 use Framework\Http\JsonResponse;
 use Framework\Http\RedirectResponse;
@@ -69,6 +70,8 @@ class Router
      * @param string $name The name of the route.
      * @param array $parameters Associative array of route parameters.
      * @return string|null The URL for the named route with parameters applied, or null if route not found.
+     *
+     * @throws BindingResolutionException
      */
     public function route(string $name, array $parameters = []): ?string
     {
@@ -153,6 +156,8 @@ class Router
      *
      * @param Request $request
      * @return Route|null
+     *
+     * @throws BindingResolutionException
      */
     public function find_route(Request $request): ?Route
     {
@@ -164,6 +169,8 @@ class Router
      *
      * @param Request $request The current request.
      * @return View|RedirectResponse|JsonResponse|null The result of invoking the controller method, or null if no route matches request.
+     *
+     * @throws BindingResolutionException
      */
     public function dispatch(Request $request)
     {
@@ -191,7 +198,7 @@ class Router
      * @param array $parameters Associative array of parameters.
      * @return View|RedirectResponse|JsonResponse|null The result of invoking the controller method.
      *
-     * @throws ReflectionException If an error occurs during reflection.
+     * @throws ReflectionException|BindingResolutionException
      */
     private function resolve_controller(array $action, array $parameters)
     {
@@ -206,7 +213,7 @@ class Router
                 continue;
             }
 
-            if ($type->getName() == Request::class) {
+            if ($type->getName() === Request::class) {
                 $reflection_parameters[] = request();
                 continue;
             }
@@ -228,13 +235,15 @@ class Router
      * @param string $route_url The URL pattern of the route.
      * @param string $url The actual URL.
      * @return array Associative array of route parameters, or empty array if no match.
+     *
+     * @throws BindingResolutionException
      */
     private function get_parameters(string $route_url, string $url): ?array
     {
         $compiled_route = $this->container->get(UrlGenerator::class)->compile_route($route_url);
 
         if (preg_match($compiled_route, $url, $matches)) {
-            return array_filter($matches, fn($key) => is_string($key), ARRAY_FILTER_USE_KEY);
+            return array_filter($matches, static fn($key) => is_string($key), ARRAY_FILTER_USE_KEY);
         }
 
         return [];

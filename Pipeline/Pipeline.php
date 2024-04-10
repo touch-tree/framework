@@ -115,7 +115,7 @@ class Pipeline
      */
     protected function prepare_destination($destination): Closure
     {
-        return function ($passable) use ($destination) {
+        return static function ($passable) use ($destination) {
             return $destination($passable);
         };
     }
@@ -127,20 +127,18 @@ class Pipeline
      */
     protected function carry(): Closure
     {
-        return function ($stack, $pipe) {
-            return function ($passable) use ($stack, $pipe) {
-                try {
-                    $pipe = $this->container->get($pipe);
+        return fn($stack, $pipe) => function ($passable) use ($stack, $pipe) {
+            try {
+                $pipe = $this->container->get($pipe);
 
-                    if (is_a($pipe, Pipe::class) || $pipe instanceof Pipeable) {
-                        return $pipe->handle($passable, $stack);
-                    }
-
-                    return method_exists($pipe, $this->method) ? $pipe->{$this->method}($passable, $stack) : $pipe($passable, $stack);
-                } catch (Exception $exception) {
-                    return $this->handle_exception($passable, $exception);
+                if (is_a($pipe, Pipe::class) || $pipe instanceof Pipeable) {
+                    return $pipe->handle($passable, $stack);
                 }
-            };
+
+                return method_exists($pipe, $this->method) ? $pipe->{$this->method}($passable, $stack) : $pipe($passable, $stack);
+            } catch (Exception $exception) {
+                return $this->handle_exception($passable, $exception);
+            }
         };
     }
 
@@ -149,6 +147,7 @@ class Pipeline
      *
      * @param mixed $passable The data being passed through the pipeline.
      * @param Exception $exception The exception to be handled.
+     * @return mixed
      *
      * @throws Exception The exception is rethrown.
      */

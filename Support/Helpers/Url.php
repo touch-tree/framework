@@ -2,6 +2,7 @@
 
 namespace Framework\Support\Helpers;
 
+use Framework\Component\Exceptions\BindingResolutionException;
 use Framework\Routing\Generator\UrlGenerator;
 
 /**
@@ -17,7 +18,7 @@ class Url extends Facade
      *
      * @return string
      */
-    static protected function accessor(): string
+    protected static function accessor(): string
     {
         return UrlGenerator::class;
     }
@@ -29,6 +30,8 @@ class Url extends Facade
      * @param array $parameters [optional] Route parameters to include in the URL.
      * @param bool $absolute [optional] Whether to exclude the host from the generated URL.
      * @return string The generated absolute URL.
+     *
+     * @throws BindingResolutionException
      */
     public static function to(string $path, array $parameters = [], bool $absolute = true): string
     {
@@ -42,6 +45,8 @@ class Url extends Facade
      * @param array $parameters [optional] Parameters to substitute into the route URI.
      * @param bool $absolute [optional] Whether to generate an absolute URL (including scheme and host).
      * @return string The generated URL.
+     *
+     * @throws BindingResolutionException
      */
     public static function route(string $name, array $parameters = [], bool $absolute = true): string
     {
@@ -52,6 +57,8 @@ class Url extends Facade
      * Get the full base URL for the application.
      *
      * @return string The full base URL for the application. Returns the relative path if 'app.url' is not set.
+     *
+     * @throws BindingResolutionException
      */
     public static function full(): string
     {
@@ -62,6 +69,8 @@ class Url extends Facade
      * Get the current URL.
      *
      * @return string The current URL.
+     *
+     * @throws BindingResolutionException
      */
     public static function current(): string
     {

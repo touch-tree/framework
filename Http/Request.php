@@ -2,10 +2,10 @@
 
 namespace Framework\Http;
 
-use Exception;
 use Framework\Component\Validation\Validator;
 use Framework\Session\Session;
 use Framework\Support\Collection;
+use JsonException;
 
 /**
  * The Request class represents an HTTP request entity and provides methods to work with query parameters.
@@ -272,6 +272,28 @@ class Request
      */
     public function json(): Collection
     {
-        return new Collection(json_decode($this->content(), true));
+        try {
+            $array = json_decode($this->content(), true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $exception) {
+            $array = [];
+        }
+
+        return new Collection($array);
+    }
+
+    /**
+     * Determine if the request expects a JSON response.
+     *
+     * @return bool true if the request expects a JSON response, false otherwise.
+     */
+    public function expects_json(): bool
+    {
+        foreach ($this->headers()->get('Accept') as $type) {
+            if (strpos($type, '/json') !== false) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

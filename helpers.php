@@ -14,6 +14,7 @@
 use Framework\Component\Application;
 use Framework\Component\Config;
 use Framework\Component\Container;
+use Framework\Component\Exceptions\BindingResolutionException;
 use Framework\Component\View;
 use Framework\Http\HeaderBag;
 use Framework\Http\Redirector;
@@ -31,6 +32,8 @@ use Framework\Support\Helpers\Url;
  *
  * @param string|null $route [optional] The route to redirect to. If null, path of redirect should be set using 'route' method instead.
  * @return RedirectResponse A RedirectResponse instance representing the redirection.
+ *
+ * @throws BindingResolutionException
  */
 function redirect(string $route = null): RedirectResponse
 {
@@ -105,6 +108,8 @@ function storage_path(string $path = null): string
  * @param string|null $key [optional] The key of the session value.
  * @param T|null $value [optional] The value to set for the session key.
  * @return Session|T|string|null
+ *
+ * @throws BindingResolutionException
  */
 function session(string $key = null, $value = null)
 {
@@ -126,6 +131,8 @@ function session(string $key = null, $value = null)
  *
  * @param string $key The key to retrieve the error.
  * @return string|null The error message or null if not found.
+ *
+ * @throws BindingResolutionException
  */
 function error(string $key): ?string
 {
@@ -140,6 +147,8 @@ function error(string $key): ?string
  * @param string $name The name of the route.
  * @param array $parameters [optional] Associative array of route parameters.
  * @return string|null The URL for the named route with parameters applied.
+ *
+ * @throws BindingResolutionException
  */
 function route(string $name, array $parameters = []): ?string
 {
@@ -151,6 +160,8 @@ function route(string $name, array $parameters = []): ?string
  *
  * @param string|null $key The key to retrieve from the server. If null, the entire Server instance is returned.
  * @return mixed|Server If $key is provided, the value associated with that key from the server is returned. If $key is null, the entire Server instance is returned.
+ *
+ * @throws BindingResolutionException
  */
 function server(string $key = null)
 {
@@ -167,6 +178,8 @@ function server(string $key = null)
  * Request class is created and reused.
  *
  * @return Request The instance of the Request class.
+ *
+ * @throws BindingResolutionException
  */
 function request(): Request
 {
@@ -183,6 +196,8 @@ function request(): Request
  * @param string $key The key for which the previous input value should be retrieved.
  * @param string|null $default [optional] The default value if the previous input value cannot be retrieved.
  * @return mixed Returns the previous input value for the specified key or null if not found.
+ *
+ * @throws BindingResolutionException
  */
 function old(string $key, ?string $default = null)
 {
@@ -206,6 +221,8 @@ function old(string $key, ?string $default = null)
  * @param string|array<T>|null $key [optional] The configuration key or an array of key-value pairs to set.
  * @param T $default [optional] The default value to return if the key is not found.
  * @return T|array The value of the configuration key, the entire configuration array, or the default value.
+ *
+ * @throws BindingResolutionException
  */
 function config($key = null, $default = null)
 {
@@ -251,7 +268,9 @@ function dd(...$message)
  * @template T
  * @param class-string<T>|null $abstract [optional] The fully qualified class name to resolve.
  * @param array $parameters [optional] Parameters to override constructor parameters of the provided class or Closure.
- * @return T|Container|null An instance of the specified class, or null if the instance cannot be resolved.
+ * @return T|Container An instance of the specified class.
+ *
+ * @throws BindingResolutionException
  *
  * @see Container
  */
@@ -298,8 +317,10 @@ function normalize_path(string $input): string
  *
  * @return RedirectResponse
  *
- * @see Redirector::back()
+ * @throws BindingResolutionException
  * @see redirect()
+ *
+ * @see Redirector::back()
  */
 function back(): RedirectResponse
 {
@@ -311,6 +332,8 @@ function back(): RedirectResponse
  *
  * @param string|null $path [optional] The path for the URL.
  * @return UrlGenerator|string The generated URL.
+ *
+ * @throws BindingResolutionException
  */
 function url(string $path = null)
 {
@@ -322,6 +345,8 @@ function url(string $path = null)
  *
  * @param string $path The relative path to the asset.
  * @return string The full URL for the asset.
+ *
+ * @throws BindingResolutionException
  */
 function asset(string $path): string
 {

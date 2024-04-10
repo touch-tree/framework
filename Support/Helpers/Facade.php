@@ -2,6 +2,8 @@
 
 namespace Framework\Support\Helpers;
 
+use Framework\Component\Exceptions\BindingResolutionException;
+
 /**
  * Abstract class for creating facades.
  *
@@ -22,7 +24,7 @@ abstract class Facade
      *
      * @return class-string<T> The fully qualified class name of the accessor class.
      */
-    abstract static protected function accessor(): string;
+    abstract protected static function accessor(): string;
 
     /**
      * Get the accessor class instance from the application's service container.
@@ -34,6 +36,8 @@ abstract class Facade
      * The accessor's dependencies will be resolved when retrieved from the service container.
      *
      * @return T The instance of the accessor class.
+     *
+     * @throws BindingResolutionException
      */
     public static function get_accessor_class()
     {

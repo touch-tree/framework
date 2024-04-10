@@ -1,21 +1,21 @@
 <?php
 
-namespace Framework\Filesystem\Exceptions;
+namespace Framework\Component\Exceptions;
 
 use Exception;
 use Framework\Http\Response;
 
 /**
- * Exception thrown when a file is not found.
+ * Exception thrown when there is an error resolving a binding in the service container.
  *
- * This exception should be thrown when attempting to access or manipulate a file that does not exist.
+ * This exception should be thrown when an attempt to resolve a binding from the service container fails.
  *
- * @package Framework\Filesystem\Exceptions
+ * @package Framework\Component\Exceptions
  */
-class FileNotFoundException extends Exception
+class BindingResolutionException extends Exception
 {
     /**
-     * Create a new FileNotFoundException instance.
+     * Create a new BindingResolutionException instance.
      *
      * @param string|null $message [optional] The exception message.
      * @param int $code [optional] The exception code.

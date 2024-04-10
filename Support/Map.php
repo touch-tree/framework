@@ -3,7 +3,7 @@
 namespace Framework\Support;
 
 use ArrayAccess;
-use Error;
+use TypeError;
 
 /**
  * The Map class provides utility functions for navigating associative arrays using dot notation.
@@ -110,15 +110,11 @@ class Map
      * @param array $array The array to modify.
      * @param string $key The key in dot notation.
      * @param mixed $value The value to add.
-     * @return array The modified array.
+     * @return void
      */
-    public static function add(array $array, string $key, $value): array
+    public static function add(array $array, string $key, $value): void
     {
-        if (!self::has($array, $key)) {
-            $array = self::set($array, $key, $value);
-        }
-
-        return $array;
+        self::set($array, $key, $value);
     }
 
     /**
@@ -127,21 +123,19 @@ class Map
      * @param array $array The array to modify.
      * @param string $key The key in dot notation.
      * @param mixed $value The value to push.
-     * @return array The modified array.
+     * @return void
      */
-    public static function push(array &$array, string $key, $value): array
+    public static function push(array &$array, string $key, $value): void
     {
         $overwrite = self::get($array, $key, []);
 
         if (!is_array($overwrite)) {
-            throw new Error('Session value is not an array: ' . $key);
+            throw new TypeError('Expected typeof array but received ' . gettype($array));
         }
 
         $overwrite[] = $value;
 
         self::set($array, $key, $overwrite);
-
-        return $array;
     }
 
     /**
@@ -227,15 +221,7 @@ class Map
      */
     public static function collapse(array $array): array
     {
-        $results = [];
-
-        foreach ($array as $values) {
-            if (is_array($values)) {
-                $results = array_merge($results, $values);
-            }
-        }
-
-        return $results;
+        return array_merge(...$array);
     }
 
     /**

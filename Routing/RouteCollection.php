@@ -2,6 +2,7 @@
 
 namespace Framework\Routing;
 
+use Framework\Component\Exceptions\BindingResolutionException;
 use Framework\Http\Request;
 use Framework\Routing\Generator\UrlGenerator;
 use Framework\Support\Helpers\Url;
@@ -69,6 +70,8 @@ class RouteCollection
      *
      * @param Request $request The incoming HTTP request.
      * @return Route|null The matched Route object if found, otherwise null.
+     *
+     * @throws BindingResolutionException
      */
     public function match(Request $request): ?Route
     {

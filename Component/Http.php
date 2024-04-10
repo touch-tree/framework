@@ -3,6 +3,7 @@
 namespace Framework\Component;
 
 use Framework\Http\HeaderBag;
+use JsonException;
 
 /**
  * The Http class provides a simple interface for sending HTTP requests using cURL.
@@ -68,7 +69,7 @@ class Http
      * @param array $options The cURL options to set.
      * @return void
      */
-    private function many_curl_setopt($curl, array $options)
+    private function many_curl_setopt($curl, array $options): void
     {
         foreach ($options as $option) {
             curl_setopt($curl, $option[0], $option[1]);
@@ -82,6 +83,8 @@ class Http
      * @param string $endpoint The API endpoint URL.
      * @param array $data [optional] The data to send with the request.
      * @return bool|string The response from the server.
+     *
+     * @throws JsonException
      */
     private function send_request(string $method, string $endpoint, array $data = [])
     {
@@ -101,8 +104,8 @@ class Http
             ]
         );
 
-        if ($method === 'POST' || $method === 'PATCH') {
-            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
+        if (in_array($method, ['POST', 'PATCH'], true)) {
+            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data, JSON_THROW_ON_ERROR));
         }
 
         $response = curl_exec($curl);
@@ -122,6 +125,8 @@ class Http
      * @param string $endpoint The API endpoint URL.
      * @param array $data [optional] The data to send with the request.
      * @return Http
+     *
+     * @throws JsonException
      */
     public function patch(string $endpoint, array $data = []): Http
     {
@@ -136,6 +141,8 @@ class Http
      * @param string $endpoint The API endpoint URL.
      * @param array $data [optional] The data to send with the request.
      * @return Http
+     *
+     * @throws JsonException
      */
     public function post(string $endpoint, array $data = []): Http
     {
@@ -150,6 +157,8 @@ class Http
      * @param string $endpoint The API endpoint URL.
      * @param array $data [optional] The data to send with the request.
      * @return Http
+     *
+     * @throws JsonException
      */
     public function get(string $endpoint, array $data = []): Http
     {
@@ -164,6 +173,8 @@ class Http
      * @param string $endpoint The API endpoint URL.
      * @param array $data [optional] The data to send with the request.
      * @return Http
+     *
+     * @throws JsonException
      */
     public function put(string $endpoint, array $data = []): Http
     {
@@ -178,6 +189,8 @@ class Http
      * @param string $endpoint The API endpoint URL.
      * @param array $data [optional] The data to send with the request.
      * @return Http
+     *
+     * @throws JsonException
      */
     public function update(string $endpoint, array $data = []): Http
     {
@@ -192,6 +205,8 @@ class Http
      * @param string $endpoint The API endpoint URL.
      * @param array $data [optional] The data to send with the request.
      * @return Http
+     *
+     * @throws JsonException
      */
     public function delete(string $endpoint, array $data = []): Http
     {
@@ -203,10 +218,14 @@ class Http
     /**
      * Get the response as JSON.
      *
-     * @return array The decoded JSON response.
+     * @return array|null The decoded JSON response, or null if decoding fails.
      */
-    public function json(): array
+    public function json(): ?array
     {
-        return json_decode($this->response, true);
+        try {
+            return json_decode($this->response, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            return null;
+        }
     }
 }

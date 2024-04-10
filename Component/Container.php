@@ -5,6 +5,7 @@ namespace Framework\Component;
 use Closure;
 use Error;
 use Exception;
+use Framework\Component\Exceptions\BindingResolutionException;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionException;
@@ -54,7 +55,7 @@ class Container
     public static function get_instance(): self
     {
         if (!isset(static::$instance)) {
-            static::$instance = new Container();
+            static::$instance = new self();
         }
 
         return static::$instance;
@@ -69,17 +70,29 @@ class Container
      * @template T
      * @param class-string<T>|null $abstract [optional] The fully qualified class name to resolve.
      * @param array $parameters [optional] Parameters to override constructor parameters of the provided class or Closure.
-     * @return T|Container|null An instance of the specified class, or null if the instance cannot be resolved.
+     * @return T An instance of the specified class.
+     *
+     * @throws BindingResolutionException If the instance cannot be resolved.
      *
      * @see Container
      */
-    public function get(string $abstract, array $parameters = []): ?object
+    public function get(string $abstract, array $parameters = []): object
     {
         if (isset(self::$bindings[$abstract])) {
-            return self::$instances[$abstract] = $this->resolve(self::$bindings[$abstract], $parameters);
+            $instance = $this->resolve(self::$bindings[$abstract], $parameters);
+
+            if ($instance !== null) {
+                return self::$instances[$abstract] = $instance;
+            }
         }
 
-        return $this->resolve($abstract, $parameters);
+        $instance = $this->resolve($abstract, $parameters);
+
+        if ($instance === null) {
+            throw new BindingResolutionException($abstract);
+        }
+
+        return $instance;
     }
 
     /**
@@ -87,7 +100,7 @@ class Container
      *
      * @param Closure|string $abstract The fully qualified class name or Closure.
      * @param array $parameters [optional] Parameters to override constructor parameters.
-     * @return object|null|false The resolved instance of the specified class. null if the class does not exist. false if the class constructor is not public or if the class does not have a constructor and the $args parameter contains one or more parameters.
+     * @return object|null The resolved instance of the specified class. null if the class does not exist or if the class constructor is not public or if the class does not have a constructor and the $args parameter contains one or more parameters.
      */
     private function resolve($abstract, array $parameters = []): ?object
     {
@@ -108,7 +121,7 @@ class Container
 
             return $reflection_class->newInstance();
         } catch (Exception $exception) {
-            return false;
+            return null;
         }
     }
 
@@ -118,6 +131,8 @@ class Container
      * @param ReflectionMethod $constructor The constructor method.
      * @param array $parameters [optional] Parameters to override constructor parameters.
      * @return array|null The resolved dependencies.
+     *
+     * @throws BindingResolutionException
      */
     public function resolve_dependencies(ReflectionMethod $constructor, array $parameters = []): ?array
     {
@@ -152,7 +167,7 @@ class Container
      * @param Closure|string|object $concrete The closure, class name, or instance.
      * @return void
      */
-    public function bind(string $abstract, $concrete)
+    public function bind(string $abstract, $concrete): void
     {
         self::$bindings[$abstract] = $concrete;
     }
@@ -166,7 +181,7 @@ class Container
      *
      * @throws Error
      */
-    public function singleton(string $abstract, $concrete)
+    public function singleton(string $abstract, $concrete): void
     {
         $this->bind($abstract, $concrete);
 
@@ -201,7 +216,7 @@ class Container
      * @param string $abstract The abstract class or interface.
      * @return void
      */
-    public function forget_binding(string $abstract)
+    public function forget_binding(string $abstract): void
     {
         unset(self::$bindings[$abstract]);
     }

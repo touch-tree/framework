@@ -23,7 +23,7 @@ class Filesystem
      */
     public function files(string $directory, $extension = null): array
     {
-        return self::get_paths($directory, fn($file) => $file->isFile() && self::has_extension($file, $extension));
+        return $this->get_paths($directory, fn($file) => $file->isFile() && self::has_extension($file, $extension));
     }
 
     /**
@@ -69,7 +69,7 @@ class Filesystem
      */
     public function directories(string $directory): array
     {
-        return self::get_paths($directory, fn($file) => $file->isDir());
+        return $this->get_paths($directory, fn($file) => $file->isDir());
     }
 
     /**
@@ -107,7 +107,7 @@ class Filesystem
 
         $file_extension = pathinfo($file->getPathname(), PATHINFO_EXTENSION);
 
-        return in_array($file_extension, is_array($extension) ? $extension : [$extension]);
+        return in_array($file_extension, is_array($extension) ? $extension : [$extension], true);
     }
 
     /**
@@ -127,7 +127,7 @@ class Filesystem
         foreach ($paths as $path) {
             if (file_exists($path)) {
                 if (is_dir($path)) {
-                    $success = $success && self::delete_directory($path);
+                    $success = $success && $this->delete_directory($path);
                 } else {
                     $success = $success && unlink($path);
                 }

@@ -2,6 +2,7 @@
 
 namespace Framework\Support\Helpers;
 
+use Framework\Component\Exceptions\BindingResolutionException;
 use Framework\Routing\RouteCollection;
 use Framework\Routing\Router;
 
@@ -29,6 +30,8 @@ class Route extends Facade
      * @param string $uri The URI pattern for the route.
      * @param array $action An array representing the controller and method to be called for this route.
      * @return Router The Router instance.
+     *
+     * @throws BindingResolutionException
      */
     public static function get(string $uri, array $action): Router
     {
@@ -41,6 +44,8 @@ class Route extends Facade
      * @param string $uri The URI pattern for the route.
      * @param array $action An array representing the controller and method to be called for this route.
      * @return Router The Router instance.
+     *
+     * @throws BindingResolutionException
      */
     public static function post(string $uri, array $action): Router
     {
@@ -51,6 +56,8 @@ class Route extends Facade
      * Get the RouteCollection instance containing all registered routes.
      *
      * @return RouteCollection The RouteCollection instance.
+     *
+     * @throws BindingResolutionException
      */
     public function routes(): RouteCollection
     {

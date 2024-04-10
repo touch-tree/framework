@@ -2,6 +2,7 @@
 
 namespace Framework\Cache;
 
+use Framework\Component\Exceptions\BindingResolutionException;
 use Framework\Support\Helpers\File;
 use Framework\Support\Str;
 
@@ -22,6 +23,8 @@ class CacheManager
      * @param string $key The unique identifier for the cached item.
      * @param mixed $default The default value to return if the item is not found in the cache.
      * @return mixed|null The cached item value or the default value if the item is not found.
+     *
+     * @throws BindingResolutionException
      */
     public function get(string $key, $default = null)
     {
@@ -29,7 +32,7 @@ class CacheManager
             return $default;
         }
 
-        if ($this->is_expired($cached = unserialize(File::get($file)))) {
+        if ($this->is_expired($cached = unserialize(File::get($file), ['allowed_classes' => true]))) {
             $this->forget($key);
             return $default;
         }
@@ -55,8 +58,10 @@ class CacheManager
      * @param mixed $value The value to be stored in the cache.
      * @param int $ttl The time-to-live for the cached item in seconds.
      * @return void
+     *
+     * @throws BindingResolutionException
      */
-    public function put(string $key, $value, int $ttl)
+    public function put(string $key, $value, int $ttl): void
     {
         $file = $this->get_cache_file($key);
 
@@ -77,6 +82,8 @@ class CacheManager
      *
      * @param string $key The unique identifier for the cached item.
      * @return bool true if the item exists in the cache, false otherwise.
+     *
+     * @throws BindingResolutionException
      */
     public function has(string $key): bool
     {
@@ -88,6 +95,8 @@ class CacheManager
      *
      * @param string $key The unique identifier for the cached item to be removed.
      * @return bool true if the item was successfully removed, false otherwise.
+     *
+     * @throws BindingResolutionException
      */
     public function forget(string $key): bool
     {
@@ -104,6 +113,8 @@ class CacheManager
      * @param string $key The unique identifier for the cached item.
      * @param int $value The value to increment the cached item by.
      * @return int|bool The new value of the cached item or false on failure.
+     *
+     * @throws BindingResolutionException
      */
     public function increment(string $key, int $value = 1)
     {
@@ -118,6 +129,8 @@ class CacheManager
      * @param string $key The unique identifier for the cached item.
      * @param int $value The value to decrement the cached item by.
      * @return int|bool The new value of the cached item or false on failure.
+     *
+     * @throws BindingResolutionException
      */
     public function decrement(string $key, int $value = 1)
     {
@@ -128,8 +141,10 @@ class CacheManager
      * Clear all entries from the cache.
      *
      * @return void
+     *
+     * @throws BindingResolutionException
      */
-    public function clear()
+    public function clear(): void
     {
         foreach (File::files(storage_path('Framework/cache'), 'cache') as $file) {
             if (is_file($file)) {
@@ -143,6 +158,8 @@ class CacheManager
      *
      * @param string $key The cache key.
      * @return string The filename for the cache key.
+     *
+     * @throws BindingResolutionException
      */
     protected function get_cache_file(string $key): string
     {

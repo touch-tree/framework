@@ -3,6 +3,7 @@
 namespace Framework\Component;
 
 use App\Http\Kernel;
+use Framework\Component\Exceptions\BindingResolutionException;
 use Framework\Component\Exceptions\ExceptionHandler;
 use Framework\Http\Kernel as HttpKernel;
 use Framework\Routing\Services\RoutingService;
@@ -75,7 +76,7 @@ class Application extends Container
      * @param string $path The path to the configuration directory.
      * @return void
      */
-    public function set_config_path(string $path)
+    public function set_config_path(string $path): void
     {
         $this->config_path = $path;
     }
@@ -99,8 +100,10 @@ class Application extends Container
      * This method initiates the bootstrap process for the application, including the initialization of registered services.
      *
      * @return void
+     *
+     * @throws BindingResolutionException
      */
-    public function bootstrap()
+    public function bootstrap(): void
     {
         $this->bootstrap_services();
         $this->load_configuration_files();
@@ -109,28 +112,31 @@ class Application extends Container
     /**
      * Register base bindings.
      *
+     * Bindings are references to classes registered in our service container.
+     * They allow us to retrieve a global instance of a class using an identifier or namespace,
+     * enabling us to reuse the same instance instead of creating a new one each time.
+     *
      * @return void
      */
-    private function register_base_bindings()
+    private function register_base_bindings(): void
     {
-        // Bindings are references to classes registered in our service container.
-        // They allow us to retrieve a global instance of a class using an identifier or namespace,
-        // enabling us to reuse the same instance instead of creating a new one each time.
-
         $this->singleton(HttpKernel::class, Kernel::class);
-        $this->singleton(ExceptionHandler::class, ExceptionHandler::class);
+
+        $this->singleton(ExceptionHandler::class, function () {
+            return new ExceptionHandler(request());
+        });
     }
 
     /**
      * Register base services.
      *
+     * Here we register classes and components needed in this framework.
+     * In this instance, the routing service is needed to register components related to our routing system.
+     *
      * @return void
      */
-    private function register_base_services()
+    private function register_base_services(): void
     {
-        // Here we register classes and components needed in this framework.
-        // In this instance, the routing service is needed to register components related to our routing system.
-
         $this->register(RoutingService::class);
     }
 
@@ -138,8 +144,10 @@ class Application extends Container
      * Load configuration files from the specified path and merge them into the configuration array.
      *
      * @return void
+     *
+     * @throws BindingResolutionException
      */
-    public function load_configuration_files()
+    public function load_configuration_files(): void
     {
         foreach (File::files($this->get_config_path(), 'php') as $file) {
             $config = include $file;
@@ -156,8 +164,10 @@ class Application extends Container
      * Bootstrap services.
      *
      * @return void
+     *
+     * @throws BindingResolutionException
      */
-    private function bootstrap_services()
+    private function bootstrap_services(): void
     {
         $this->load_services();
         $this->register_services();
@@ -167,8 +177,10 @@ class Application extends Container
      * Load services into the application.
      *
      * @return void
+     *
+     * @throws BindingResolutionException
      */
-    private function load_services()
+    private function load_services(): void
     {
         $services = new Collection($this->services);
 
@@ -187,7 +199,7 @@ class Application extends Container
      */
     public function get_service($service)
     {
-        $matches = Arr::where($this->get_services(), fn($value) => $value === get_class($service));
+        $matches = Arr::where($this->get_services(), static fn($value) => $value === get_class($service));
 
         return reset($matches);
     }
@@ -229,7 +241,7 @@ class Application extends Container
      *
      * @return void
      */
-    private function register_services()
+    private function register_services(): void
     {
         foreach ($this->loaded_services as $service) {
             $service->register();

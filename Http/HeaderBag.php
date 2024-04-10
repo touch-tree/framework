@@ -14,26 +14,6 @@ use Framework\Component\ParameterBag;
 class HeaderBag extends ParameterBag
 {
     /**
-     * HeaderBag constructor.
-     *
-     * @param array $headers [optional] An associative array of headers.
-     */
-    public function __construct(array $headers = [])
-    {
-        parent::__construct($headers);
-    }
-
-    /**
-     * Retrieves all headers.
-     *
-     * @return array An associative array of headers.
-     */
-    public function all(): array
-    {
-        return parent::all();
-    }
-
-    /**
      * Retrieves the value of a header.
      *
      * @param string $key The header key.
@@ -68,15 +48,5 @@ class HeaderBag extends ParameterBag
     public function has(string $key): bool
     {
         return parent::has(strtolower($key));
-    }
-
-    /**
-     * Removes a header.
-     *
-     * @param string $key The header key.
-     */
-    public function remove(string $key)
-    {
-        parent::remove($key);
     }
 }

@@ -3,6 +3,7 @@
 namespace Framework\Component\Validation;
 
 use Exception;
+use Framework\Component\Exceptions\ValidationException;
 use Framework\Component\ParameterBag;
 
 /**
@@ -49,17 +50,17 @@ class Validator
     /**
      * Validates the data based on the specified rules.
      *
-     * @return bool true if validation passes, false otherwise.
-     *
      * @throws Exception If an unsupported validation rule is encountered.
      */
-    public function validate(): bool
+    public function validate(): void
     {
         foreach ($this->rules as $field => $rules) {
             array_map(fn($rule) => $this->apply_rule($field, $rule), explode('|', $rules));
         }
 
-        return empty($this->errors->all());
+        if (!$this->errors->any()) {
+            throw new ValidationException($this->errors->all());
+        }
     }
 
     /**
@@ -67,37 +68,34 @@ class Validator
      *
      * @param string $field The field to validate.
      * @param string $rule The validation rule to apply.
-     * @return bool true if the field passes the rule, false otherwise.
      *
      * @throws Exception If an unsupported validation rule is encountered.
      */
-    protected function apply_rule(string $field, string $rule): bool
+    protected function apply_rule(string $field, string $rule): void
     {
         if ($rule === 'required') {
-            return $this->is_required($field);
+            $this->is_required($field);
         }
 
         if ($rule === 'string') {
-            return $this->is_string($field);
+            $this->is_string($field);
         }
 
         if ($rule === 'alpha') {
-            return $this->is_alpha($field);
+            $this->is_alpha($field);
         }
 
         if ($rule === 'alpha_num') {
-            return $this->is_alpha_num($field);
+            $this->is_alpha_num($field);
         }
 
         if ($rule === 'numeric') {
-            return $this->is_numeric($field);
+            $this->is_numeric($field);
         }
 
         if ($rule === 'email') {
-            return $this->is_email($field);
+            $this->is_email($field);
         }
-
-        throw new Exception($rule);
     }
 
     /**
@@ -106,7 +104,7 @@ class Validator
      * @param string $field The field for which the validation error occurred.
      * @param string $rule The rule that was not satisfied.
      */
-    public function add_error(string $field, string $rule)
+    public function add_error(string $field, string $rule): void
     {
         $this->errors->set($field, $this->errors->get($field, [$rule]));
     }
@@ -125,107 +123,71 @@ class Validator
      * Validates that the specified field is required and not empty.
      *
      * @param string $field The field to validate.
-     * @return bool true if the validation passes, false otherwise.
      */
-    protected function is_required(string $field): bool
+    protected function is_required(string $field): void
     {
-        $value = $this->data[$field] ?? null;
-        $is_valid = !empty($value);
-
-        if (!$is_valid) {
+        if (!empty($this->data[$field] ?? null)) {
             $this->add_error($field, 'This field is required.');
         }
-
-        return $is_valid;
     }
 
     /**
      * Validates that the specified field contains only letters (alphabetic characters).
      *
      * @param string $field The field to validate.
-     * @return bool true if the validation passes, false otherwise.
      */
-    protected function is_alpha(string $field): bool
+    protected function is_alpha(string $field): void
     {
-        $value = $this->data[$field] ?? null;
-        $is_valid = isset($value) && ctype_alpha($value);
-
-        if (!$is_valid) {
+        if (!ctype_alpha($this->data[$field] ?? null)) {
             $this->add_error($field, 'This field must contain only alphabetic characters.');
         }
-
-        return $is_valid;
     }
 
     /**
      * Validates that the specified field contains only alphanumeric characters.
      *
      * @param string $field The field to validate.
-     * @return bool true if the validation passes, false otherwise.
      */
-    protected function is_alpha_num(string $field): bool
+    protected function is_alpha_num(string $field): void
     {
-        $value = $this->data[$field] ?? null;
-        $is_valid = isset($value) && ctype_alnum($value);
-
-        if (!$is_valid) {
+        if (!ctype_alnum($this->data[$field] ?? null)) {
             $this->add_error($field, 'This field must contain only alphanumeric characters.');
         }
-
-        return $is_valid;
     }
 
     /**
      * Validates that the specified field is a string.
      *
      * @param string $field The field to validate.
-     * @return bool true if the validation passes, false otherwise.
      */
-    protected function is_string(string $field): bool
+    protected function is_string(string $field): void
     {
-        $value = $this->data[$field] ?? null;
-        $is_valid = isset($value) && is_string($value);
-
-        if (!$is_valid) {
+        if (!is_string($this->data[$field] ?? null)) {
             $this->add_error($field, 'This field must be a string.');
         }
-
-        return $is_valid;
     }
 
     /**
      * Validates that the specified field is numeric.
      *
      * @param string $field The field to validate.
-     * @return bool true if the validation passes, false otherwise.
      */
-    protected function is_numeric(string $field): bool
+    protected function is_numeric(string $field): void
     {
-        $value = $this->data[$field] ?? null;
-        $is_valid = isset($value) && is_numeric($value);
-
-        if (!$is_valid) {
+        if (!is_numeric($this->data[$field] ?? null)) {
             $this->add_error($field, 'This field must contain only numeric characters.');
         }
-
-        return $is_valid;
     }
 
     /**
      * Validates that the specified field is a valid email address.
      *
      * @param string $field The field to validate.
-     * @return bool true if the validation passes, false otherwise.
      */
-    protected function is_email(string $field): bool
+    protected function is_email(string $field): void
     {
-        $value = $this->data[$field] ?? null;
-        $is_valid = isset($value) && filter_var($value, FILTER_VALIDATE_EMAIL) !== false;
-
-        if (!$is_valid) {
+        if (!filter_var($this->data[$field] ?? null, FILTER_VALIDATE_EMAIL)) {
             $this->add_error($field, 'This field must contain a valid email.');
         }
-
-        return $is_valid;
     }
 }

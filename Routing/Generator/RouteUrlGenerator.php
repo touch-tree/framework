@@ -2,8 +2,6 @@
 
 namespace Framework\Routing\Generator;
 
-use Framework\Http\Request;
-use Framework\Routing\RouteCollection;
 use Framework\Support\UrlParser;
 
 /**

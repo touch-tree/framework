@@ -89,7 +89,7 @@ class ParameterBag
      * @param string $key The key of the parameter to be removed.
      * @return void
      */
-    public function remove(string $key)
+    public function remove(string $key): void
     {
         unset($this->parameters[$key]);
     }

@@ -3,6 +3,7 @@
 namespace Framework\Http;
 
 use Framework\Component\Container;
+use Framework\Component\Exceptions\BindingResolutionException;
 use Framework\Component\View;
 use Framework\Http\Exceptions\NotFoundHttpException;
 use Framework\Pipeline\Pipeline;
@@ -92,7 +93,8 @@ class Kernel
      *
      * @param Request $request The incoming HTTP request.
      * @return mixed The response returned by the router and middleware pipeline.
-     * @throws NotFoundHttpException
+     *
+     * @throws NotFoundHttpException|BindingResolutionException
      */
     public function send_request_through_router(Request $request)
     {
@@ -135,7 +137,7 @@ class Kernel
      * @param Request $request The HTTP request object.
      * @return void
      */
-    protected function terminate(Request $request)
+    protected function terminate(Request $request): void
     {
         $request->session->forget(['flash', 'errors']);
     }

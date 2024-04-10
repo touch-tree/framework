@@ -36,7 +36,7 @@ class Config
      * @param array $keys An associative array of configuration keys and their values.
      * @return void
      */
-    public function set(array $keys)
+    public function set(array $keys): void
     {
         foreach ($keys as $key => $value) {
             Map::set(self::$items, $key, $value);

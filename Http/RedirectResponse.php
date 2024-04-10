@@ -3,7 +3,6 @@
 namespace Framework\Http;
 
 use Error;
-use Framework\Routing\Generator\UrlGenerator;
 use Framework\Session\Session;
 use Framework\Support\Helpers\Url;
 use LogicException;
@@ -72,10 +71,9 @@ class RedirectResponse extends Response
     /**
      * Get the session.
      *
-     * @param Session $session
      * @return Session
      */
-    public function get_session(Session $session): Session
+    public function get_session(): Session
     {
         return $this->session;
     }
@@ -96,10 +94,9 @@ class RedirectResponse extends Response
     /**
      * Get the request.
      *
-     * @param Request $request
      * @return Request
      */
-    public function get_request(Request $request): Request
+    public function get_request(): Request
     {
         return $this->request;
     }
@@ -176,7 +173,7 @@ class RedirectResponse extends Response
      *
      * @return void
      */
-    public function send()
+    public function send(): void
     {
         parent::send();
 

@@ -17,7 +17,7 @@ class Cache extends Facade
      *
      * @return string
      */
-    static protected function accessor(): string
+    protected static function accessor(): string
     {
         return CacheManager::class;
     }
@@ -42,7 +42,7 @@ class Cache extends Facade
      * @param int $ttl The time-to-live for the cached item in seconds.
      * @return void
      */
-    public static function put(string $key, $value, int $ttl)
+    public static function put(string $key, $value, int $ttl): void
     {
         self::get_accessor_class()->put($key, $value, $ttl);
     }
@@ -98,7 +98,7 @@ class Cache extends Facade
      *
      * @return void
      */
-    public static function clear()
+    public static function clear(): void
     {
         self::get_accessor_class()->clear();
     }

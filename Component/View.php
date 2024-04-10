@@ -154,9 +154,9 @@ class View
      */
     private static function resolve_path(string $path): ?string
     {
-        $path = realpath($path) ?: realpath(resource_path('views/' . str_replace('.', '/', $path) . '.php'));
+        $realpath = realpath($path) ?: resource_path('views/' . str_replace('.', '/', $path) . '.php');
 
-        return $path ?: null;
+        return file_exists($realpath) ? $realpath : null;
     }
 
     /**
