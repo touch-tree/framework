@@ -192,14 +192,14 @@ function old(string $key, ?string $default = null)
 /**
  * Get the value of a configuration key or set a configuration value at runtime.
  *
- * If `$key` is `null`, it retrieves the entire configuration array. If `$key`
- * is an array, it sets multiple configuration values at once. If `$key` is a
+ * If $key is null, it retrieves the entire configuration array. If $key
+ * is an array, it sets multiple configuration values at once. If $key is a
  * string, it retrieves the value for the specified key.
  *
- * If `$key` is `null` and `$default` is provided, the default value will be
+ * If $key is null and $default is provided, the default value will be
  * returned if the configuration key is not found.
  *
- * If `$key` is an array, it sets multiple configuration values at runtime and
+ * If $key is an array, it sets multiple configuration values at runtime and
  * returns the array of key-value pairs that were set.
  *
  * @template T
