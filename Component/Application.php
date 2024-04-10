@@ -120,7 +120,14 @@ class Application extends Container
      */
     private function register_base_bindings(): void
     {
-        $this->singleton(HttpKernel::class, Kernel::class);
+        // If no additional kernel is provided, use the base kernel.
+        // This prevents the kernel from being unable to be used when its overwrite implementation is missing.
+
+        if (class_exists(Kernel::class) && is_a(Kernel::class, HttpKernel::class, true)) {
+            $this->singleton(HttpKernel::class, Kernel::class);
+        } else {
+            $this->singleton(HttpKernel::class, HttpKernel::class);
+        }
 
         $this->singleton(ExceptionHandler::class, function () {
             return new ExceptionHandler(request());
