@@ -166,9 +166,6 @@ class Http
      *
      * @param string $endpoint The API endpoint URL.
      * @param array $data [optional] The data to send with the request.
-     * @return Http
-     *
-     * @throws JsonException
      */
     public function put(string $endpoint, array $data = []): Http
     {
