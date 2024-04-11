@@ -3,7 +3,6 @@
 namespace Framework\Http;
 
 use Framework\Component\Container;
-use Framework\Component\Exceptions\BindingResolutionException;
 use Framework\Component\View;
 use Framework\Http\Exceptions\NotFoundHttpException;
 use Framework\Pipeline\Pipeline;

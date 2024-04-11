@@ -6,7 +6,6 @@ use Closure;
 use Exception;
 use Framework\Component\Exceptions\BindingResolutionException;
 use ReflectionClass;
-use ReflectionException;
 use ReflectionParameter;
 
 /**

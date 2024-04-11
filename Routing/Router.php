@@ -2,10 +2,8 @@
 
 namespace Framework\Routing;
 
-use Error;
 use Exception;
 use Framework\Component\Container;
-use Framework\Component\Exceptions\BindingResolutionException;
 use Framework\Component\View;
 use Framework\Http\JsonResponse;
 use Framework\Http\RedirectResponse;
@@ -163,8 +161,6 @@ class Router
      *
      * @param Request $request The current request.
      * @return View|RedirectResponse|JsonResponse|null The result of invoking the controller method, or null if no route matches request.
-     *
-     * @throws BindingResolutionException
      */
     public function dispatch(Request $request)
     {

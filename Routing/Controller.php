@@ -2,7 +2,6 @@
 
 namespace Framework\Routing;
 
-use Exception;
 use Framework\Component\Exceptions\ValidationException;
 use Framework\Component\Validation\Validator;
 use Framework\Http\Request;

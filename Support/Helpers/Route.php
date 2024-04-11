@@ -2,7 +2,6 @@
 
 namespace Framework\Support\Helpers;
 
-use Framework\Component\Exceptions\BindingResolutionException;
 use Framework\Routing\RouteCollection;
 use Framework\Routing\Router;
 

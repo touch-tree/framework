@@ -2,7 +2,6 @@
 
 namespace Framework\Support\Helpers;
 
-use Error;
 use Framework\Component\Exceptions\BindingResolutionException;
 use http\Exception\RuntimeException;
 

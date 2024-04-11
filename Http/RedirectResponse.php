@@ -2,7 +2,6 @@
 
 namespace Framework\Http;
 
-use Error;
 use Framework\Session\Session;
 use Framework\Support\Helpers\Url;
 use LogicException;
@@ -122,7 +121,6 @@ class RedirectResponse extends Response
      * @param string $path The destination path for the redirect.
      * @return RedirectResponse
      *
-     * @throws Error If the provided route is invalid.
      * @see route()
      */
     public function route(string $path): RedirectResponse

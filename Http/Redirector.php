@@ -2,7 +2,6 @@
 
 namespace Framework\Http;
 
-use Error;
 use Framework\Routing\Generator\UrlGenerator;
 use Framework\Session\Session;
 
@@ -32,8 +31,6 @@ class Redirector
      * Redirect constructor.
      *
      * @param Session $session The session manager for storing flash data.
-     *
-     * @throws Error If the provided route is invalid.
      */
     public function __construct(Session $session, UrlGenerator $url)
     {

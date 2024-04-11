@@ -2,7 +2,6 @@
 
 namespace Framework\Cache;
 
-use Framework\Component\Exceptions\BindingResolutionException;
 use Framework\Support\Helpers\File;
 use Framework\Support\Str;
 

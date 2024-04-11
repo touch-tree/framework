@@ -2,7 +2,6 @@
 
 namespace Framework\Routing;
 
-use Framework\Component\Exceptions\BindingResolutionException;
 use Framework\Http\Request;
 use Framework\Routing\Generator\UrlGenerator;
 use Framework\Support\Helpers\Url;

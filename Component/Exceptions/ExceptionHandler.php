@@ -23,8 +23,6 @@ class ExceptionHandler
      * When an exception occurs, it will be passed to the handle method of this class.
      *
      * @param Request $request The HTTP request
-     *
-     * @throws BindingResolutionException
      */
     public function __construct(Request $request)
     {
@@ -38,8 +36,6 @@ class ExceptionHandler
      *
      * @param Exception|Error $exception The exception to render
      * @param Request $request The HTTP request
-     *
-     * @throws BindingResolutionException
      */
     private function render(Throwable $exception, Request $request): void
     {
@@ -55,8 +51,6 @@ class ExceptionHandler
      * @param Exception|Error $exception The exception to handle
      * @param Request $request The HTTP request
      * @return Response The response to send
-     *
-     * @throws BindingResolutionException
      */
     public function handle(Throwable $exception, Request $request): Response
     {

@@ -2,7 +2,6 @@
 
 namespace Framework\Session;
 
-use Error;
 use Framework\Support\Map;
 
 /**
@@ -61,8 +60,6 @@ class Session
      * @param string $key The key in 'dot' notation.
      * @param mixed $value The value to push onto the array.
      * @return Session The current Session instance.
-     *
-     * @throws Error If the session value at the specified key is not an array.
      */
     public function push(string $key, $value): Session
     {

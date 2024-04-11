@@ -2,7 +2,6 @@
 
 namespace Framework\Http;
 
-use Exception;
 use Framework\Component\Validation\Validator;
 
 /**

@@ -2,7 +2,6 @@
 
 namespace Framework\Component\Validation;
 
-use Exception;
 use Framework\Component\Exceptions\ValidationException;
 use Framework\Component\ParameterBag;
 
