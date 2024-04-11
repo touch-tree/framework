@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Component;
+namespace Framework\Component\Config;
 
 use Framework\Support\Map;
 
@@ -11,7 +11,7 @@ use Framework\Support\Map;
  *
  * @package Framework\Component
  */
-class Config
+class ConfigRepository
 {
     /**
      * The array of configuration values.

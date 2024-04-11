@@ -17,11 +17,11 @@ class Route extends Facade
     /**
      * Set the accessor for the facade.
      *
-     * @return string
+     * @return Router
      */
-    protected static function accessor(): string
+    protected static function accessor(): object
     {
-        return Router::class;
+        return get_service(Router::class);
     }
 
     /**
@@ -33,7 +33,7 @@ class Route extends Facade
      */
     public static function get(string $uri, array $action): Router
     {
-        return self::get_accessor_class()->get($uri, $action);
+        return self::accessor()->get($uri, $action);
     }
 
     /**
@@ -45,7 +45,7 @@ class Route extends Facade
      */
     public static function post(string $uri, array $action): Router
     {
-        return self::get_accessor_class()->post($uri, $action);
+        return self::accessor()->post($uri, $action);
     }
 
     /**
@@ -55,6 +55,6 @@ class Route extends Facade
      */
     public function routes(): RouteCollection
     {
-        return self::get_accessor_class()->routes();
+        return self::accessor()->routes();
     }
 }

@@ -16,11 +16,11 @@ class File extends Facade
     /**
      * Set the accessor for the facade.
      *
-     * @return string
+     * @return Filesystem
      */
-    protected static function accessor(): string
+    protected static function accessor(): object
     {
-        return Filesystem::class;
+        return get_service(Filesystem::class);
     }
 
     /**
@@ -32,7 +32,7 @@ class File extends Facade
      */
     public static function files(string $directory, $extension = []): array
     {
-        return self::get_accessor_class()->files($directory, $extension);
+        return self::accessor()->files($directory, $extension);
     }
 
     /**
@@ -44,7 +44,7 @@ class File extends Facade
      */
     public static function all_files(string $directory, bool $recursive = true): array
     {
-        return self::get_accessor_class()->all_files($directory, $recursive);
+        return self::accessor()->all_files($directory, $recursive);
     }
 
     /**
@@ -56,7 +56,7 @@ class File extends Facade
      */
     public static function put(string $file_path, string $content): bool
     {
-        return self::get_accessor_class()->put($file_path, $content);
+        return self::accessor()->put($file_path, $content);
     }
 
     /**
@@ -67,7 +67,7 @@ class File extends Facade
      */
     public static function directories(string $directory): array
     {
-        return self::get_accessor_class()->directories($directory);
+        return self::accessor()->directories($directory);
     }
 
     /**
@@ -78,7 +78,7 @@ class File extends Facade
      */
     public static function get(string $file_path)
     {
-        return self::get_accessor_class()->get($file_path);
+        return self::accessor()->get($file_path);
     }
 
     /**
@@ -89,7 +89,7 @@ class File extends Facade
      */
     public static function exists(string $path): bool
     {
-        return self::get_accessor_class()->exists($path);
+        return self::accessor()->exists($path);
     }
 
     /**
@@ -100,19 +100,7 @@ class File extends Facade
      */
     public static function make_directory(string $directory): bool
     {
-        return self::get_accessor_class()->make_directory($directory);
-    }
-
-    /**
-     * Retrieve paths from a directory based on a callback condition.
-     *
-     * @param string $directory The directory path.
-     * @param callable $callback The callback function defining the condition.
-     * @return array An array of paths that meet the condition.
-     */
-    private static function get_paths(string $directory, callable $callback): array
-    {
-        return self::get_accessor_class()->get_paths($directory, $callback);
+        return self::accessor()->make_directory($directory);
     }
 
     /**
@@ -122,9 +110,9 @@ class File extends Facade
      * @param string|array $extension The extension(s) to check against.
      * @return bool true if the file has the specified extension, false otherwise.
      */
-    private static function has_extension(SplFileInfo $file, $extension): bool
+    public static function has_extension(SplFileInfo $file, $extension): bool
     {
-        return self::get_accessor_class()->has_extension($file, $extension);
+        return self::accessor()->has_extension($file, $extension);
     }
 
     /**
@@ -135,7 +123,7 @@ class File extends Facade
      */
     public static function delete($paths): bool
     {
-        return self::get_accessor_class()->delete($paths);
+        return self::accessor()->delete($paths);
     }
 
     /**
@@ -144,8 +132,8 @@ class File extends Facade
      * @param string $directory The directory to delete.
      * @return bool true if successfully deleted, false otherwise.
      */
-    private static function delete_directory(string $directory): bool
+    public static function delete_directory(string $directory): bool
     {
-        return self::get_accessor_class()->delete_directory($directory);
+        return self::accessor()->delete_directory($directory);
     }
 }

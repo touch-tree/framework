@@ -15,11 +15,11 @@ class Url extends Facade
     /**
      * Set the accessor for the facade.
      *
-     * @return string
+     * @return UrlGenerator
      */
-    protected static function accessor(): string
+    protected static function accessor(): object
     {
-        return UrlGenerator::class;
+        return get_service(UrlGenerator::class);
     }
 
     /**
@@ -32,7 +32,7 @@ class Url extends Facade
      */
     public static function to(string $path, array $parameters = [], bool $absolute = true): string
     {
-        return self::get_accessor_class()->to($path, $parameters, $absolute);
+        return self::accessor()->to($path, $parameters, $absolute);
     }
 
     /**
@@ -45,7 +45,7 @@ class Url extends Facade
      */
     public static function route(string $name, array $parameters = [], bool $absolute = true): string
     {
-        return self::get_accessor_class()->route($name, $parameters, $absolute);
+        return self::accessor()->route($name, $parameters, $absolute);
     }
 
     /**
@@ -55,7 +55,7 @@ class Url extends Facade
      */
     public static function full(): string
     {
-        return self::get_accessor_class()->full();
+        return self::accessor()->full();
     }
 
     /**
@@ -65,6 +65,6 @@ class Url extends Facade
      */
     public static function current(): string
     {
-        return self::get_accessor_class()->current();
+        return self::accessor()->current();
     }
 }

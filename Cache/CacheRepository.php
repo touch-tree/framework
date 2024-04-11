@@ -7,7 +7,7 @@ use Framework\Support\Helpers\File;
 use Framework\Support\Str;
 
 /**
- * The CacheManager class provides file-based caching for storing and retrieving data from the filesystem.
+ * The CacheRepository class provides file-based caching for storing and retrieving data from the filesystem.
  *
  * This class offers methods to interact with the cache, including storing, retrieving, checking existence,
  * and removing items from the cache. It supports setting a time-to-live (TTL) for cached items and provides methods
@@ -15,7 +15,7 @@ use Framework\Support\Str;
  *
  * @package Framework\Cache
  */
-class CacheManager
+class CacheRepository
 {
     /**
      * Get an item from the cache.

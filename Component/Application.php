@@ -3,14 +3,13 @@
 namespace Framework\Component;
 
 use App\Http\Kernel;
-use Framework\Component\Exceptions\BindingResolutionException;
+use Framework\Component\Config\ConfigRepository;
 use Framework\Component\Exceptions\ExceptionHandler;
 use Framework\Http\Kernel as HttpKernel;
 use Framework\Routing\Services\RoutingService;
 use Framework\Support\Arr;
 use Framework\Support\Collection;
 use Framework\Support\Helpers\File;
-use SplFileInfo;
 
 /**
  * The Application class is responsible for bootstrapping the application and registering services.
@@ -120,12 +119,12 @@ class Application extends Container
     private function register_base_bindings(): void
     {
         if (class_exists(Kernel::class) && is_a(Kernel::class, HttpKernel::class, true)) {
-            $this->singleton(HttpKernel::class, Kernel::class);
+            $this->bind(HttpKernel::class, Kernel::class);
         } else {
-            $this->singleton(HttpKernel::class, HttpKernel::class);
+            $this->bind(HttpKernel::class, HttpKernel::class);
         }
 
-        $this->singleton(ExceptionHandler::class, function () {
+        $this->bind(ExceptionHandler::class, function () {
             return new ExceptionHandler(request());
         });
     }
@@ -157,7 +156,11 @@ class Application extends Container
                 continue;
             }
 
-            $this->get(Config::class)->set([$file->getBasename() => $config]);
+            $this->get(ConfigRepository::class)->set(
+                [
+                    pathinfo($file->getFilename(), PATHINFO_FILENAME) => $config
+                ]
+            );
         }
     }
 

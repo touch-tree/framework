@@ -99,7 +99,7 @@ class Filesystem
      * @param string|array $extension The extension(s) to check against.
      * @return bool True if the file has the specified extension, false otherwise.
      */
-    private function has_extension(SplFileInfo $file, $extension): bool
+    public function has_extension(SplFileInfo $file, $extension): bool
     {
         if (is_null($extension)) {
             return true;
@@ -145,7 +145,7 @@ class Filesystem
      * @param string $directory The directory to delete.
      * @return bool True if successfully deleted, false otherwise.
      */
-    private function delete_directory(string $directory): bool
+    public function delete_directory(string $directory): bool
     {
         foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST) as $file) {
             if ($file->isDir()) {

@@ -12,7 +12,7 @@
 */
 
 use Framework\Component\Application;
-use Framework\Component\Config;
+use Framework\Component\Config\ConfigRepository;
 use Framework\Component\Container;
 use Framework\Component\View;
 use Framework\Http\HeaderBag;
@@ -209,7 +209,7 @@ function old(string $key, ?string $default = null)
  */
 function config($key = null, $default = null)
 {
-    $config = Application::get_instance()->get(Config::class);
+    $config = Application::get_instance()->get(ConfigRepository::class);
 
     if (is_null($key)) {
         return $config->all();
@@ -250,18 +250,17 @@ function dd(...$message)
  *
  * @template T
  * @param class-string<T>|null $abstract [optional] The fully qualified class name to resolve.
- * @param array $parameters [optional] Parameters to override constructor parameters of the provided class or Closure.
  * @return T|Container An instance of the specified class.
  *
  * @see Container
  */
-function get_service(string $abstract = null, array $parameters = [])
+function get_service(string $abstract = null)
 {
     if (is_null($abstract)) {
         return Application::get_instance();
     }
 
-    return Application::get_instance()->get($abstract, $parameters);
+    return Application::get_instance()->get($abstract);
 }
 
 /**

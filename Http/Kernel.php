@@ -93,7 +93,7 @@ class Kernel
      * @param Request $request The incoming HTTP request.
      * @return mixed The response returned by the router and middleware pipeline.
      *
-     * @throws NotFoundHttpException|BindingResolutionException
+     * @throws NotFoundHttpException
      */
     public function send_request_through_router(Request $request)
     {

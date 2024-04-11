@@ -2,24 +2,24 @@
 
 namespace Framework\Support\Helpers;
 
-use Framework\Cache\CacheManager;
+use Framework\Cache\CacheRepository;
 
 /**
  * Cache facade.
  *
  * @package Framework\Support\Helpers
- * @see CacheManager
+ * @see CacheRepository
  */
 class Cache extends Facade
 {
     /**
      * Set the accessor for the facade.
      *
-     * @return string
+     * @return CacheRepository
      */
-    protected static function accessor(): string
+    protected static function accessor(): object
     {
-        return CacheManager::class;
+        return get_service(CacheRepository::class);
     }
 
     /**
@@ -31,7 +31,7 @@ class Cache extends Facade
      */
     public static function get(string $key, $default = null)
     {
-        return self::get_accessor_class()->get($key, $default);
+        return self::accessor()->get($key, $default);
     }
 
     /**
@@ -44,7 +44,7 @@ class Cache extends Facade
      */
     public static function put(string $key, $value, int $ttl): void
     {
-        self::get_accessor_class()->put($key, $value, $ttl);
+        self::accessor()->put($key, $value, $ttl);
     }
 
     /**
@@ -55,7 +55,7 @@ class Cache extends Facade
      */
     public static function has(string $key): bool
     {
-        return self::get_accessor_class()->has($key);
+        return self::accessor()->has($key);
     }
 
     /**
@@ -66,7 +66,7 @@ class Cache extends Facade
      */
     public static function forget(string $key): bool
     {
-        return self::get_accessor_class()->forget($key);
+        return self::accessor()->forget($key);
     }
 
     /**
@@ -78,7 +78,7 @@ class Cache extends Facade
      */
     public static function increment(string $key, int $value = 1)
     {
-        return self::get_accessor_class()->increment($key, $value);
+        return self::accessor()->increment($key, $value);
     }
 
     /**
@@ -90,7 +90,7 @@ class Cache extends Facade
      */
     public static function decrement(string $key, int $value = 1)
     {
-        return self::get_accessor_class()->decrement($key, $value);
+        return self::accessor()->decrement($key, $value);
     }
 
     /**
@@ -100,6 +100,6 @@ class Cache extends Facade
      */
     public static function clear(): void
     {
-        self::get_accessor_class()->clear();
+        self::accessor()->clear();
     }
 }
