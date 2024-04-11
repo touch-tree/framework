@@ -57,7 +57,7 @@ class Validator
             array_map(fn($rule) => $this->apply_rule($field, $rule), explode('|', $rules));
         }
 
-        if (!$this->errors->any()) {
+        if ($this->errors->any()) {
             throw new ValidationException($this->errors->all());
         }
     }

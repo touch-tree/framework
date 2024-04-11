@@ -164,21 +164,15 @@ class Router
      */
     public function dispatch(Request $request)
     {
-        $route = $this->find_route($request);
-
-        if (is_null($route)) {
+        if (is_null($route = $this->find_route($request))) {
             return null;
         }
 
-        try {
-            [$class, $method] = $route->action();
+        [$class, $method] = $route->action();
 
-            $route_uri = Url::to($route->uri(), [], false);
+        $route_uri = Url::to($route->uri(), [], false);
 
-            return $this->resolve_controller([$this->container->get($class), $method], $this->get_parameters($route_uri, $request->request_uri()));
-        } catch (Exception $exception) {
-            return null;
-        }
+        return $this->resolve_controller([$this->container->get($class), $method], $this->get_parameters($route_uri, $request->request_uri()));
     }
 
     /**
@@ -187,8 +181,6 @@ class Router
      * @param array $action An array containing the controller instance and method.
      * @param array $parameters Associative array of parameters.
      * @return View|RedirectResponse|JsonResponse|null The result of invoking the controller method.
-     *
-     * @throws ReflectionException
      */
     private function resolve_controller(array $action, array $parameters)
     {
