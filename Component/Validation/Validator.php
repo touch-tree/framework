@@ -123,7 +123,7 @@ class Validator
      */
     protected function is_required(string $field): void
     {
-        if (!empty($this->data[$field] ?? null)) {
+        if (empty($this->data[$field] ?? null)) {
             $this->add_error($field, 'This field is required.');
         }
     }
