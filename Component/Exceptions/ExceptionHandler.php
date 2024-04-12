@@ -59,13 +59,19 @@ class ExceptionHandler
         }
 
         if ($exception instanceof ValidationException) {
+            $errors = $exception->errors();
+
             if ($request->expects_json()) {
-                return response()->json(['errors' => $exception->errors()], Response::HTTP_UNPROCESSABLE_ENTITY);
+                return response()->json(['errors' => $errors], Response::HTTP_UNPROCESSABLE_ENTITY);
             }
 
-            return redirect()->back()->with_errors($exception->errors());
+            return back()->with_errors($errors);
         }
 
-        return response(config('development_mode') ? $exception : null, Response::HTTP_INTERNAL_SERVER_ERROR);
+        if (config('development_mode')) {
+            dd($exception);
+        }
+
+        return response(null, Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 }

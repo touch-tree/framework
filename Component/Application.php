@@ -6,6 +6,7 @@ use App\Http\Kernel;
 use Framework\Component\Config\ConfigRepository;
 use Framework\Component\Exceptions\ExceptionHandler;
 use Framework\Http\Kernel as HttpKernel;
+use Framework\Http\Request;
 use Framework\Routing\Services\RoutingService;
 use Framework\Support\Arr;
 use Framework\Support\Collection;
@@ -124,8 +125,8 @@ class Application extends Container
             $this->bind(HttpKernel::class, HttpKernel::class);
         }
 
-        $this->bind(ExceptionHandler::class, function () {
-            return new ExceptionHandler(request());
+        $this->singleton(ExceptionHandler::class, function () {
+            return new ExceptionHandler($this->get(Request::class));
         });
     }
 

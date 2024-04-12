@@ -103,7 +103,7 @@ class Validator
      */
     public function add_error(string $field, string $rule): void
     {
-        $this->errors->set($field, $this->errors->get($field, [$rule]));
+        $this->errors->set($field, $this->errors->get($field, $rule));
     }
 
     /**

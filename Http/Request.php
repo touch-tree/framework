@@ -286,9 +286,17 @@ class Request
      */
     public function expects_json(): bool
     {
-        foreach ($this->headers()->get('Accept') as $type) {
-            if (strpos($type, '/json') !== false) {
-                return true;
+        $accept_header = $this->headers()->get('Accept');
+
+        if (is_string($accept_header) && strpos($accept_header, '/json') !== false) {
+            return true;
+        }
+
+        if (is_array($accept_header)) {
+            foreach ($accept_header as $type) {
+                if (is_string($type) && strpos($type, '/json') !== false) {
+                    return true;
+                }
             }
         }
 

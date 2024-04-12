@@ -34,7 +34,13 @@ use Framework\Support\Helpers\Url;
  */
 function redirect(string $route = null): RedirectResponse
 {
-    return Application::get_instance()->get(Redirector::class)->to($route);
+    $redirector = Application::get_instance()->get(Redirector::class);
+
+    if (is_null($route)) {
+        return $redirector->make();
+    }
+
+    return $redirector->to($route);
 }
 
 /**
@@ -104,7 +110,7 @@ function storage_path(string $path = null): string
  * @template T
  * @param string|null $key [optional] The key of the session value.
  * @param T|null $value [optional] The value to set for the session key.
- * @return Session|T|string|null
+ * @return Session|T|string
  */
 function session(string $key = null, $value = null)
 {
@@ -256,11 +262,13 @@ function dd(...$message)
  */
 function get_service(string $abstract = null)
 {
+    $app = Application::get_instance();
+
     if (is_null($abstract)) {
-        return Application::get_instance();
+        return $app;
     }
 
-    return Application::get_instance()->get($abstract);
+    return $app->get($abstract);
 }
 
 /**
@@ -309,7 +317,9 @@ function back(): RedirectResponse
  */
 function url(string $path = null)
 {
-    return $path ? Url::to($path) : Application::get_instance()->get(UrlGenerator::class);
+    $url = Application::get_instance()->get(UrlGenerator::class);
+
+    return $path ? $url->to($path) : $url->get(UrlGenerator::class);
 }
 
 /**
@@ -320,5 +330,5 @@ function url(string $path = null)
  */
 function asset(string $path): string
 {
-    return Url::to('public/') . trim($path, '/');
+    return Application::get_instance()->get(UrlGenerator::class)->to('public/') . trim($path, '/');
 }

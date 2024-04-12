@@ -46,13 +46,7 @@ class Redirector
      */
     public function to(string $path): RedirectResponse
     {
-        $response = new RedirectResponse();
-
-        $response
-            ->set_request($this->url->get_request())
-            ->set_session($this->session);
-
-        return $response->route($path);
+        return $this->make()->route($path);
     }
 
     /**
@@ -66,13 +60,7 @@ class Redirector
      */
     public function back(): RedirectResponse
     {
-        $response = new RedirectResponse();
-
-        $response
-            ->set_request($this->url->get_request())
-            ->set_session($this->session);
-
-        return $response->back();
+        return $this->make()->back();
     }
 
     /**
@@ -84,5 +72,21 @@ class Redirector
     public function json(array $data): JsonResponse
     {
         return new JsonResponse($data);
+    }
+
+    /**
+     * Make a new RedirectResponse instance with the request and session already set.
+     *
+     * @return RedirectResponse The redirect response object.
+     */
+    public function make(): RedirectResponse
+    {
+        $response = new RedirectResponse();
+
+        $response
+            ->set_request($this->url->get_request())
+            ->set_session($this->session);
+
+        return $response;
     }
 }

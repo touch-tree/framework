@@ -36,10 +36,6 @@ class FormRequest extends Request
      */
     public function validate(array $rules = []): Validator
     {
-        $validator = parent::validate($rules ?: $this->rules());
-
-        $this->session->put('errors.form', $validator->errors()->all());
-
-        return $validator;
+        return parent::validate($rules ?: $this->rules());
     }
 }

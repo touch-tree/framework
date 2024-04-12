@@ -4,6 +4,7 @@ namespace Framework\Routing\Services;
 
 use Framework\Component\Service;
 use Framework\Http\Redirector;
+use Framework\Http\Request;
 use Framework\Routing\Generator\UrlGenerator;
 use Framework\Routing\Router;
 use Framework\Session\Session;
@@ -42,7 +43,7 @@ class RoutingService extends Service
     private function register_url_generator(): void
     {
         $this->container->bind(UrlGenerator::class, function () {
-            return new UrlGenerator($this->container->get(Router::class)->routes(), request());
+            return new UrlGenerator($this->container->get(Router::class)->routes(), $this->container->get(Request::class));
         });
     }
 
