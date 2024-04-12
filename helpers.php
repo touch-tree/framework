@@ -36,11 +36,7 @@ function redirect(string $route = null): RedirectResponse
 {
     $redirector = Application::get_instance()->get(Redirector::class);
 
-    if (is_null($route)) {
-        return $redirector->make();
-    }
-
-    return $redirector->to($route);
+    return is_null($route) ? $redirector->make() : $redirector->to($route);
 }
 
 /**
@@ -264,11 +260,7 @@ function get_service(string $abstract = null)
 {
     $app = Application::get_instance();
 
-    if (is_null($abstract)) {
-        return $app;
-    }
-
-    return $app->get($abstract);
+    return is_null($abstract) ? $app : $app->get($abstract);
 }
 
 /**
