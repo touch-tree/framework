@@ -10,7 +10,7 @@ use Framework\Cache\CacheRepository;
  * @package Framework\Support\Helpers
  * @see CacheRepository
  */
-class Cache extends Facade
+class Cache extends Helper
 {
     /**
      * Set the accessor for the facade.
@@ -19,7 +19,7 @@ class Cache extends Facade
      */
     protected static function accessor(): object
     {
-        return get_service(CacheRepository::class);
+        return get(CacheRepository::class);
     }
 
     /**

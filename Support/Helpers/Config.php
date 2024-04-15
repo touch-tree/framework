@@ -4,7 +4,7 @@ namespace Framework\Support\Helpers;
 
 use Framework\Component\Config\ConfigRepository;
 
-class Config extends Facade
+class Config extends Helper
 {
     /**
      * Set the accessor for the facade.
@@ -13,7 +13,7 @@ class Config extends Facade
      */
     protected static function accessor(): object
     {
-        return get_service(ConfigRepository::class);
+        return get(ConfigRepository::class);
     }
 
     /**

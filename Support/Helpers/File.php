@@ -11,7 +11,7 @@ use SplFileInfo;
  * @package Framework\Support\Helpers
  * @see Filesystem
  */
-class File extends Facade
+class File extends Helper
 {
     /**
      * Set the accessor for the facade.
@@ -20,7 +20,7 @@ class File extends Facade
      */
     protected static function accessor(): object
     {
-        return get_service(Filesystem::class);
+        return get(Filesystem::class);
     }
 
     /**

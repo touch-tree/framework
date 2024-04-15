@@ -3,19 +3,49 @@
 namespace Framework\Support;
 
 use ArrayAccess;
-use TypeError;
 
 /**
- * The Map class provides utility functions for navigating associative arrays using dot notation.
- *
- * This class offers methods to efficiently access, set, check, add, remove, and manipulate array elements
- * within nested arrays using dot notation. It also provides methods for extracting subsets of arrays,
- * plucking values, and collapsing arrays.
+ * The ArrayHelper class provides utility methods for arrays.
  *
  * @package Framework\Support
  */
-class Map
+class ArrayHelper
 {
+    /**
+     * Filter the array using the given callback and return the first result.
+     *
+     * @param array $array The array to filter.
+     * @param callable|null $callback The callback function to filter the array.
+     * @param mixed $default The default value if no matching element is found.
+     * @return mixed The first matching element or the default value.
+     */
+    public static function first(array $array, ?callable $callback = null, $default = null)
+    {
+        if (is_null($callback)) {
+            return empty($array) ? $default : reset($array);
+        }
+
+        foreach ($array as $key => $value) {
+            if ($callback($value, $key)) {
+                return $value;
+            }
+        }
+
+        return $default;
+    }
+
+    /**
+     * Filter the array using the given callback.
+     *
+     * @param array $array The array to filter.
+     * @param callable $callback The callback function to filter the array.
+     * @return array The filtered array.
+     */
+    public static function where(array $array, callable $callback): array
+    {
+        return array_filter($array, $callback, ARRAY_FILTER_USE_BOTH);
+    }
+
     /**
      * Get an item from an array using 'dot' notation.
      *
@@ -77,7 +107,7 @@ class Map
      * @param mixed $value The value to set.
      * @return $this
      */
-    public static function set(array &$array, string $key, $value): Map
+    public static function set(array &$array, string $key, $value): ArrayHelper
     {
         foreach (self::explode_key($key) as $segment) {
             if (!isset($array[$segment]) || !is_array($array[$segment])) {

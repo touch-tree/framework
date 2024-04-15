@@ -251,16 +251,14 @@ function dd(...$message)
  * If no class name is provided, the function returns the service container itself.
  *
  * @template T
- * @param class-string<T>|null $abstract [optional] The fully qualified class name to resolve.
- * @return T|Container An instance of the specified class.
+ * @param class-string<T> $abstract The fully qualified class name to resolve.
+ * @return T An instance of the specified class.
  *
  * @see Container
  */
-function get_service(string $abstract = null)
+function get(string $abstract)
 {
-    $app = Application::get_instance();
-
-    return is_null($abstract) ? $app : $app->get($abstract);
+    return Application::get_instance()->get($abstract);
 }
 
 /**

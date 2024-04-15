@@ -4,7 +4,7 @@ namespace Framework\Routing\Generator;
 
 use Framework\Http\Request;
 use Framework\Routing\RouteCollection;
-use Framework\Support\Str;
+use Framework\Support\StringHelper;
 
 /**
  * The UrlGenerator class generates URLs for routes and resources within the application.
@@ -125,7 +125,7 @@ class UrlGenerator
      */
     private function get_relative_path(): string
     {
-        return str_replace(Str::finish($this->request->server('DOCUMENT_ROOT'), '/'), '', base_path());
+        return str_replace(StringHelper::finish($this->request->server('DOCUMENT_ROOT'), '/'), '', base_path());
     }
 
     /**

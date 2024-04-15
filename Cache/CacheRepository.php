@@ -3,7 +3,7 @@
 namespace Framework\Cache;
 
 use Framework\Support\Helpers\File;
-use Framework\Support\Str;
+use Framework\Support\StringHelper;
 
 /**
  * The CacheRepository class provides file-based caching for storing and retrieving data from the filesystem.
@@ -150,6 +150,6 @@ class CacheRepository
             File::make_directory($path);
         }
 
-        return Str::finish($path, '/') . md5($key) . '.cache';
+        return StringHelper::finish($path, '/') . md5($key) . '.cache';
     }
 }

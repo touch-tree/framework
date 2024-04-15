@@ -8,7 +8,7 @@ use Framework\Component\Exceptions\ExceptionHandler;
 use Framework\Http\Kernel as HttpKernel;
 use Framework\Http\Request;
 use Framework\Routing\Services\RoutingService;
-use Framework\Support\Arr;
+use Framework\Support\ArrayHelper;
 use Framework\Support\Collection;
 use Framework\Support\Helpers\File;
 
@@ -200,7 +200,7 @@ class Application extends Container
      */
     public function get_service($service)
     {
-        $matches = Arr::where($this->get_services(), static fn($value) => $value === get_class($service));
+        $matches = ArrayHelper::where($this->get_services(), static fn($value) => $value === get_class($service));
 
         return reset($matches);
     }

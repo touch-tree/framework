@@ -14,7 +14,7 @@ use http\Exception\RuntimeException;
  *
  * @package Framework\Support\Helpers
  */
-abstract class Facade
+abstract class Helper
 {
     /**
      * Get the accessor class name.

@@ -10,7 +10,7 @@ use Framework\Routing\Generator\UrlGenerator;
  * @package Framework\Support\Helpers
  * @see UrlGenerator
  */
-class Url extends Facade
+class Url extends Helper
 {
     /**
      * Set the accessor for the facade.
@@ -19,7 +19,7 @@ class Url extends Facade
      */
     protected static function accessor(): object
     {
-        return get_service(UrlGenerator::class);
+        return get(UrlGenerator::class);
     }
 
     /**

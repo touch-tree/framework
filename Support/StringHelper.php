@@ -3,11 +3,11 @@
 namespace Framework\Support;
 
 /**
- * The Str class provides utility methods for string manipulation.
+ * The StringHelper class provides utility methods for string manipulation.
  *
  * @package Framework\Support
  */
-class Str
+class StringHelper
 {
     /**
      * Append the given suffix to the string if it does not already end with it.

@@ -3,7 +3,7 @@
 namespace Framework\Support\Helpers;
 
 use Framework\Routing\RouteCollection;
-use Framework\Routing\Router;
+use Framework\Routing\Router as ApplicationRouter;
 
 /**
  * Route facade.
@@ -11,7 +11,7 @@ use Framework\Routing\Router;
  * @package Framework\Support\Helpers
  * @see Router
  */
-class Route extends Facade
+class Router extends Helper
 {
     /**
      * Set the accessor for the facade.
@@ -20,17 +20,17 @@ class Route extends Facade
      */
     protected static function accessor(): object
     {
-        return get_service(Router::class);
+        return get(ApplicationRouter::class);
     }
 
     /**
      * Register a GET route.
      *
      * @param string $uri The URI pattern for the route.
-     * @param array $action An array representing the controller and method to be called for this route.
+     * @param array|string $action An array representing the controller and method to be called for this route.
      * @return Router The Router instance.
      */
-    public static function get(string $uri, array $action): Router
+    public static function get(string $uri, $action): Router
     {
         return self::accessor()->get($uri, $action);
     }
