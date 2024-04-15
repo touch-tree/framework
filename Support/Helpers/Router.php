@@ -16,7 +16,7 @@ class Router extends Helper
     /**
      * Set the accessor for the facade.
      *
-     * @return Router
+     * @return ApplicationRouter
      */
     protected static function accessor(): object
     {
@@ -28,9 +28,9 @@ class Router extends Helper
      *
      * @param string $uri The URI pattern for the route.
      * @param array|string $action An array representing the controller and method to be called for this route.
-     * @return Router The Router instance.
+     * @return ApplicationRouter The Router instance.
      */
-    public static function get(string $uri, $action): Router
+    public static function get(string $uri, $action): ApplicationRouter
     {
         return self::accessor()->get($uri, $action);
     }
@@ -40,9 +40,9 @@ class Router extends Helper
      *
      * @param string $uri The URI pattern for the route.
      * @param array $action An array representing the controller and method to be called for this route.
-     * @return Router The Router instance.
+     * @return ApplicationRouter The Router instance.
      */
-    public static function post(string $uri, array $action): Router
+    public static function post(string $uri, array $action): ApplicationRouter
     {
         return self::accessor()->post($uri, $action);
     }
