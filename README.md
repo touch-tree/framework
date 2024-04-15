@@ -1,1 +1,1 @@
-A framework woven for developers who want something simple, elegant, and easy-to-use.
+A framework woven for developers who want something elegant and simple.
