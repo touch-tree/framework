@@ -24,7 +24,6 @@ use Framework\Http\Server;
 use Framework\Routing\Generator\UrlGenerator;
 use Framework\Routing\Router;
 use Framework\Session\Session;
-use Framework\Support\Helpers\Url;
 
 /**
  * Redirect to a specified route.
