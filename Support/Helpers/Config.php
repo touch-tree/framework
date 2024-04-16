@@ -4,6 +4,12 @@ namespace Framework\Support\Helpers;
 
 use Framework\Component\Config\ConfigRepository;
 
+/**
+ * Config helper.
+ *
+ * @package Framework\Support\Helpers
+ * @see ConfigRepository
+ */
 class Config extends Helper
 {
     /**

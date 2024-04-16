@@ -6,7 +6,7 @@ use Framework\Filesystem\Filesystem;
 use SplFileInfo;
 
 /**
- * File facade.
+ * File helper.
  *
  * @package Framework\Support\Helpers
  * @see Filesystem

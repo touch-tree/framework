@@ -5,7 +5,7 @@ namespace Framework\Support\Helpers;
 use Framework\Cache\CacheRepository;
 
 /**
- * Cache facade.
+ * Cache helper.
  *
  * @package Framework\Support\Helpers
  * @see CacheRepository
