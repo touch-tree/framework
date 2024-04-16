@@ -308,7 +308,7 @@ function url(string $path = null)
 {
     $url = Application::get_instance()->get(UrlGenerator::class);
 
-    return $path ? $url->to($path) : $url->get(UrlGenerator::class);
+    return $path ? $url->to($path) : $url;
 }
 
 /**
