@@ -302,7 +302,7 @@ function back(): RedirectResponse
  * Generate a URL based on the given route.
  *
  * @param string|null $path [optional] The path for the URL.
- * @return UrlGenerator|string The generated URL.
+ * @return UrlGenerator|string The generated URL or UrlGenerator if $path is not specified.
  */
 function url(string $path = null)
 {
