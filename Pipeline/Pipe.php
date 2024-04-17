@@ -4,7 +4,6 @@ namespace Framework\Pipeline;
 
 use Closure;
 use Framework\Http\Request;
-use Framework\Pipeline\Interfaces\Pipeable;
 
 /**
  * The Pipe class represents a middleware component that can intercept and process HTTP requests in a pipeline.
@@ -13,7 +12,7 @@ use Framework\Pipeline\Interfaces\Pipeable;
  *
  * @package Framework\Pipeline
  */
-class Pipe implements Pipeable
+class Pipe
 {
     /**
      * Handle an incoming request for a pipeline.
