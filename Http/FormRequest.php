@@ -58,7 +58,7 @@ class FormRequest extends Request
      */
     public function validate(array $rules = []): Validator
     {
-        $validator = new Validator($this->all(), $rules);
+        $validator = new Validator($this->all(), $this->rules());
 
         if ($validator->validate()) {
             $this->failed($validator);
