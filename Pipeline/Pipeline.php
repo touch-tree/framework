@@ -5,7 +5,6 @@ namespace Framework\Pipeline;
 use Closure;
 use Exception;
 use Framework\Component\Container;
-use Framework\Pipeline\Interfaces\Pipeable;
 
 /**
  * The Pipeline class allows for the execution of a sequence of operations (pipes) on an object.
@@ -19,7 +18,7 @@ class Pipeline
     /**
      * The array of pipes.
      *
-     * @var array<Pipeable>
+     * @var array
      */
     protected array $pipes = [];
 
@@ -71,7 +70,7 @@ class Pipeline
     /**
      * Set the array of pipes.
      *
-     * @param array<Pipeable> $pipes The array of pipes or variadic arguments of pipes.
+     * @param array $pipes The array of pipes or variadic arguments of pipes.
      * @return $this
      */
     public function through(array $pipes): Pipeline
@@ -131,7 +130,7 @@ class Pipeline
             try {
                 $pipe = $this->container->get($pipe);
 
-                if (is_a($pipe, Pipe::class) || $pipe instanceof Pipeable) {
+                if (is_a($pipe, Pipe::class)) {
                     return $pipe->handle($passable, $stack);
                 }
 

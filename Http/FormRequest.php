@@ -2,6 +2,7 @@
 
 namespace Framework\Http;
 
+use Framework\Component\Exceptions\ValidationException;
 use Framework\Component\Validation\Validator;
 
 /**
@@ -15,9 +16,30 @@ use Framework\Component\Validation\Validator;
 class FormRequest extends Request
 {
     /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Handle a failed validation attempt.
+     *
+     * @param Validator $validator The Validator instance.
+     * @return void
+     */
+    public function failed(Validator $validator): void
+    {
+        throw new ValidationException($validator->errors()->all());
+    }
+
+    /**
      * Get the validation rules for the form request.
      *
-     * @return array [optional] An array of validation rules.
+     * @return array An array of validation rules.
      */
     public function rules(): array
     {
@@ -36,6 +58,12 @@ class FormRequest extends Request
      */
     public function validate(array $rules = []): Validator
     {
-        return parent::validate($rules ?: $this->rules());
+        $validator = new Validator($this->all(), $rules);
+
+        if ($validator->validate()) {
+            $this->failed($validator);
+        }
+
+        return $validator;
     }
 }

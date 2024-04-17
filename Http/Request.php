@@ -2,6 +2,7 @@
 
 namespace Framework\Http;
 
+use Framework\Component\Exceptions\ValidationException;
 use Framework\Component\Validation\Validator;
 use Framework\Session\Session;
 use Framework\Support\Collection;
@@ -128,7 +129,10 @@ class Request
     public function validate(array $rules): Validator
     {
         $validator = new Validator($this->all(), $rules);
-        $validator->validate();
+
+        if ($validator->validate()) {
+            throw new ValidationException($validator->errors()->all());
+        }
 
         return $validator;
     }

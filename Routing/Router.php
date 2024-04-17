@@ -200,8 +200,10 @@ class Router
                 continue;
             }
 
-            if (is_subclass_of($type->getName(), Request::class)) {
-                $reflection_parameters[] = $this->container->get($type->getName());
+            if (is_subclass_of($name = $type->getName(), Request::class)) {
+                $req = new $name();
+                $req->validate();
+                $reflection_parameters[] = $req;
                 continue;
             }
 
