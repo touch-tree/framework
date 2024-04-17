@@ -5,7 +5,7 @@ namespace Framework\Support\Helpers;
 use Framework\Routing\Generator\UrlGenerator;
 
 /**
- * Url facade.
+ * Url helper.
  *
  * @package Framework\Support\Helpers
  * @see UrlGenerator

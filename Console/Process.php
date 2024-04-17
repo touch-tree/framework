@@ -71,6 +71,7 @@ class Process
      * Runs the process.
      *
      * @return Process
+     *
      * @throws RuntimeException If unable to open process.
      */
     public function run(): Process

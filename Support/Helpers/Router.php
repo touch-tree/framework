@@ -6,7 +6,7 @@ use Framework\Routing\RouteCollection;
 use Framework\Routing\Router as ApplicationRouter;
 
 /**
- * Route facade.
+ * Router helper.
  *
  * @package Framework\Support\Helpers
  * @see Router
