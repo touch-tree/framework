@@ -68,7 +68,7 @@ class ExceptionHandler
             return back()->with_errors($errors);
         }
 
-        if (config('development_mode')) {
+        if (config('app.development_mode')) {
             dd($exception);
         }
 
