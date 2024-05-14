@@ -71,10 +71,12 @@ class RouteCollection
      */
     public function match(Request $request): ?Route
     {
-        foreach ($this->routes as $route) {
-            $route_uri = Url::to($route->uri(), [], false);
+        $url = get(UrlGenerator::class);
 
-            if ($request->method() === $route->method() && preg_match(get(UrlGenerator::class)->compile_route($route_uri), $request->path())) {
+        foreach ($this->routes as $route) {
+            $route_uri = $url->route_url()->to($route->uri(), [], false);
+
+            if ($request->method() === $route->method() && preg_match($url->compile_route($route_uri), $request->path())) {
                 return $route;
             }
         }
