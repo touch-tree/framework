@@ -19,8 +19,6 @@ class Controller
      * @param Request $request The request to be validated.
      * @param array $rules The validation rules to apply.
      * @return void
-     *
-     * @throws ValidationException If validation fails.
      */
     public function validate(Request $request, array $rules): void
     {
