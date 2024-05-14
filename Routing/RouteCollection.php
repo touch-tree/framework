@@ -50,10 +50,9 @@ class RouteCollection
      * Get a route from the collection by its name.
      *
      * @param string $key
-     * @param null $default
      * @return Route|null The Route object if found, otherwise null.
      */
-    public function get(string $key, $default = null): ?Route
+    public function get(string $key): ?Route
     {
         foreach ($this->routes as $route) {
             if ($route->name() === $key) {
@@ -61,7 +60,7 @@ class RouteCollection
             }
         }
 
-        return $default;
+        return null;
     }
 
     /**

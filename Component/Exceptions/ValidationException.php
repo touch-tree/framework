@@ -19,7 +19,7 @@ class ValidationException extends Exception
     protected array $errors;
 
     /**
-     * Create a new validation exception instance.
+     * Create a new ValidationException instance.
      *
      * @param array $errors The array of validation errors.
      * @param string|null $message The error message.

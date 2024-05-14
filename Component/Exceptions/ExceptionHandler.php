@@ -69,7 +69,7 @@ class ExceptionHandler
         }
 
         if (config('app.development_mode')) {
-            dd($exception);
+            dd($exception->getMessage(), $exception);
         }
 
         return response(null, Response::HTTP_INTERNAL_SERVER_ERROR);

@@ -2,9 +2,11 @@
 
 namespace Framework\Routing\Generator;
 
+use Framework\Component\Exceptions\RouteNotFoundException;
 use Framework\Http\Request;
 use Framework\Routing\RouteCollection;
 use Framework\Support\StringHelper;
+use Framework\Support\UrlParser;
 
 /**
  * The UrlGenerator class generates URLs for routes and resources within the application.
@@ -83,16 +85,20 @@ class UrlGenerator
      * @param array $parameters [optional] Parameters to substitute into the route URI.
      * @param bool $absolute [optional] Whether to generate an absolute URL (including scheme and host).
      * @return string The generated URL.
+     *
+     * @throws RouteNotFoundException
      */
     public function route(string $name, array $parameters = [], bool $absolute = true): string
     {
-        $route_path = $this->routes->get($name, $parameters);
+        $route = $this->routes->get($name);
 
-        if ($absolute) {
-            $route_path = $this->request->root() . ltrim($route_path, '/');
+        if (!$route) {
+            throw new RouteNotFoundException($name);
         }
 
-        return $route_path;
+        $url = new UrlParser($this->full() . ltrim($this->route_url()->populate_route_parameters($route->uri(), $parameters), '/'));
+
+        return $absolute ? $url->get_url() : $url->get_path();
     }
 
     /**
