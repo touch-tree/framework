@@ -1,16 +1,16 @@
 <?php
 
-namespace Framework\Support\Helpers;
+namespace Framework\Support\Facades;
 
 use Framework\Routing\Generator\UrlGenerator;
 
 /**
- * Url helper.
+ * Url facade.
  *
- * @package Framework\Support\Helpers
+ * @package Framework\Support\Facades
  * @see UrlGenerator
  */
-class Url extends Helper
+class Url extends Facade
 {
     /**
      * Set the accessor for the facade.

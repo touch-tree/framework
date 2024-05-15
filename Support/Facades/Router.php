@@ -1,17 +1,17 @@
 <?php
 
-namespace Framework\Support\Helpers;
+namespace Framework\Support\Facades;
 
 use Framework\Routing\RouteCollection;
 use Framework\Routing\Router as ApplicationRouter;
 
 /**
- * Router helper.
+ * Router facade.
  *
- * @package Framework\Support\Helpers
+ * @package Framework\Support\Facades
  * @see Router
  */
-class Router extends Helper
+class Router extends Facade
 {
     /**
      * Set the accessor for the facade.

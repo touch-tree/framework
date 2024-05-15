@@ -40,9 +40,9 @@ class RouteUrlGenerator
      */
     public function to(string $path, array $parameters = [], bool $absolute = true): string
     {
-        $url = new UrlParser($this->url->full() . ltrim($this->populate_route_parameters($path, $parameters), '/'));
+        $url = $this->url->full() . ltrim($this->populate_route_parameters($path, $parameters), '/');
 
-        return $absolute ? $url->get_url() : $url->get_path();
+        return $absolute ? $url : parse_url($url, PHP_URL_PATH);
     }
 
     /**

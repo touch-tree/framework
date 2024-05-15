@@ -5,7 +5,7 @@ namespace Framework\Routing\Generator;
 use Framework\Component\Exceptions\RouteNotFoundException;
 use Framework\Http\Request;
 use Framework\Routing\RouteCollection;
-use Framework\Support\StringHelper;
+use Framework\Support\Text;
 use Framework\Support\UrlParser;
 
 /**
@@ -96,9 +96,9 @@ class UrlGenerator
             throw new RouteNotFoundException($name);
         }
 
-        $url = new UrlParser($this->full() . ltrim($this->route_url()->populate_route_parameters($route->uri(), $parameters), '/'));
+        $url = $this->full() . ltrim($this->route_url()->populate_route_parameters($route->uri(), $parameters), '/');
 
-        return $absolute ? $url->get_url() : $url->get_path();
+        return $absolute ? $url : parse_url($url, PHP_URL_PATH);
     }
 
     /**
@@ -131,7 +131,7 @@ class UrlGenerator
      */
     private function get_relative_path(): string
     {
-        return str_replace(StringHelper::finish($this->request->server('DOCUMENT_ROOT'), '/'), '', base_path());
+        return str_replace(Text::add_end($this->request->server('DOCUMENT_ROOT'), '/'), '', base_path());
     }
 
     /**

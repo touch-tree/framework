@@ -4,7 +4,7 @@ namespace Framework\Routing;
 
 use Framework\Http\Request;
 use Framework\Routing\Generator\UrlGenerator;
-use Framework\Support\Helpers\Url;
+use Framework\Support\Facades\Url;
 
 /**
  * The RouteCollection class represents a collection of routes in the routing system.

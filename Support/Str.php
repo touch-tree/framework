@@ -3,11 +3,11 @@
 namespace Framework\Support;
 
 /**
- * The StringHelper class provides utility methods for string manipulation.
+ * The Str class provides utility methods for string manipulation.
  *
  * @package Framework\Support
  */
-class StringHelper
+class Str
 {
     /**
      * Append the given suffix to the string if it does not already end with it.
@@ -16,7 +16,7 @@ class StringHelper
      * @param string $suffix The suffix to be appended.
      * @return string The modified string.
      */
-    public static function finish(string $value, string $suffix): string
+    public static function ends(string $value, string $suffix): string
     {
         return static::ends_with($value, $suffix) ? $value : $value . $suffix;
     }
@@ -28,7 +28,7 @@ class StringHelper
      * @param string $prefix The prefix to be appended.
      * @return string The modified string.
      */
-    public static function start(string $value, string $prefix): string
+    public static function starts(string $value, string $prefix): string
     {
         return static::starts_with($value, $prefix) ? $value : $prefix . $value;
     }

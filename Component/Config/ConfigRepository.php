@@ -2,7 +2,7 @@
 
 namespace Framework\Component\Config;
 
-use Framework\Support\ArrayHelper;
+use Framework\Support\Arr;
 
 /**
  * The Config class provides a simple configuration management system.
@@ -39,7 +39,7 @@ class ConfigRepository
     public function set(array $keys): void
     {
         foreach ($keys as $key => $value) {
-            ArrayHelper::set(self::$items, $key, $value);
+            Arr::set(self::$items, $key, $value);
         }
     }
 
@@ -52,7 +52,7 @@ class ConfigRepository
      */
     public function get(string $key, $default = null)
     {
-        return ArrayHelper::get(self::$items, $key, $default);
+        return Arr::get(self::$items, $key, $default);
     }
 
     /**
@@ -63,6 +63,6 @@ class ConfigRepository
      */
     public function has(string $key): bool
     {
-        return ArrayHelper::has(self::$items, $key);
+        return Arr::has(self::$items, $key);
     }
 }

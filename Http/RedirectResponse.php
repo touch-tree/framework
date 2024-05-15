@@ -3,7 +3,7 @@
 namespace Framework\Http;
 
 use Framework\Session\Session;
-use Framework\Support\Helpers\Url;
+use Framework\Support\Facades\Url;
 use LogicException;
 
 /**

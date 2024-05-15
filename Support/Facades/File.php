@@ -1,17 +1,17 @@
 <?php
 
-namespace Framework\Support\Helpers;
+namespace Framework\Support\Facades;
 
 use Framework\Filesystem\Filesystem;
 use SplFileInfo;
 
 /**
- * File helper.
+ * File facade.
  *
- * @package Framework\Support\Helpers
+ * @package Framework\Support\Facades
  * @see Filesystem
  */
-class File extends Helper
+class File extends Facade
 {
     /**
      * Set the accessor for the facade.

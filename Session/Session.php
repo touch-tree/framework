@@ -2,7 +2,7 @@
 
 namespace Framework\Session;
 
-use Framework\Support\ArrayHelper;
+use Framework\Support\Arr;
 
 /**
  * The Session class provides a simple interface for working with session data.
@@ -21,7 +21,7 @@ class Session
      */
     public function flash(string $key, $value): Session
     {
-        ArrayHelper::set($_SESSION, 'flash.' . $key, $value);
+        Arr::set($_SESSION, 'flash.' . $key, $value);
 
         return $this;
     }
@@ -35,9 +35,9 @@ class Session
      */
     public function pull(string $key, $default = null)
     {
-        $value = ArrayHelper::get($_SESSION, $key, $default);
+        $value = Arr::get($_SESSION, $key, $default);
 
-        ArrayHelper::forget($_SESSION, $key);
+        Arr::forget($_SESSION, $key);
 
         return $value;
     }
@@ -51,7 +51,7 @@ class Session
      */
     public function get(string $key, $default = null)
     {
-        return ArrayHelper::get($_SESSION, $key, $default);
+        return Arr::get($_SESSION, $key, $default);
     }
 
     /**
@@ -63,7 +63,7 @@ class Session
      */
     public function push(string $key, $value): Session
     {
-        ArrayHelper::push($_SESSION, $key, $value);
+        Arr::push($_SESSION, $key, $value);
 
         return $this;
     }
@@ -78,12 +78,12 @@ class Session
     public function put($key, $value = null): Session
     {
         if (is_string($key) && !is_null($value)) {
-            ArrayHelper::set($_SESSION, $key, $value);
+            Arr::set($_SESSION, $key, $value);
         }
 
         if (is_array($key) && is_null($value)) {
             foreach ($key as $k => $v) {
-                ArrayHelper::set($_SESSION, $k, $v);
+                Arr::set($_SESSION, $k, $v);
             }
         }
 
@@ -98,7 +98,7 @@ class Session
      */
     public function has(string $key): bool
     {
-        return ArrayHelper::has($_SESSION, $key);
+        return Arr::has($_SESSION, $key);
     }
 
     /**
@@ -111,12 +111,12 @@ class Session
     {
         if (is_array($key)) {
             foreach ($key as $k) {
-                ArrayHelper::forget($_SESSION, $k);
+                Arr::forget($_SESSION, $k);
             }
         }
 
         if (is_string($key)) {
-            ArrayHelper::forget($_SESSION, $key);
+            Arr::forget($_SESSION, $key);
         }
 
         return $this;

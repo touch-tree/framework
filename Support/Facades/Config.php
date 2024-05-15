@@ -1,16 +1,16 @@
 <?php
 
-namespace Framework\Support\Helpers;
+namespace Framework\Support\Facades;
 
 use Framework\Component\Config\ConfigRepository;
 
 /**
- * Config helper.
+ * Config facade.
  *
- * @package Framework\Support\Helpers
+ * @package Framework\Support\Facades
  * @see ConfigRepository
  */
-class Config extends Helper
+class Config extends Facade
 {
     /**
      * Set the accessor for the facade.

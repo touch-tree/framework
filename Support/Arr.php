@@ -5,11 +5,11 @@ namespace Framework\Support;
 use ArrayAccess;
 
 /**
- * The ArrayHelper class provides utility methods for arrays.
+ * The Arr class provides utility methods for arrays.
  *
  * @package Framework\Support
  */
-class ArrayHelper
+class Arr
 {
     /**
      * Filter the array using the given callback and return the first result.
@@ -107,7 +107,7 @@ class ArrayHelper
      * @param mixed $value The value to set.
      * @return $this
      */
-    public static function set(array &$array, string $key, $value): ArrayHelper
+    public static function set(array &$array, string $key, $value): Arr
     {
         foreach (self::explode_key($key) as $segment) {
             if (!isset($array[$segment]) || !is_array($array[$segment])) {

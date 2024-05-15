@@ -1,16 +1,16 @@
 <?php
 
-namespace Framework\Support\Helpers;
+namespace Framework\Support\Facades;
 
 use Framework\Cache\CacheRepository;
 
 /**
- * Cache helper.
+ * Cache facade.
  *
- * @package Framework\Support\Helpers
+ * @package Framework\Support\Facades
  * @see CacheRepository
  */
-class Cache extends Helper
+class Cache extends Facade
 {
     /**
      * Set the accessor for the facade.

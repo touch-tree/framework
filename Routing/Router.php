@@ -9,7 +9,7 @@ use Framework\Http\JsonResponse;
 use Framework\Http\RedirectResponse;
 use Framework\Http\Request;
 use Framework\Routing\Generator\UrlGenerator;
-use Framework\Support\Helpers\Url;
+use Framework\Support\Facades\Url;
 use ReflectionException;
 use ReflectionMethod;
 
