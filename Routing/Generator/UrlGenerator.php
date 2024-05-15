@@ -5,6 +5,7 @@ namespace Framework\Routing\Generator;
 use Framework\Component\Exceptions\RouteNotFoundException;
 use Framework\Http\Request;
 use Framework\Routing\RouteCollection;
+use Framework\Support\Str;
 use Framework\Support\Text;
 use Framework\Support\UrlParser;
 
@@ -131,7 +132,7 @@ class UrlGenerator
      */
     private function get_relative_path(): string
     {
-        return str_replace(Text::add_end($this->request->server('DOCUMENT_ROOT'), '/'), '', base_path());
+        return str_replace(Str::ends($this->request->server('DOCUMENT_ROOT'), '/'), '', base_path());
     }
 
     /**
