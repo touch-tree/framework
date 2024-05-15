@@ -68,6 +68,17 @@ class ExceptionHandler
             return back()->with_errors($errors);
         }
 
+        return $this->resolve($exception);
+    }
+
+    /**
+     * Resolve the exception.
+     *
+     * @param Throwable $exception
+     * @return Response
+     */
+    private function resolve(Throwable $exception): Response
+    {
         if (config('app.development_mode')) {
             dd($exception->getMessage(), $exception);
         }
