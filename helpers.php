@@ -60,12 +60,25 @@ if (!function_exists('view')) {
      * Create a new View instance for rendering views.
      *
      * @param string $path The path to the view file.
-     * @param array $data [optional] Data to pass to the view.
+     * @param array $parameters [optional] Parameters to pass to the view.
      * @return View
      */
-    function view(string $path, array $data = []): View
+    function view(string $path, array $parameters = []): View
     {
-        return new View($path, $data);
+        return new View($path, $parameters);
+    }
+}
+
+if (!function_exists('render_view')) {
+    /**
+     * Get and render view.
+     *
+     * @param string $path The path to the view file.
+     * @param array $parameters [optional] Parameters to pass to the view.
+     */
+    function render_view(string $path, array $parameters = []): void
+    {
+        echo (new View($path, $parameters))->render();
     }
 }
 

@@ -8,7 +8,7 @@ use Throwable;
 /**
  * The View class is responsible for rendering the content of view files.
  *
- * This class provides a simple method to render views with optional data.
+ * This class provides a simple method to render views with optional parameters.
  *
  * @package Framework\Component
  */
@@ -22,11 +22,11 @@ class View
     protected string $path;
 
     /**
-     * Data to be passed to the view.
+     * Parameters to be passed to the view.
      *
      * @var array
      */
-    protected array $data;
+    protected array $parameters;
 
     /**
      * Headers to be included in the response.
@@ -39,11 +39,11 @@ class View
      * View constructor.
      *
      * @param string $path The path to the view file.
-     * @param array $data [optional] Data to be passed to the view.
+     * @param array $parameters [optional] Parameters to be passed to the view.
      */
-    public function __construct(string $path, array $data = [])
+    public function __construct(string $path, array $parameters = [])
     {
-        $this->data = $data;
+        $this->parameters = $parameters;
         $this->path = $path;
         $this->headers = new HeaderBag();
     }
@@ -52,24 +52,24 @@ class View
      * Create a new instance of the View class.
      *
      * @param string $path The path to the view file.
-     * @param array $data [optional] Data to be passed to the view.
+     * @param array $parameters [optional] Parameters to be passed to the view.
      * @return View
      */
-    public static function make(string $path, array $data = []): View
+    public static function make(string $path, array $parameters = []): View
     {
-        return new self($path, $data);
+        return new self($path, $parameters);
     }
 
     /**
-     * Add data to be passed to the view.
+     * Add parameters to be passed to the view.
      *
-     * @param string $key The key for the data.
+     * @param string $key The key for the parameters.
      * @param mixed $value The value to be passed to the view.
      * @return View The current View instance.
      */
     public function with(string $key, $value): View
     {
-        $this->data[$key] = $value;
+        $this->parameters[$key] = $value;
 
         return $this;
     }
@@ -173,7 +173,7 @@ class View
         }
 
         try {
-            extract($this->data);
+            extract($this->parameters);
             ob_start();
 
             include $path;
