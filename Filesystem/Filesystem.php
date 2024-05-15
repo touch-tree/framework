@@ -3,6 +3,7 @@
 namespace Framework\Filesystem;
 
 use FilesystemIterator;
+use Framework\Support\Str;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
@@ -137,6 +138,64 @@ class Filesystem
         }
 
         return $success;
+    }
+
+    /**
+     * Copy a file or directory to a new location.
+     *
+     * @param string $source The path to the source file or directory.
+     * @param string $destination The path to the destination file or directory.
+     * @param bool $overwrite [optional] Whether to overwrite the destination if it already exists.
+     * @return bool true on success, false on failure.
+     */
+    public function copy(string $source, string $destination, bool $overwrite = false): bool
+    {
+        if (!$this->exists($source)) {
+            return false;
+        }
+
+        if ($this->exists($destination)) {
+            if (!$overwrite) {
+                return false;
+            }
+
+            $this->delete($destination);
+        }
+
+        if ($this->is_directory($source)) {
+            $this->make_directory($destination);
+
+            $files = $this->all_files($source);
+
+            foreach ($files as $file) {
+                $relative_path = Str::after($file->getPathname(), $source);
+
+                $path = $destination . DIRECTORY_SEPARATOR . $relative_path;
+
+                if ($file->isFile()) {
+                    $this->make_directory(dirname($path));
+
+                    if (!copy($file->getPathname(), $path)) {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        return copy($source, $destination);
+    }
+
+    /**
+     * Check if a path is a directory.
+     *
+     * @param string $path The path to check.
+     * @return bool True if the path is a directory, false otherwise.
+     */
+    public function is_directory(string $path): bool
+    {
+        return is_dir($path);
     }
 
     /**

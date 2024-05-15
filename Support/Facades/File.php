@@ -127,6 +127,30 @@ class File extends Facade
     }
 
     /**
+     * Copy a file or directory to a new location.
+     *
+     * @param string $source The path to the source file or directory.
+     * @param string $destination The path to the destination file or directory.
+     * @param bool $overwrite [optional] Whether to overwrite the destination if it already exists.
+     * @return bool true on success, false on failure.
+     */
+    public static function copy(string $source, string $destination, bool $overwrite = false): bool
+    {
+        return self::accessor()->copy($source, $destination, $overwrite);
+    }
+
+    /**
+     * Check if a path is a directory.
+     *
+     * @param string $path The path to check.
+     * @return bool True if the path is a directory, false otherwise.
+     */
+    public static function is_directory(string $path): bool
+    {
+        return self::accessor()->is_directory($path);
+    }
+
+    /**
      * Recursively delete a directory.
      *
      * @param string $directory The directory to delete.
