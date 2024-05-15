@@ -78,14 +78,11 @@ class Process
     {
         $command = implode(' ', $this->command);
 
-        $process = proc_open($command,
-            [
-                0 => ['pipe', 'r'],
-                1 => ['pipe', 'w'],
-                2 => ['pipe', 'w'],
-            ],
-            $pipes
-        );
+        $process = proc_open($command, [
+            0 => ['pipe', 'r'],
+            1 => ['pipe', 'w'],
+            2 => ['pipe', 'w'],
+        ], $pipes);
 
         if (!is_resource($process)) {
             throw new RuntimeException('Unable to open the process for command: ' . $command);

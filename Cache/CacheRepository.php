@@ -64,12 +64,10 @@ class CacheRepository
             touch($file);
         }
 
-        File::put($file, serialize(
-            [
-                'expires' => $ttl > 0 ? time() + $ttl : 0,
-                'value' => $value,
-            ]
-        ));
+        File::put($file, serialize([
+            'expires' => $ttl > 0 ? time() + $ttl : 0,
+            'value' => $value,
+        ]));
     }
 
     /**
