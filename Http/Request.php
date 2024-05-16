@@ -76,7 +76,7 @@ class Request
      * @param string|null $default [optional] The default value if the parameter is not set.
      * @return string|null The value of the form post data parameter or the default value.
      */
-    public function input(string $parameter, ?string $default = null): ?string
+    public function post(string $parameter, ?string $default = null): ?string
     {
         return $_POST[$parameter] ?? $default;
     }

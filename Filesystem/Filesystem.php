@@ -3,6 +3,7 @@
 namespace Framework\Filesystem;
 
 use FilesystemIterator;
+use Framework\Filesystem\Exceptions\DirectoryNotFoundException;
 use Framework\Support\Str;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -32,10 +33,14 @@ class Filesystem
      *
      * @param string $directory The directory path.
      * @param bool $recursive [optional] Whether to include subdirectories recursively.
-     * @return array<SplFileInfo> An array of files and directories.
+     * @return array<SplFileInfo>|null An array of files and directories.
      */
-    public function all_files(string $directory, bool $recursive = true): array
+    public function all_files(string $directory, bool $recursive = true): ?array
     {
+        if (!is_dir($directory)) {
+            return [];
+        }
+
         if ($recursive) {
             $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::SELF_FIRST);
         } else {
