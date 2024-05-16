@@ -141,8 +141,8 @@ if (!function_exists('session')) {
             $session->put($key, $value);
         }
 
-        if (!is_null($key)) {
-            return $session->pull($key);
+        if (!is_null($key) && is_null($value)) {
+            return $session->get($key);
         }
 
         return $session;
