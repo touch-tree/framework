@@ -63,12 +63,20 @@ class View
     /**
      * Add parameters to be passed to the view.
      *
-     * @param string $key The key for the parameters.
+     * @param string|array $key The key for the parameters.
      * @param mixed $value The value to be passed to the view.
      * @return View The current View instance.
      */
-    public function with(string $key, $value): View
+    public function with($key, $value = null): View
     {
+        if (is_array($key) && is_null($value)) {
+            foreach ($key as $k => $v) {
+                $this->parameters[$k] = $v;
+            }
+
+            return $this;
+        };
+
         $this->parameters[$key] = $value;
 
         return $this;
