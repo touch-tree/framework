@@ -360,13 +360,14 @@ if (!function_exists('url')) {
      * Generate a URL based on the given route.
      *
      * @param string|null $path [optional] The path for the URL.
+     * @param array $parameters [optional] Query parameters for the URL.
      * @return UrlGenerator|string The generated URL or UrlGenerator if $path is not specified.
      */
-    function url(string $path = null)
+    function url(string $path = null, array $parameters = [])
     {
         $url = Application::get_instance()->get(UrlGenerator::class);
 
-        return $path ? $url->to($path) : $url;
+        return $path ? $url->to($path, $parameters) : $url;
     }
 }
 
@@ -382,4 +383,3 @@ if (!function_exists('asset')) {
         return Application::get_instance()->get(UrlGenerator::class)->to('public/') . trim($path, '/');
     }
 }
-

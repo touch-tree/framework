@@ -225,7 +225,7 @@ class Router
         $compiled_route = $this->container->get(UrlGenerator::class)->compile_route($route_url);
 
         if (preg_match($compiled_route, $url, $matches)) {
-            return array_filter($matches, static fn($key) => is_string($key), ARRAY_FILTER_USE_KEY);
+            return array_filter($matches, static fn ($key) => is_string($key), ARRAY_FILTER_USE_KEY);
         }
 
         return [];

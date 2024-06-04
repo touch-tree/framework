@@ -2,6 +2,7 @@
 
 namespace Framework\Routing\Generator;
 
+use Framework\Support\Str;
 use Framework\Support\UrlParser;
 
 /**
@@ -31,18 +32,40 @@ class RouteUrlGenerator
     }
 
     /**
-     * Generate a URL for the given path with route parameters.
+     * Generate a URL for the given path with query parameters.
      *
      * @param string $path The path to the resource.
-     * @param array $parameters [optional] Route parameters to include in the URL.
+     * @param array $parameters [optional] Query parameters to include in the URL.
      * @param bool $absolute [optional] Whether to generate an absolute URL (including scheme and host).
      * @return string The generated URL.
      */
     public function to(string $path, array $parameters = [], bool $absolute = true): string
     {
-        $url = $this->url->full() . ltrim($this->populate_route_parameters($path, $parameters), '/');
+        $url = $this->url->full() . ltrim(Str::ends($path, '/'), '/');
 
-        return $absolute ? $url : parse_url($url, PHP_URL_PATH);
+        if ($parameters) {
+            $url = rtrim($url, '/') . '?' . http_build_query($parameters);
+        }
+
+        return $absolute ? $url : $this->get_path($url);
+    }
+
+    /**
+     * Get the path of an URL.
+     *
+     * @param mixed $url The URL path.
+     * @param mixed $keep_query Keep the query.
+     * @return string
+     */
+    public function get_path(string $url, bool $keep_query = true): string
+    {
+        $path = parse_url($url, PHP_URL_PATH);
+
+        if ($keep_query && $query = parse_url($url, PHP_URL_QUERY)) {
+            $path .= '?' . $query;
+        }
+
+        return $path;
     }
 
     /**

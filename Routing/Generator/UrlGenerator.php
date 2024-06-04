@@ -33,6 +33,13 @@ class UrlGenerator
     private Request $request;
 
     /**
+     * RouteUrlGenerator instance.
+     * 
+     * @var RouteUrlGenerator
+     */
+    private RouteUrlGenerator $route_generator;
+
+    /**
      * UrlGenerator constructor.
      *
      * @param RouteCollection $routes The route collection.
@@ -133,17 +140,6 @@ class UrlGenerator
     private function get_relative_path(): string
     {
         return str_replace(Str::ends($this->request->server('DOCUMENT_ROOT'), '/'), '', base_path());
-    }
-
-    /**
-     * Build a query string from an array of parameters.
-     *
-     * @param array $parameters The parameters to include in the query string.
-     * @return string The generated query string.
-     */
-    public function build_query_string(array $parameters): string
-    {
-        return http_build_query($parameters);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Framework\Support;
 
+use TypeError;
 use ArrayAccess;
 
 /**

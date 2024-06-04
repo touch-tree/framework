@@ -2,6 +2,7 @@
 
 namespace Framework\Component;
 
+use CurlHandle;
 use Framework\Http\HeaderBag;
 use JsonException;
 
@@ -65,11 +66,11 @@ class Http
     /**
      * Batch process cURL options.
      *
-     * @param resource $curl The cURL resource.
+     * @param CurlHandle $curl The cURL resource.
      * @param array $options The cURL options to set.
      * @return void
      */
-    private function many_curl_setopt($curl, array $options): void
+    private function many_curl_setopt(CurlHandle $curl, array $options): void
     {
         foreach ($options as $option) {
             curl_setopt($curl, $option[0], $option[1]);
