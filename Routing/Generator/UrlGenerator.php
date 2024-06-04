@@ -83,7 +83,7 @@ class UrlGenerator
      */
     public function compile_route(string $route_url): string
     {
-        return '#^' . str_replace(['\{', '\}'], ['(?P<', '>[^/]+)'], preg_quote($route_url, '#')) . '$#';
+        return '#^' . str_replace(['\{', '\}'], ['(?P<', '>[^/]+)'], preg_quote(rtrim($route_url, '/'), '#')) . '/?$#';
     }
 
     /**

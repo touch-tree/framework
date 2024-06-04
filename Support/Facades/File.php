@@ -76,9 +76,9 @@ class File extends Facade
      * @param string $file_path The path to the file.
      * @return string|false The contents of the file, or false on failure.
      */
-    public static function get(string $file_path)
+    public static function read(string $file_path)
     {
-        return self::accessor()->get($file_path);
+        return self::accessor()->read($file_path);
     }
 
     /**

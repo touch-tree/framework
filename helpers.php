@@ -363,11 +363,11 @@ if (!function_exists('url')) {
      * @param array $parameters [optional] Query parameters for the URL.
      * @return UrlGenerator|string The generated URL or UrlGenerator if $path is not specified.
      */
-    function url(string $path = null, array $parameters = [])
+    function url(string $path = null, array $parameters = [], bool $absolute = true)
     {
         $url = Application::get_instance()->get(UrlGenerator::class);
 
-        return $path ? $url->to($path, $parameters) : $url;
+        return $path ? $url->to($path, $parameters, $absolute) : $url;
     }
 }
 

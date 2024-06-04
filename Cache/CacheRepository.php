@@ -29,7 +29,7 @@ class CacheRepository
             return $default;
         }
 
-        if ($this->is_expired($cached = unserialize(File::get($file), ['allowed_classes' => true]))) {
+        if ($this->is_expired($cached = unserialize(File::read($file), ['allowed_classes' => true]))) {
             $this->forget($key);
             return $default;
         }
