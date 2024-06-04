@@ -129,16 +129,24 @@ if (!function_exists('session')) {
      * If only $key is provided, it retrieves the session value.
      *
      * @template T
-     * @param string|null $key [optional] The key of the session value.
+     * @param string|array|null $key [optional] The key of the session value.
      * @param T|null $value [optional] The value to set for the session key.
      * @return Session|T|string
      */
-    function session(string $key = null, $value = null)
+    function session($key = null, $value = null)
     {
         $session = Application::get_instance()->get(Session::class);
 
+        if (is_array($key) && is_null($value)) {
+            foreach ($key as $k => $v) {
+                $session->put($k, $v);
+            }
+
+            return $session;
+        }
+
         if (!is_null($key) && !is_null($value)) {
-            $session->put($key, $value);
+            return $session->put($key, $value);
         }
 
         if (!is_null($key) && is_null($value)) {

@@ -15,12 +15,18 @@ class Session
     /**
      * Flash a key-value pair to the session using 'dot' notation.
      *
-     * @param string $key The key to flash to the session.
+     * @param string|array $key The key to flash to the session.
      * @param mixed $value The value to associate with the key.
      * @return Session The current Session instance.
      */
-    public function flash(string $key, $value): Session
+    public function flash($key, $value = null): Session
     {
+        if (is_array($key) && is_null($value)) {
+            Arr::set($_SESSION, 'flash', $key);
+
+            return $this;
+        }
+
         Arr::set($_SESSION, 'flash.' . $key, $value);
 
         return $this;

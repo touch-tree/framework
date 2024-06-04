@@ -65,6 +65,8 @@ class ExceptionHandler
                 return response()->json(['errors' => $errors], Response::HTTP_UNPROCESSABLE_ENTITY);
             }
 
+            $request->flash();
+
             return back()->with_errors($errors);
         }
 
