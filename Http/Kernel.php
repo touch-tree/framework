@@ -107,7 +107,7 @@ class Kernel
         return $this->container->get(Pipeline::class)
             ->send($request)
             ->through($pipes)
-            ->then(fn($request) => $this->router->dispatch($request));
+            ->then(fn ($request) => $this->router->dispatch($request));
     }
 
     /**
@@ -149,12 +149,11 @@ class Kernel
      */
     private function prepare_response(Request $request, $response): ?Response
     {
-        if ($response instanceof RedirectResponse) {
-            $request->flash();
-            return $response;
-        }
+        if ($response instanceof Response) {
+            if ($response instanceof RedirectResponse) {
+                $request->flash();
+            }
 
-        if ($response instanceof JsonResponse) {
             return $response;
         }
 
@@ -162,6 +161,6 @@ class Kernel
             return response($response->render(), Response::HTTP_OK, $response->get_headers());
         }
 
-        return null;
+        return response($response);
     }
 }
