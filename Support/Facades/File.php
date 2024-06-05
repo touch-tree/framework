@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Support\Helpers;
+namespace Framework\Support\Facades;
 
 use Framework\Filesystem\Filesystem;
 use SplFileInfo;
@@ -8,7 +8,7 @@ use SplFileInfo;
 /**
  * File facade.
  *
- * @package Framework\Support\Helpers
+ * @package Framework\Support\Facades
  * @see Filesystem
  */
 class File extends Facade
@@ -20,7 +20,7 @@ class File extends Facade
      */
     protected static function accessor(): object
     {
-        return get_service(Filesystem::class);
+        return get(Filesystem::class);
     }
 
     /**
@@ -76,9 +76,9 @@ class File extends Facade
      * @param string $file_path The path to the file.
      * @return string|false The contents of the file, or false on failure.
      */
-    public static function get(string $file_path)
+    public static function read(string $file_path)
     {
-        return self::accessor()->get($file_path);
+        return self::accessor()->read($file_path);
     }
 
     /**
@@ -124,6 +124,30 @@ class File extends Facade
     public static function delete($paths): bool
     {
         return self::accessor()->delete($paths);
+    }
+
+    /**
+     * Copy a file or directory to a new location.
+     *
+     * @param string $source The path to the source file or directory.
+     * @param string $destination The path to the destination file or directory.
+     * @param bool $overwrite [optional] Whether to overwrite the destination if it already exists.
+     * @return bool true on success, false on failure.
+     */
+    public static function copy(string $source, string $destination, bool $overwrite = false): bool
+    {
+        return self::accessor()->copy($source, $destination, $overwrite);
+    }
+
+    /**
+     * Check if a path is a directory.
+     *
+     * @param string $path The path to check.
+     * @return bool True if the path is a directory, false otherwise.
+     */
+    public static function is_directory(string $path): bool
+    {
+        return self::accessor()->is_directory($path);
     }
 
     /**

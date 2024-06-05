@@ -2,7 +2,7 @@
 
 namespace Framework\Session;
 
-use Framework\Support\Map;
+use Framework\Support\Arr;
 
 /**
  * The Session class provides a simple interface for working with session data.
@@ -15,13 +15,19 @@ class Session
     /**
      * Flash a key-value pair to the session using 'dot' notation.
      *
-     * @param string $key The key to flash to the session.
+     * @param string|array $key The key to flash to the session.
      * @param mixed $value The value to associate with the key.
      * @return Session The current Session instance.
      */
-    public function flash(string $key, $value): Session
+    public function flash($key, $value = null): Session
     {
-        Map::set($_SESSION, 'flash.' . $key, $value);
+        if (is_array($key) && is_null($value)) {
+            Arr::set($_SESSION, 'flash', $key);
+
+            return $this;
+        }
+
+        Arr::set($_SESSION, 'flash.' . $key, $value);
 
         return $this;
     }
@@ -35,9 +41,9 @@ class Session
      */
     public function pull(string $key, $default = null)
     {
-        $value = Map::get($_SESSION, $key, $default);
+        $value = Arr::get($_SESSION, $key, $default);
 
-        Map::forget($_SESSION, $key);
+        Arr::forget($_SESSION, $key);
 
         return $value;
     }
@@ -51,7 +57,7 @@ class Session
      */
     public function get(string $key, $default = null)
     {
-        return Map::get($_SESSION, $key, $default);
+        return Arr::get($_SESSION, $key, $default);
     }
 
     /**
@@ -63,7 +69,7 @@ class Session
      */
     public function push(string $key, $value): Session
     {
-        Map::push($_SESSION, $key, $value);
+        Arr::push($_SESSION, $key, $value);
 
         return $this;
     }
@@ -78,12 +84,12 @@ class Session
     public function put($key, $value = null): Session
     {
         if (is_string($key) && !is_null($value)) {
-            Map::set($_SESSION, $key, $value);
+            Arr::set($_SESSION, $key, $value);
         }
 
         if (is_array($key) && is_null($value)) {
             foreach ($key as $k => $v) {
-                Map::set($_SESSION, $k, $v);
+                Arr::set($_SESSION, $k, $v);
             }
         }
 
@@ -98,7 +104,7 @@ class Session
      */
     public function has(string $key): bool
     {
-        return Map::has($_SESSION, $key);
+        return Arr::has($_SESSION, $key);
     }
 
     /**
@@ -111,12 +117,12 @@ class Session
     {
         if (is_array($key)) {
             foreach ($key as $k) {
-                Map::forget($_SESSION, $k);
+                Arr::forget($_SESSION, $k);
             }
         }
 
         if (is_string($key)) {
-            Map::forget($_SESSION, $key);
+            Arr::forget($_SESSION, $key);
         }
 
         return $this;

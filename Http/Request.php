@@ -2,6 +2,7 @@
 
 namespace Framework\Http;
 
+use Framework\Component\Exceptions\ValidationException;
 use Framework\Component\Validation\Validator;
 use Framework\Session\Session;
 use Framework\Support\Collection;
@@ -75,7 +76,7 @@ class Request
      * @param string|null $default [optional] The default value if the parameter is not set.
      * @return string|null The value of the form post data parameter or the default value.
      */
-    public function input(string $parameter, ?string $default = null): ?string
+    public function post(string $parameter, ?string $default = null): ?string
     {
         return $_POST[$parameter] ?? $default;
     }
@@ -128,7 +129,10 @@ class Request
     public function validate(array $rules): Validator
     {
         $validator = new Validator($this->all(), $rules);
-        $validator->validate();
+
+        if ($validator->validate()) {
+            throw new ValidationException($validator->errors()->all());
+        }
 
         return $validator;
     }
@@ -162,7 +166,7 @@ class Request
      */
     public function old(string $key)
     {
-        return $this->session->get('flash.' . $key);
+        return $this->session->get('flash.form.' . $key);
     }
 
     /**

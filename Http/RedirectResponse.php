@@ -3,7 +3,7 @@
 namespace Framework\Http;
 
 use Framework\Session\Session;
-use Framework\Support\Helpers\Url;
+use Framework\Support\Facades\Url;
 use LogicException;
 
 /**
@@ -133,13 +133,13 @@ class RedirectResponse extends Response
     /**
      * Attach flash data to the redirect.
      *
-     * @param string $key The key for the flash data.
-     * @param mixed $value The value of the flash data.
+     * @param string|array $key The key for the flash data or an associative array of key-value pairs.
+     * @param mixed $value The value of the flash data (ignored if $key is an array).
      * @return RedirectResponse
      *
      * @throws LogicException If the 'path' property is not set.
      */
-    public function with(string $key, $value): RedirectResponse
+    public function with($key, $value = null): RedirectResponse
     {
         $this->session->flash($key, $value);
 

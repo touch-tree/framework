@@ -2,7 +2,7 @@
 
 namespace Framework\Cache;
 
-use Framework\Support\Helpers\File;
+use Framework\Support\Facades\File;
 use Framework\Support\Str;
 
 /**
@@ -29,7 +29,7 @@ class CacheRepository
             return $default;
         }
 
-        if ($this->is_expired($cached = unserialize(File::get($file), ['allowed_classes' => true]))) {
+        if ($this->is_expired($cached = unserialize(File::read($file), ['allowed_classes' => true]))) {
             $this->forget($key);
             return $default;
         }
@@ -64,12 +64,9 @@ class CacheRepository
             touch($file);
         }
 
-        File::put($file, serialize(
-            [
-                'expires' => $ttl > 0 ? time() + $ttl : 0,
-                'value' => $value,
-            ]
-        ));
+        $expires_at = $ttl > 0 ? time() + $ttl : 0;
+
+        File::put($file, serialize(['expires' => $expires_at, 'value' => $value]));
     }
 
     /**
@@ -146,10 +143,12 @@ class CacheRepository
      */
     protected function get_cache_file(string $key): string
     {
-        if (!File::exists($path = storage_path('Framework/cache'))) {
+        $path = storage_path('Framework/cache');
+
+        if (!File::exists($path)) {
             File::make_directory($path);
         }
 
-        return Str::finish($path, '/') . md5($key) . '.cache';
+        return Str::ends($path, '/') . md5($key) . '.cache';
     }
 }

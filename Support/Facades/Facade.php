@@ -1,9 +1,6 @@
 <?php
 
-namespace Framework\Support\Helpers;
-
-use Framework\Component\Exceptions\BindingResolutionException;
-use http\Exception\RuntimeException;
+namespace Framework\Support\Facades;
 
 /**
  * Abstract class for creating facades.
@@ -12,7 +9,7 @@ use http\Exception\RuntimeException;
  * A facade is a class that provides a static interface to objects that are
  * available in the application's service container.
  *
- * @package Framework\Support\Helpers
+ * @package Framework\Support\Facades
  */
 abstract class Facade
 {

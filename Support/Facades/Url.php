@@ -1,13 +1,13 @@
 <?php
 
-namespace Framework\Support\Helpers;
+namespace Framework\Support\Facades;
 
 use Framework\Routing\Generator\UrlGenerator;
 
 /**
  * Url facade.
  *
- * @package Framework\Support\Helpers
+ * @package Framework\Support\Facades
  * @see UrlGenerator
  */
 class Url extends Facade
@@ -19,7 +19,7 @@ class Url extends Facade
      */
     protected static function accessor(): object
     {
-        return get_service(UrlGenerator::class);
+        return get(UrlGenerator::class);
     }
 
     /**

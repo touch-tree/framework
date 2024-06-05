@@ -1,9 +1,15 @@
 <?php
 
-namespace Framework\Support\Helpers;
+namespace Framework\Support\Facades;
 
 use Framework\Component\Config\ConfigRepository;
 
+/**
+ * Config facade.
+ *
+ * @package Framework\Support\Facades
+ * @see ConfigRepository
+ */
 class Config extends Facade
 {
     /**
@@ -13,7 +19,7 @@ class Config extends Facade
      */
     protected static function accessor(): object
     {
-        return get_service(ConfigRepository::class);
+        return get(ConfigRepository::class);
     }
 
     /**

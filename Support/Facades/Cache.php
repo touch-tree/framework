@@ -1,13 +1,13 @@
 <?php
 
-namespace Framework\Support\Helpers;
+namespace Framework\Support\Facades;
 
 use Framework\Cache\CacheRepository;
 
 /**
  * Cache facade.
  *
- * @package Framework\Support\Helpers
+ * @package Framework\Support\Facades
  * @see CacheRepository
  */
 class Cache extends Facade
@@ -19,7 +19,7 @@ class Cache extends Facade
      */
     protected static function accessor(): object
     {
-        return get_service(CacheRepository::class);
+        return get(CacheRepository::class);
     }
 
     /**

@@ -10,13 +10,29 @@ namespace Framework\Support;
 class Str
 {
     /**
+     * Replace any occurrence of a set of characters in a string.
+     *
+     * @param array $replacements An associative array where keys are needles and values are replacements.
+     * @param string $haystack The original string.
+     * @return string The modified string.
+     */
+    public static function replace(array $replacements, string $haystack): string
+    {
+        foreach ($replacements as $needle => $replacement) {
+            $haystack = str_replace($needle, $replacement, $haystack);
+        }
+
+        return $haystack;
+    }
+
+    /**
      * Append the given suffix to the string if it does not already end with it.
      *
      * @param string $value The original string.
      * @param string $suffix The suffix to be appended.
      * @return string The modified string.
      */
-    public static function finish(string $value, string $suffix): string
+    public static function ends(string $value, string $suffix): string
     {
         return static::ends_with($value, $suffix) ? $value : $value . $suffix;
     }
@@ -28,7 +44,7 @@ class Str
      * @param string $prefix The prefix to be appended.
      * @return string The modified string.
      */
-    public static function start(string $value, string $prefix): string
+    public static function starts(string $value, string $prefix): string
     {
         return static::starts_with($value, $prefix) ? $value : $prefix . $value;
     }
@@ -100,6 +116,24 @@ class Str
         }
 
         return false;
+    }
+
+    /**
+     * Return the portion of string after the first occurrence of a given value.
+     *
+     * @param string $subject The string to search in.
+     * @param string $search The value to search for.
+     * @return string The portion of string after the first occurrence of the search value.
+     */
+    public static function after(string $subject, string $search): string
+    {
+        $pos = strpos($subject, $search);
+
+        if (!$pos) {
+            return $subject;
+        }
+
+        return substr($subject, $pos + strlen($search));
     }
 
     /**

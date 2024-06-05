@@ -2,7 +2,10 @@
 
 namespace Framework\Filesystem;
 
+use Exception;
 use FilesystemIterator;
+use Framework\Filesystem\Exceptions\DirectoryNotFoundException;
+use Framework\Support\Str;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
@@ -23,7 +26,7 @@ class Filesystem
      */
     public function files(string $directory, $extension = []): array
     {
-        return $this->get_paths($directory, fn(SplFileInfo $file) => $file->isFile() && self::has_extension($file, $extension));
+        return $this->get_paths($directory, fn (SplFileInfo $file) => $file->isFile() && self::has_extension($file, $extension));
     }
 
     /**
@@ -31,10 +34,14 @@ class Filesystem
      *
      * @param string $directory The directory path.
      * @param bool $recursive [optional] Whether to include subdirectories recursively.
-     * @return array<SplFileInfo> An array of files and directories.
+     * @return array<SplFileInfo>|null An array of files and directories.
      */
-    public function all_files(string $directory, bool $recursive = true): array
+    public function all_files(string $directory, bool $recursive = true): ?array
     {
+        if (!is_dir($directory)) {
+            return [];
+        }
+
         if ($recursive) {
             $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::SELF_FIRST);
         } else {
@@ -69,7 +76,7 @@ class Filesystem
      */
     public function directories(string $directory): array
     {
-        return $this->get_paths($directory, fn($file) => $file->isDir());
+        return $this->get_paths($directory, fn ($file) => $file->isDir());
     }
 
     /**
@@ -140,6 +147,64 @@ class Filesystem
     }
 
     /**
+     * Copy a file or directory to a new location.
+     *
+     * @param string $source The path to the source file or directory.
+     * @param string $destination The path to the destination file or directory.
+     * @param bool $overwrite [optional] Whether to overwrite the destination if it already exists.
+     * @return bool true on success, false on failure.
+     */
+    public function copy(string $source, string $destination, bool $overwrite = false): bool
+    {
+        if (!$this->exists($source)) {
+            return false;
+        }
+
+        if ($this->exists($destination)) {
+            if (!$overwrite) {
+                return false;
+            }
+
+            $this->delete($destination);
+        }
+
+        if ($this->is_directory($source)) {
+            $this->make_directory($destination);
+
+            $files = $this->all_files($source);
+
+            foreach ($files as $file) {
+                $relative_path = Str::after($file->getPathname(), $source);
+
+                $path = $destination . DIRECTORY_SEPARATOR . $relative_path;
+
+                if ($file->isFile()) {
+                    $this->make_directory(dirname($path));
+
+                    if (!copy($file->getPathname(), $path)) {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        return copy($source, $destination);
+    }
+
+    /**
+     * Check if a path is a directory.
+     *
+     * @param string $path The path to check.
+     * @return bool True if the path is a directory, false otherwise.
+     */
+    public function is_directory(string $path): bool
+    {
+        return is_dir($path);
+    }
+
+    /**
      * Recursively delete a directory.
      *
      * @param string $directory The directory to delete.
@@ -162,11 +227,17 @@ class Filesystem
      * Get the contents of a file.
      *
      * @param string $file_path The path to the file.
-     * @return string|false The contents of the file, or false on failure.
+     * @return string|null The contents of the file, or false on failure.
      */
-    public function get(string $file_path)
+    public function read(string $file_path): ?string
     {
-        return file_get_contents($file_path);
+        $content = @file_get_contents($file_path);
+
+        if (!$content) {
+            return null;
+        }
+
+        return $content;
     }
 
     /**

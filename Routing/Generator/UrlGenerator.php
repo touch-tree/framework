@@ -2,9 +2,12 @@
 
 namespace Framework\Routing\Generator;
 
+use Framework\Component\Exceptions\RouteNotFoundException;
 use Framework\Http\Request;
 use Framework\Routing\RouteCollection;
 use Framework\Support\Str;
+use Framework\Support\Text;
+use Framework\Support\UrlParser;
 
 /**
  * The UrlGenerator class generates URLs for routes and resources within the application.
@@ -28,6 +31,13 @@ class UrlGenerator
      * @var Request
      */
     private Request $request;
+
+    /**
+     * RouteUrlGenerator instance.
+     * 
+     * @var RouteUrlGenerator
+     */
+    private RouteUrlGenerator $route_generator;
 
     /**
      * UrlGenerator constructor.
@@ -73,7 +83,7 @@ class UrlGenerator
      */
     public function compile_route(string $route_url): string
     {
-        return '#^' . str_replace(['\{', '\}'], ['(?P<', '>[^/]+)'], preg_quote($route_url, '#')) . '$#';
+        return '#^' . str_replace(['\{', '\}'], ['(?P<', '>[^/]+)'], preg_quote(rtrim($route_url, '/'), '#')) . '/?$#';
     }
 
     /**
@@ -83,16 +93,20 @@ class UrlGenerator
      * @param array $parameters [optional] Parameters to substitute into the route URI.
      * @param bool $absolute [optional] Whether to generate an absolute URL (including scheme and host).
      * @return string The generated URL.
+     *
+     * @throws RouteNotFoundException
      */
     public function route(string $name, array $parameters = [], bool $absolute = true): string
     {
-        $route_path = $this->routes->get($name, $parameters);
+        $route = $this->routes->get($name);
 
-        if ($absolute) {
-            $route_path = $this->request->root() . ltrim($route_path, '/');
+        if (!$route) {
+            throw new RouteNotFoundException($name);
         }
 
-        return $route_path;
+        $url = $this->full() . ltrim($this->route_url()->populate_route_parameters($route->uri(), $parameters), '/');
+
+        return $absolute ? $url : parse_url($url, PHP_URL_PATH);
     }
 
     /**
@@ -125,18 +139,7 @@ class UrlGenerator
      */
     private function get_relative_path(): string
     {
-        return str_replace(Str::finish($this->request->server('DOCUMENT_ROOT'), '/'), '', base_path());
-    }
-
-    /**
-     * Build a query string from an array of parameters.
-     *
-     * @param array $parameters The parameters to include in the query string.
-     * @return string The generated query string.
-     */
-    public function build_query_string(array $parameters): string
-    {
-        return http_build_query($parameters);
+        return str_replace(Str::ends($this->request->server('DOCUMENT_ROOT'), '/'), '', base_path());
     }
 
     /**

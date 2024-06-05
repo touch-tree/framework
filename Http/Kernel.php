@@ -2,6 +2,7 @@
 
 namespace Framework\Http;
 
+use ArrayObject;
 use Framework\Component\Container;
 use Framework\Component\View;
 use Framework\Http\Exceptions\NotFoundHttpException;
@@ -9,6 +10,8 @@ use Framework\Pipeline\Pipeline;
 use Framework\Routing\Route;
 use Framework\Routing\Router;
 use Framework\Session\Pipes\SessionPipe;
+use Iterator;
+use Traversable;
 
 /**
  * The Kernel class is the central HTTP component of the application.
@@ -107,7 +110,7 @@ class Kernel
         return $this->container->get(Pipeline::class)
             ->send($request)
             ->through($pipes)
-            ->then(fn($request) => $this->router->dispatch($request));
+            ->then(fn ($request) => $this->router->dispatch($request));
     }
 
     /**
@@ -149,12 +152,11 @@ class Kernel
      */
     private function prepare_response(Request $request, $response): ?Response
     {
-        if ($response instanceof RedirectResponse) {
-            $request->flash();
-            return $response;
-        }
+        if ($response instanceof Response) {
+            if ($response instanceof RedirectResponse) {
+                $request->flash();
+            }
 
-        if ($response instanceof JsonResponse) {
             return $response;
         }
 
@@ -162,6 +164,6 @@ class Kernel
             return response($response->render(), Response::HTTP_OK, $response->get_headers());
         }
 
-        return null;
+        return response($response);
     }
 }

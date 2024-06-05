@@ -57,10 +57,10 @@ class Process
      * Process constructor.
      *
      * @param array $command Command to execute.
-     * @param float|null $timeout Timeout for the process in seconds.
-     * @param array $options Additional options for the process.
+     * @param float|null $timeout [optional] Timeout for the process in seconds (default is 60).
+     * @param array $options [optional] Additional options for the process.
      */
-    public function __construct(array $command, ?float $timeout = 60, array $options = [])
+    public function __construct(array $command, float $timeout = 60, array $options = [])
     {
         $this->command = $command;
         $this->timeout = $timeout;
@@ -71,20 +71,18 @@ class Process
      * Runs the process.
      *
      * @return Process
+     *
      * @throws RuntimeException If unable to open process.
      */
     public function run(): Process
     {
         $command = implode(' ', $this->command);
 
-        $process = proc_open($command,
-            [
-                0 => ['pipe', 'r'],
-                1 => ['pipe', 'w'],
-                2 => ['pipe', 'w'],
-            ],
-            $pipes
-        );
+        $process = proc_open($command, [
+            0 => ['pipe', 'r'],
+            1 => ['pipe', 'w'],
+            2 => ['pipe', 'w'],
+        ], $pipes);
 
         if (!is_resource($process)) {
             throw new RuntimeException('Unable to open the process for command: ' . $command);

@@ -2,7 +2,6 @@
 
 namespace Framework\Component\Validation;
 
-use Framework\Component\Exceptions\ValidationException;
 use Framework\Component\ParameterBag;
 
 /**
@@ -49,17 +48,15 @@ class Validator
     /**
      * Validates the data based on the specified rules.
      *
-     * @throws ValidationException If validation fails.
+     * @throws bool false if validation fails otherwise true.
      */
-    public function validate(): void
+    public function validate(): bool
     {
         foreach ($this->rules as $field => $rules) {
             array_map(fn($rule) => $this->apply_rule($field, $rule), explode('|', $rules));
         }
 
-        if ($this->errors->any()) {
-            throw new ValidationException($this->errors->all());
-        }
+        return $this->errors->any();
     }
 
     /**

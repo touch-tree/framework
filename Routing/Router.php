@@ -9,7 +9,7 @@ use Framework\Http\JsonResponse;
 use Framework\Http\RedirectResponse;
 use Framework\Http\Request;
 use Framework\Routing\Generator\UrlGenerator;
-use Framework\Support\Helpers\Url;
+use Framework\Support\Facades\Url;
 use ReflectionException;
 use ReflectionMethod;
 
@@ -200,8 +200,10 @@ class Router
                 continue;
             }
 
-            if (is_subclass_of($type->getName(), Request::class)) {
-                $reflection_parameters[] = $this->container->get($type->getName());
+            if (is_subclass_of($type_name = $type->getName(), Request::class)) {
+                $request = $this->container->get($type_name);
+                $request->validate();
+                $reflection_parameters[] = $request;
                 continue;
             }
 

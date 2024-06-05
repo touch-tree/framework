@@ -4,7 +4,7 @@ namespace Framework\Routing;
 
 use Framework\Http\Request;
 use Framework\Routing\Generator\UrlGenerator;
-use Framework\Support\Helpers\Url;
+use Framework\Support\Facades\Url;
 
 /**
  * The RouteCollection class represents a collection of routes in the routing system.
@@ -50,10 +50,9 @@ class RouteCollection
      * Get a route from the collection by its name.
      *
      * @param string $key
-     * @param null $default
      * @return Route|null The Route object if found, otherwise null.
      */
-    public function get(string $key, $default = null): ?Route
+    public function get(string $key): ?Route
     {
         foreach ($this->routes as $route) {
             if ($route->name() === $key) {
@@ -61,7 +60,7 @@ class RouteCollection
             }
         }
 
-        return $default;
+        return null;
     }
 
     /**
@@ -72,10 +71,12 @@ class RouteCollection
      */
     public function match(Request $request): ?Route
     {
-        foreach ($this->routes as $route) {
-            $route_uri = Url::to($route->uri(), [], false);
+        $url = get(UrlGenerator::class);
 
-            if ($request->method() === $route->method() && preg_match(get_service(UrlGenerator::class)->compile_route($route_uri), $request->path())) {
+        foreach ($this->routes as $route) {
+            $route_uri = $url->route_url()->to($route->uri(), [], false);
+
+            if ($request->method() === $route->method() && preg_match($url->compile_route($route_uri), $request->path())) {
                 return $route;
             }
         }

@@ -65,11 +65,24 @@ class ExceptionHandler
                 return response()->json(['errors' => $errors], Response::HTTP_UNPROCESSABLE_ENTITY);
             }
 
+            $request->flash();
+
             return back()->with_errors($errors);
         }
 
-        if (config('development_mode')) {
-            dd($exception);
+        return $this->resolve($exception);
+    }
+
+    /**
+     * Resolve the exception.
+     *
+     * @param Throwable $exception
+     * @return Response
+     */
+    private function resolve(Throwable $exception): Response
+    {
+        if (config('app.development_mode')) {
+            dd($exception->getMessage(), $exception);
         }
 
         return response(null, Response::HTTP_INTERNAL_SERVER_ERROR);
