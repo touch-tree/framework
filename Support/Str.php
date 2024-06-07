@@ -147,4 +147,21 @@ class Str
     {
         return $value . (is_array($append) ? implode($append) : $append);
     }
+
+    /**
+     * Replace placeholders in a string with corresponding values.
+     *
+     * @param string $string The string containing placeholders to be replaced.
+     * @param array $replacements An associative array containing the values to replace the placeholders.
+     *
+     * @return string The string with placeholders replaced by their corresponding values.
+     */
+    public static function populate(string $string, array $replacements): string
+    {
+        foreach ($replacements as $key => $value) {
+            $string = str_replace('{' . $key . '}', $value, $string);
+        }
+
+        return $string;
+    }
 }

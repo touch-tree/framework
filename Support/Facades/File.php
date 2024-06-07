@@ -74,7 +74,7 @@ class File extends Facade
      * Get the contents of a file.
      *
      * @param string $file_path The path to the file.
-     * @return string|false The contents of the file, or false on failure.
+     * @return string|null The contents of the file, or null on failure.
      */
     public static function read(string $file_path)
     {

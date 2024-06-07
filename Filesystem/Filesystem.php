@@ -227,7 +227,7 @@ class Filesystem
      * Get the contents of a file.
      *
      * @param string $file_path The path to the file.
-     * @return string|null The contents of the file, or false on failure.
+     * @return string|null The contents of the file, or null on failure.
      */
     public function read(string $file_path): ?string
     {
